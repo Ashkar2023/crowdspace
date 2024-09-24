@@ -1,5 +1,5 @@
-import { IUser } from "@interfaces/entity.interface";
-import { Schema, Types, model } from "mongoose";
+import { IUser } from "@entities/interfaces/user-entity.interface.js";
+import { HydratedDocument, Schema, Types, model } from "mongoose";
 
 const LinkSchema = new Schema({
     title: { type: String, required: true },
@@ -20,9 +20,10 @@ const configurationSchema = new Schema({
     darkTheme: { type: Boolean, default: false },
     privateAccount: { type: Boolean, default: false },
     suggestionInProfile: { type: Boolean, default: true },
-    PushNotifications: { type: NotificationsSchema, default:()=>({}) },
-    inAppNotifications: { type: NotificationsSchema, default:()=>({}) },
+    PushNotifications: { type: NotificationsSchema },
+    inAppNotifications: { type: NotificationsSchema },
 }, { _id: false });
+
 
 
 const UserSchema = new Schema<IUser>({
@@ -31,35 +32,40 @@ const UserSchema = new Schema<IUser>({
         required: [true, "Username required & should be a string"],
         index: 1
     },
+    displayname:{
+        type:String,
+        required: [true, "display name required & should be a string"]
+    },
     email: {
         type: String,
         required: [true, "Email required"],
-        unique: true
+        unique: true,
+        index:1
     },
     password: {
         type: String,
         required: true,
-
     },
     gender: {
         type: String,
         enum: {
             values: ["M", "F"],
             message: "`{PATH}` should either be 'M' | 'F'."
-        }
+        },
+        default: undefined
     },
     blockedUsers: [Types.ObjectId],
     links: [LinkSchema],
     configuration: {
         type: configurationSchema,
-        required: true,
-        // default: ()=>({})
+        default: {}
     },
     bio: String,
     cover: String,
     avatar: String,
-})
+}, { timestamps: true })
 
 
-const userModel = model<IUser>("User", UserSchema, "Users");
-export default userModel;
+export type HydratedUser = HydratedDocument<IUser, { createdAt: Date, updatedAt: Date }>;
+
+export const userModel = model<IUser>("User", UserSchema, "Users");

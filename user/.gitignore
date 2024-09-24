@@ -1,5 +1,14 @@
 node_modules/
 dist/
 
-env.development
-env.production
+
+.dev.env
+.prod.env
+
+.env.development
+.env.production
+.env
+
+
+package-lock.json
+yarn.lock

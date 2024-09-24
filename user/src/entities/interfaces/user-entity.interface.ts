@@ -1,6 +1,5 @@
 import { ObjectId } from "mongoose"
 
-/* User */
 export type Link = {
     title: string,
     url: string
@@ -9,7 +8,7 @@ export type Link = {
 export type Configuration = {
     darkTheme: boolean,
     privateAccount: boolean,
-    suggestionInProfile:boolean,
+    suggestionInProfile: boolean,
     PushNotifications: {
         likes: boolean,
         comments: boolean,
@@ -19,7 +18,7 @@ export type Configuration = {
         posts: boolean,
         liveStream: boolean
     },
-    inAppNotifications:{
+    inAppNotifications: {
         likes: boolean,
         comments: boolean,
         follows: boolean,
@@ -30,31 +29,26 @@ export type Configuration = {
     }
 }
 
-// core user props 
+// core user fields 
 export type IUser = {
     username: string,
+    displayname: string,
     email: string,
     password: string,
-    gender: "M" | "F",
-    blockedUsers: ObjectId[]
-    configuration: Configuration,
+    gender?: "M" | "F",
+    isVerified?: boolean,
+    blockedUsers?: ObjectId[]
+    configuration?: Configuration,
     bio?: string,
     links?: Link[],
     cover?: string,
     avatar?: string,
 }
 
+
 // USER ENTITY - with user state & behaviour
 export interface IUserEntity extends IUser {
-    validate:()=> void,
-    validateConfig: ()=> boolean,
-    get:()=>  IUser
+    validate: () => void,
+    validateConfig: () => boolean,
+    get: () => IUser
 }
-
-
-
-/* Follows */
-
-// export type Follows = {
-
-// }
