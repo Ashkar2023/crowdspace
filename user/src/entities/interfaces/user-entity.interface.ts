@@ -31,6 +31,7 @@ export type Configuration = {
 
 // core user fields 
 export type IUser = {
+    _id?:string,
     username: string,
     displayname: string,
     email: string,

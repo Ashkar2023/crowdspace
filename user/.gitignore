@@ -12,3 +12,5 @@ dist/
 
 package-lock.json
 yarn.lock
+
+folderStructure.txt

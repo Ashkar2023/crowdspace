@@ -13,11 +13,12 @@ export function buildAuthRoutes({ router, authContoller }: {
     // middlewares:Record<string, RequestHandler> //TODO - for recieving middlewares
 }) {
 
-    //register user - TODO validate req.body with a middleware by Joi/Yup
+    // register user
+    /* TODO validate req.body with a middleware by zod */
     router.post("/register", createCallback(authContoller.registerUser.bind(authContoller)));
     
-    //test
-    router.get("/login", createCallback(authContoller.))
+    //login user
+    router.post("/login", createCallback(authContoller.loginUser.bind(authContoller)))
 
 
     return router

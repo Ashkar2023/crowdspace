@@ -30,21 +30,23 @@ const UserSchema = new Schema<IUser>({
     username: {
         type: String,
         required: [true, "Username required & should be a string"],
+        unique: true,
         index: 1
     },
-    displayname:{
-        type:String,
+    displayname: {
+        type: String,
         required: [true, "display name required & should be a string"]
     },
     email: {
         type: String,
         required: [true, "Email required"],
         unique: true,
-        index:1
+        index: 1
     },
     password: {
         type: String,
         required: true,
+        select:false
     },
     gender: {
         type: String,
@@ -63,7 +65,15 @@ const UserSchema = new Schema<IUser>({
     bio: String,
     cover: String,
     avatar: String,
-}, { timestamps: true })
+}, {
+    timestamps: true,
+    toObject:{
+        transform(doc, ret) {
+            delete ret.password;
+        },
+    }
+})
+
 
 
 export type HydratedUser = HydratedDocument<IUser, { createdAt: Date, updatedAt: Date }>;

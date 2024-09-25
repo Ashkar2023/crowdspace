@@ -1,4 +1,3 @@
-import { IUserController } from "@adapters/controllers/interfaces/controller.interface.js";
 import { IUserUsecases } from "./interfaces/interactor.interface.js";
 import { IUserRepository } from "./interfaces/user-repository.interface.js";
 
@@ -11,7 +10,7 @@ export class UserInteractorImp implements IUserUsecases{
     }
 
     async usernameExists(username:string){
-        const result = await this.repository.findUsername(username);
+        const result = await this.repository.findUser(username,"username");
         return result? true : false;
     }
 }

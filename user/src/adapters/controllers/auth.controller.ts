@@ -1,5 +1,6 @@
 import { IAuthContoller } from "@adapters/controllers/interfaces/controller.interface.js";
-import { AppError, BadRequestError, ResponseCreator, validateReqBody } from "@crowdspace/common";
+import { BadRequestError, ResponseCreator, sign, validateReqBody } from "@crowdspace/common";
+import { expirationDate } from "@crowdspace/common"; 
 import { IAuthUsecases } from "@interactors/interfaces/interactor.interface.js";
 
 import { Request } from "express";
@@ -9,21 +10,20 @@ export class AuthControllerImp implements IAuthContoller {
 
     constructor(interactor: IAuthUsecases) {
         this.interactor = interactor;
-        
     }
 
     async registerUser(req: Request) {
         const userData = req.body;
 
         // make this into a package validation like joi/yup
-        validateReqBody(userData,["username","email","password","displayname"]);
+        validateReqBody(userData, ["username", "email", "password", "displayname"]);
 
         /* sanitizeInput */
-        
+
         const emailFound = await this.interactor.checkExistingUser(userData.email);
 
-        if(emailFound){
-            throw new BadRequestError("User with email already exists",403)
+        if (emailFound) {
+            throw new BadRequestError("User with email already exists", 403)
         }
 
         const registeredUser = await this.interactor.registerUser({
@@ -41,11 +41,28 @@ export class AuthControllerImp implements IAuthContoller {
             .get();
     }
 
-    async authenticateUser(req: Request){
-        // const loginData = req.body;
+    async loginUser(req: Request) {
+        const { credential, password, type } = req.body;
 
-        // const response = new ResponseCreator();
-        // return response
-        // .setStatusCode()
+        const { user, refreshToken, accessToken } = await this.interactor.authenticateUser({
+            credential,
+            password,
+            type
+        });
+
+        const response = new ResponseCreator();
+        return response
+            .setStatusCode(200)
+            .setHeaders({
+                "Set-Cookie": [
+                    `ajwt=${accessToken}; Path=/; Expires=${expirationDate(5, "minute")}; httpOnly;`,
+                    `rjwt=${refreshToken}; Path=/; Expires=${expirationDate(1, "week")}; httpOnly;`
+                ]
+            })
+            .setMessage("User authenticated")
+            .setData(user)
+            .get();
+
+        /* Correct cookies for production with secure and sameSite(if needed) */
     }
 }
