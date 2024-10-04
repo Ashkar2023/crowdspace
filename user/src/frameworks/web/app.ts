@@ -1,16 +1,9 @@
-import express from "express";
-import { connectDb } from "@frameworks/db/mongo/db.js";
-import cookieParser from "cookie-parser"
-import { authRouter, userRouter } from "./routes/index.js";
 import { globalErrorHadler } from "@crowdspace/common";
-import cors from "cors"
-
-
-const ENVIRONMENT = process.env.NODE_ENV
-
-if (ENVIRONMENT === "dev") {
-    process.loadEnvFile(`./.${ENVIRONMENT}.env`);
-}
+import { connectDb } from "@frameworks/db/db.js";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import express from "express";
+import { authRouter, userRouter } from "./routes/index.js";
 
 
 const app = express();
@@ -21,7 +14,7 @@ app.use(cors({
     origin: ["http://localhost:5173"],
     allowedHeaders: ["Content-Type"],
     credentials: true,
-    maxAge: 20,
+    maxAge: 3600,
     preflightContinue: false,
     // exposedHeaders:[]
 }))

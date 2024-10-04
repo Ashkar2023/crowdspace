@@ -1,4 +1,4 @@
-import { IHashService } from "@interactors/interfaces/hash.interface.js";
+import { IHashService } from "@interactors/interfaces/hash-service.interface.js";
 import bcrypt from "bcryptjs"
 
 export class HashServiceImp implements IHashService {

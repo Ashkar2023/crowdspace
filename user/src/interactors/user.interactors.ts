@@ -1,4 +1,4 @@
-import { IUserUsecases } from "./interfaces/interactor.interface.js";
+import { IUserUsecases } from "./interfaces/usecases.interface.js";
 import { IUserRepository } from "./interfaces/user-repository.interface.js";
 
 

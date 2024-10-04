@@ -10,7 +10,7 @@ export class userRepositoryImp implements IUserRepository {
         this.model = userModel;
     }
 
-    async createUser(user: IUser) {
+    async insertUser(user: IUser) {
         return await this.model.create(user);
     }
 
@@ -21,6 +21,10 @@ export class userRepositoryImp implements IUserRepository {
         select: string = "-_id"
     ) {
         return await this.model.findOne({ [type]: credential }).select(select);
+    }
+
+    async verifyUser(email: string) {
+        return await this.model.findOneAndUpdate({ email }, { $set: { isVerified: true } }, { new: true });
     }
 
 }

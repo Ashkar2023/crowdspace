@@ -1,7 +1,7 @@
-import { IUserUsecases } from "@interactors/interfaces/interactor.interface.js";
-import { IUserController } from "./interfaces/controller.interface.js";
-import { BadRequestError, ConflictError, IResponse, ResponseCreator, validate, validateReqBody } from "@crowdspace/common";
+import { IUserUsecases } from "@interactors/interfaces/usecases.interface.js";
+import { ConflictError, ResponseCreator, validateReqBody } from "@crowdspace/common";
 import { Request } from "express";
+import { IUserController } from "./interfaces/user-controller.interface.js";
 
 export class UserControllerImp implements IUserController {
     private userInteractor: IUserUsecases

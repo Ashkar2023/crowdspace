@@ -48,6 +48,11 @@ const UserSchema = new Schema<IUser>({
         required: true,
         select:false
     },
+    isVerified:{
+        type:Boolean,
+        required:true,
+        default:false
+    },
     gender: {
         type: String,
         enum: {
@@ -69,6 +74,7 @@ const UserSchema = new Schema<IUser>({
     timestamps: true,
     toObject:{
         transform(doc, ret) {
+            delete ret._id
             delete ret.password;
         },
     }
@@ -78,4 +84,4 @@ const UserSchema = new Schema<IUser>({
 
 export type HydratedUser = HydratedDocument<IUser, { createdAt: Date, updatedAt: Date }>;
 
-export const userModel = model<IUser>("User", UserSchema, "Users");
+export const userModel = model<IUser>("User", UserSchema, "users");

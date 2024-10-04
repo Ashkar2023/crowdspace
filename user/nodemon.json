@@ -5,7 +5,7 @@
         "node_modules/**/node_modules"
     ],
     "verbose": false,
-    "exec":"yarn run build && node dist/index.js",
+    "exec":"yarn run build && node --env-file=.env dist/index.js",
     "execMap": {},
     "watch": [
         "src/"
