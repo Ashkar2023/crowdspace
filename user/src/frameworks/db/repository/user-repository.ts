@@ -1,5 +1,5 @@
 import { IUser } from "@entities/interfaces/user-entity.interface.js";
-import { IUserRepository } from "@interactors/interfaces/user-repository.interface.js";
+import { IUserRepository } from "@interactors/interfaces/repositories/user-repository.interface.js";
 import { Model } from "mongoose";
 
 

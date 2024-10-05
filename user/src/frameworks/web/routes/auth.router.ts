@@ -1,15 +1,17 @@
-import { Request, RequestHandler, Response, Router } from "express";
-import { IAuthContoller } from "@adapters/controllers/interfaces/auth-controller.interface.js";
+import { RequestHandler, Router } from "express";
 import { createCallback } from "@crowdspace/common";
+import { IAuthControllerFacade } from "@adapters/controllers/interfaces/ifacade/auth-controller-facade.interface.js";
 
 
 /**  @param {Object} params - The parameters should be an Object  */
 
 export function buildAuthRoutes({ router, authContoller, middlewares }: {
     router: Router,
-    authContoller: IAuthContoller,
+    authContoller: IAuthControllerFacade,
     middlewares: Record<string, RequestHandler>
 }) {
+
+    router.post("/check-username", createCallback(authContoller.checkUsernameExists.bind(authContoller)));
 
     // register user
     /* TODO validate req.body with a middleware by zod */

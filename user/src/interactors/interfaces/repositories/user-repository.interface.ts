@@ -1,5 +1,5 @@
 import { HydratedDocument, UpdateWriteOpResult } from "mongoose"
-import { IUser } from "../../entities/interfaces/user-entity.interface.js"
+import { IUser } from "../../../entities/interfaces/user-entity.interface.js"
 
 export interface IUserRepository {
     insertUser: (user: IUser) => Promise<IUser>,

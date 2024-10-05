@@ -3,7 +3,7 @@ import { connectDb } from "@frameworks/db/db.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
-import { authRouter, userRouter } from "./routes/index.js";
+import { authRouter } from "./routes/index.js";
 
 
 const app = express();
@@ -24,7 +24,6 @@ app.use(express.json());
 
 
 app.use("/auth", authRouter); // when changing to NGINX check the prefix route path ex: /auth 
-app.use("/", userRouter);
 
 
 /* global error handling */

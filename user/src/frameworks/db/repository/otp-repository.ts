@@ -1,5 +1,5 @@
 import { IOtp } from "@entities/interfaces/otp-entity.interface.js";
-import { IOtpRepository } from "@interactors/interfaces/otp-repository.interface.js";
+import { IOtpRepository } from "@interactors/interfaces/repositories/otp-repository.interface.js";
 import { Model } from "mongoose";
 import { expirationDate } from "@crowdspace/common";
 

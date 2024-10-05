@@ -1,4 +1,4 @@
-import { IMailService } from "@interactors/interfaces/mailer-service.interface.js";
+import { IMailService } from "@interactors/interfaces/services/mailer-service.interface.js";
 import { otpHtml } from "@src/config/mail-html.js";
 import { createTransport, SentMessageInfo, Transporter, } from "nodemailer";
 

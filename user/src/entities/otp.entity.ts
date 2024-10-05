@@ -1,7 +1,7 @@
 import { UUID } from "crypto";
 import { IOtp } from "./interfaces/otp-entity.interface.js";
 
-export class OTPImp implements IOtp {
+export class OTPEntity implements IOtp {
     otp: string;
     email: string;
     expiration: Date;
