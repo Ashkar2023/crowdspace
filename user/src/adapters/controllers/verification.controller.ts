@@ -1,20 +1,20 @@
 import { Request } from "express";
 import { IVerificationController } from "./interfaces/verification-controller.interface.js";
 import { ResponseCreator, BadRequestError } from "@crowdspace/common";
-import { IOtpUsecase } from "@interactors/interfaces/user/otp-usecase.interface.js";
-import { IAuthFacade } from "@interactors/interfaces/ifacade/auth-interactor-facade.interface.js";
+import { IOtpUsecase } from "@interactors/interfaces/auth/otp-usecase.interface.js";
+import { IAuthInteractorFacade } from "@interactors/interfaces/ifacade/auth-interactor-facade.interface.js";
 
 export class VerificationController implements IVerificationController {
 
     constructor(
-        private AuthFacade : IAuthFacade
+        private AuthInteractorFacade : IAuthInteractorFacade
     ){
     }
 
     async generateAndSendOtp(req: Request) {
         const { email } = req.body;
 
-        const sent = await this.AuthFacade.genAndSendOtpMail(email);
+        const sent = await this.AuthInteractorFacade.genAndSendOtpMail(email);
 
         const response = new ResponseCreator();
         return response
@@ -26,7 +26,7 @@ export class VerificationController implements IVerificationController {
     async verifyAccount(req: Request) {
         const { email, otp } = req.body;
 
-        const updatedUser = await this.AuthFacade.verifyOtp(email, otp);
+        const updatedUser = await this.AuthInteractorFacade.verifyOtp(email, otp);
 
         if (updatedUser === false) throw new BadRequestError("Incorrect OTP");
 

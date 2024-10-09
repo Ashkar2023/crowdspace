@@ -1,4 +1,4 @@
-import { TokenError, UnauthorizedError, verify } from "@crowdspace/common";
+import { TokenError, verify } from "@crowdspace/common";
 import { RequestHandler } from "express";
 
 export const verifyAccessToken: RequestHandler = async (req, res, next) => {
@@ -16,14 +16,13 @@ export const verifyAccessToken: RequestHandler = async (req, res, next) => {
             }
         })
 
-        console.log("result :", result) // DELETE
         if (result) next();
 
     } catch (error) {
         // SHOULD DELEGATE TO GLOBAL ERROR HANDLER
         if (error instanceof Error) {
             console.log("error: ", error.message) // DELETE
-
+            
             const err = new TokenError(error.message, 401, "invalid_access");
             next(err)
         }
@@ -33,9 +32,9 @@ export const verifyAccessToken: RequestHandler = async (req, res, next) => {
 export const verifyRefreshToken: RequestHandler = async (req, res, next) => {
     try {
         const { rjwt } = req.cookies;
-
+        
         if (!rjwt) throw new Error("Refresh Token not found");
-
+        
         const result = await verify({
             jwt: rjwt,
             secret: process.env.TOKEN_SECRET as string,
@@ -44,12 +43,13 @@ export const verifyRefreshToken: RequestHandler = async (req, res, next) => {
                 audience: process.env.AUDIENCE as string
             }
         })
-
+        
         if (result) next();
-
+        
     } catch (error) {
         // SHOULD DELEGATE TO GLOBAL ERROR HANDLER
         if (error instanceof Error) {
+            console.log("error: ", error.message) // DELETE
 
             const err = new TokenError(error.message, 401, "invalid_refresh");
             next(err)

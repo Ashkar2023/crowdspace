@@ -1,5 +1,5 @@
 import { IUser } from "@entities/interfaces/user-entity.interface.js";
-import { IUserRegistrationUsecase } from "./interfaces/user/registration-usecase.interface.js";
+import { IUserRegistrationUsecase } from "./interfaces/auth/registration-usecase.interface.js";
 import { UserEntity } from "@entities/user.entity.js";
 import { IUserRepository } from "./interfaces/repositories/user-repository.interface.js";
 import { IHashService } from "./interfaces/services/hash-service.interface.js";
@@ -37,12 +37,4 @@ export class UserRegistrationImp implements IUserRegistrationUsecase{
         return { email, username, isVerified, displayname, configuration }
     }
 
-    async checkExistingUser(email: string) {
-        return (await this.UserRepository.findUser(email, "email")) ? true : false;
-    }
-
-    async usernameExists(username:string){
-        const result = await this.UserRepository.findUser(username,"username");
-        return result? true : false;
-    }
 }

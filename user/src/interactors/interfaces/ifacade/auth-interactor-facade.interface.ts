@@ -1,11 +1,12 @@
-import { IResponse } from "@crowdspace/common";
-import { Request } from "express";
-import { IUserRegistrationUsecase } from "../user/registration-usecase.interface.js";
-import { IOtpUsecase } from "../user/otp-usecase.interface.js";
-import { IUserAuthenticationUsecase } from "../user/authentication-usecase.interface.js";
+import { IUserRegistrationUsecase } from "../auth/registration-usecase.interface.js";
+import { IOtpUsecase } from "../auth/otp-usecase.interface.js";
+import { IUserAuthenticationUsecase } from "../auth/authentication-usecase.interface.js";
+import { IUserChecksUsecase } from "../auth/user-checks-usecase.interface.js";
 
-export interface IAuthFacade 
+export interface IAuthInteractorFacade 
 extends 
 IOtpUsecase,
 IUserAuthenticationUsecase,
-IUserRegistrationUsecase {}
+IUserRegistrationUsecase,
+IUserChecksUsecase
+ {}

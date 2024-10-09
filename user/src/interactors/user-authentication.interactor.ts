@@ -1,12 +1,12 @@
 import { BadRequestError, decode, sign, UnauthorizedError } from "@crowdspace/common";
 import { IHashService } from "./interfaces/services/hash-service.interface.js";
 import { IUserRepository } from "./interfaces/repositories/user-repository.interface.js";
-import { IUserAuthenticationUsecase } from "./interfaces/user/authentication-usecase.interface.js";
+import { IUserAuthenticationUsecase } from "./interfaces/auth/authentication-usecase.interface.js";
 
 export type loginData = {
     credential: string,
     password: string,
-    type: "email" | "username" | "_id"
+    type: "email" | "username"
 }
 
 export class UserAuthenticationImp implements IUserAuthenticationUsecase{
@@ -24,10 +24,10 @@ export class UserAuthenticationImp implements IUserAuthenticationUsecase{
     async authenticateUser(data: loginData) {
         const { credential, password, type } = data;
 
-        const userFound = await this.UserRepository.findUser(credential, type, "-_id +password");
+        const userFound = await this.UserRepository.findUser(credential, type, "+password");
 
         if (!userFound) {
-            throw new BadRequestError("User not found", 404);
+            throw new BadRequestError("Invalid Credentials", 404);
         }
 
         let comparison = true; // for oauth
@@ -61,14 +61,13 @@ export class UserAuthenticationImp implements IUserAuthenticationUsecase{
             },
             tokenType: "ACCESS"
         })
-
+        
         const refreshToken = await sign({
             secret: (process.env.TOKEN_SECRET as string),
             payload: {
                 iss: process.env.ISSUER as string,
                 aud: process.env.AUDIENCE as string,
                 sub: userFound._id,
-                username: userFound.username,
                 type: "REFRESH"
             },
             tokenType: "REFRESH"

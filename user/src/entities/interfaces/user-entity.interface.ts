@@ -1,12 +1,12 @@
 import { ObjectId } from "mongoose"
+import { UUID } from "node:crypto"
 
-export type Link = {
-    title: string,
-    url: string
-}
+// export type Link = {
+//     title: string,
+//     url: string
+// }
 
 export type Configuration = {
-    darkTheme: boolean,
     privateAccount: boolean,
     suggestionInProfile: boolean,
     PushNotifications: {
@@ -41,9 +41,11 @@ export type IUser = {
     blockedUsers?: ObjectId[]
     configuration?: Configuration,
     bio?: string,
-    links?: Link[],
+    links?: string[],
     cover?: string,
     avatar?: string,
+    resetToken?:UUID,
+    resetTokenExpiry?:Date
 }
 
 

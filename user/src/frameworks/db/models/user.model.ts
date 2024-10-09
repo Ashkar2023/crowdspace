@@ -1,10 +1,10 @@
 import { IUser } from "@entities/interfaces/user-entity.interface.js";
 import { HydratedDocument, Schema, Types, model } from "mongoose";
 
-const LinkSchema = new Schema({
-    title: { type: String, required: true },
-    url: { type: String, required: true }
-}, { _id: false })
+// const LinkSchema = new Schema({
+//     title: { type: String, required: true },
+//     url: { type: String, required: true }
+// }, { _id: false })
 
 const NotificationsSchema = new Schema({
     likes: { type: Boolean, default: true },
@@ -46,12 +46,12 @@ const UserSchema = new Schema<IUser>({
     password: {
         type: String,
         required: true,
-        select:false
+        select: false
     },
-    isVerified:{
-        type:Boolean,
-        required:true,
-        default:false
+    isVerified: {
+        type: Boolean,
+        required: true,
+        default: false
     },
     gender: {
         type: String,
@@ -62,7 +62,7 @@ const UserSchema = new Schema<IUser>({
         default: undefined
     },
     blockedUsers: [Types.ObjectId],
-    links: [LinkSchema],
+    links: [String],
     configuration: {
         type: configurationSchema,
         default: {}
@@ -72,7 +72,7 @@ const UserSchema = new Schema<IUser>({
     avatar: String,
 }, {
     timestamps: true,
-    toObject:{
+    toObject: {
         transform(doc, ret) {
             delete ret._id
             delete ret.password;

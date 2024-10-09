@@ -1,13 +1,13 @@
 import { Request } from "express";
 import { IUserRegistrationController } from "./interfaces/userRegistration-controller.interface.js";
 import { validateReqBody, ConflictError, ResponseCreator, BadRequestError } from "@crowdspace/common";
-import { IUserRegistrationUsecase } from "@interactors/interfaces/user/registration-usecase.interface.js";
-import { IAuthFacade } from "@interactors/interfaces/ifacade/auth-interactor-facade.interface.js";
+import { IUserRegistrationUsecase } from "@interactors/interfaces/auth/registration-usecase.interface.js";
+import { IAuthInteractorFacade } from "@interactors/interfaces/ifacade/auth-interactor-facade.interface.js";
 
 export class UserRegistrationController implements IUserRegistrationController{
 
     constructor(
-        private AuthFacade : IAuthFacade
+        private AuthInteractorFacade : IAuthInteractorFacade
     ){}
 
     async checkUsernameExists(req: Request) {
@@ -15,7 +15,7 @@ export class UserRegistrationController implements IUserRegistrationController{
         validateReqBody(req.body, ["username"]); // change to zod validation middleware
 
         const { username } = req.body;
-        const result = await this.AuthFacade.usernameExists(username);
+        const result = await this.AuthInteractorFacade.usernameExists(username);
 
         if(result) throw new ConflictError("Username already found");
 
@@ -30,18 +30,18 @@ export class UserRegistrationController implements IUserRegistrationController{
     async registerUser(req: Request) {
         const userData = req.body;
 
-        // make this into a package validation like joi/yup
-        validateReqBody(userData, ["username", "email", "password", "displayname"]);
+        /* do ZOD */
+        validateReqBody(userData, ["username", "email", "password", "displayname"]); 
 
         /* sanitizeInput */
 
-        const emailFound = await this.AuthFacade.checkExistingUser(userData.email);
+        const emailFound = await this.AuthInteractorFacade.checkExistingUser(userData.email);
 
         if (emailFound) {
-            throw new BadRequestError("User with email already exists", 403)
+            throw new BadRequestError("User already exists", 403)
         }
 
-        const registeredUser = await this.AuthFacade.registerUser({
+        const registeredUser = await this.AuthInteractorFacade.registerUser({
             username: userData.username,
             email: userData.email,
             password: userData.password,

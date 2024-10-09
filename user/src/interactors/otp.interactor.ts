@@ -1,7 +1,6 @@
 import { generateOTP, BadRequestError } from "@crowdspace/common";
 import { OTPEntity } from "@entities/otp.entity.js";
-import { IOtpUsecase } from "./interfaces/user/otp-usecase.interface.js";
-import { IHashService } from "./interfaces/services/hash-service.interface.js";
+import { IOtpUsecase } from "./interfaces/auth/otp-usecase.interface.js";
 import { IUserRepository } from "./interfaces/repositories/user-repository.interface.js";
 import { IOtpRepository } from "./interfaces/repositories/otp-repository.interface.js";
 import { IMailService } from "./interfaces/services/mailer-service.interface.js";
@@ -49,8 +48,10 @@ export class OtpImp implements IOtpUsecase {
 
         if (otpDoc?.otp === otp) {
             const updatedUser = await this.UserRepository.verifyUser(email);
-
+            
             if (updatedUser === null) throw new BadRequestError("User not found");
+            
+            const deleteOtpDoc = await this.OtpRepository.deleteOtpDoc(email);
 
             return updatedUser
 

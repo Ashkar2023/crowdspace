@@ -1,20 +1,19 @@
 import { Request } from "express";
 import { IUserAuthController } from "./interfaces/userAuth-controller.interface.js";
 import { ResponseCreator, expirationDate } from "@crowdspace/common";
-import { IUserAuthenticationUsecase } from "@interactors/interfaces/user/authentication-usecase.interface.js";
-import { IAuthFacade } from "@interactors/interfaces/ifacade/auth-interactor-facade.interface.js";
+import { IAuthInteractorFacade } from "@interactors/interfaces/ifacade/auth-interactor-facade.interface.js";
 
 export class UserAuthController implements IUserAuthController {
     
     constructor(
-        private AuthFacade: IAuthFacade
+        private AuthInteractorFacade: IAuthInteractorFacade
     ) { }
 
 
     async loginUser(req: Request) {
         const { credential, password, type } = req.body;
 
-        const { user, refreshToken, accessToken } = await this.AuthFacade.authenticateUser({
+        const { user, refreshToken, accessToken } = await this.AuthInteractorFacade.authenticateUser({
             credential,
             password,
             type
@@ -27,7 +26,7 @@ export class UserAuthController implements IUserAuthController {
             .setHeaders({
                 "Set-Cookie": [
                     `ajwt=${accessToken}; Path=/; Expires=${expirationDate(5, "minute")}; httpOnly;`,
-                    `rjwt=${refreshToken}; Path=/; Expires=${expirationDate(1, "week")}; httpOnly;`
+                    `rjwt=${refreshToken}; Path=/; httpOnly;`
                 ]
             })
             .setMessage("User authenticated")
@@ -57,7 +56,7 @@ export class UserAuthController implements IUserAuthController {
     async refreshAccess(req: Request) {
         const { rjwt } = req.cookies;
 
-        const refreshToken = await this.AuthFacade.refreshAccessToken(rjwt);
+        const refreshToken = await this.AuthInteractorFacade.refreshAccessToken(rjwt);
 
         const response = new ResponseCreator();
         return response

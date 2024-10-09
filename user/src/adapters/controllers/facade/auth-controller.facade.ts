@@ -1,4 +1,4 @@
-import { IAuthFacade } from "@interactors/interfaces/ifacade/auth-interactor-facade.interface.js";
+import { IAuthInteractorFacade } from "@interactors/interfaces/ifacade/auth-interactor-facade.interface.js";
 import { IAuthControllerFacade } from "../interfaces/ifacade/auth-controller-facade.interface.js";
 import { IOAuthController } from "../interfaces/oauth-controller.interface.js";
 import { IUserAuthController } from "../interfaces/userAuth-controller.interface.js";
@@ -17,12 +17,12 @@ export class AuthControllerFacade implements IAuthControllerFacade {
     private VerificationControllerInstance: IVerificationController;
 
     constructor(
-        private AuthFacade: IAuthFacade,
+        private AuthInteractorFacade: IAuthInteractorFacade,
     ) {
-        this.OAuthControllerInstance = new OAuthController(AuthFacade);
-        this.UserAuthControllerInstance = new UserAuthController(AuthFacade);
-        this.UserRegistrationControllerInstance = new UserRegistrationController(AuthFacade);
-        this.VerificationControllerInstance = new VerificationController(AuthFacade);
+        this.OAuthControllerInstance = new OAuthController(AuthInteractorFacade);
+        this.UserAuthControllerInstance = new UserAuthController(AuthInteractorFacade);
+        this.UserRegistrationControllerInstance = new UserRegistrationController(AuthInteractorFacade);
+        this.VerificationControllerInstance = new VerificationController(AuthInteractorFacade);
     }
 
     // User Registration Controller

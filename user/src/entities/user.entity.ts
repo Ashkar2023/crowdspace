@@ -1,5 +1,5 @@
 import { BadRequestError } from "@crowdspace/common";
-import { Configuration, IUser, IUserEntity, Link } from "@entities/interfaces/user-entity.interface.js";
+import { Configuration, IUser, IUserEntity } from "@entities/interfaces/user-entity.interface.js";
 import { Schema } from "mongoose";
 
 export class UserEntity implements IUserEntity {
@@ -12,12 +12,13 @@ export class UserEntity implements IUserEntity {
     blockedUsers?: Schema.Types.ObjectId[] | undefined;
     configuration?: Configuration | undefined;
     bio?: string | undefined;
-    links?: Link[] | undefined;
+    links?: string[] | undefined;
     cover?: string | undefined;
     avatar?: string | undefined;
+    resetToken?: `${string}-${string}-${string}-${string}-${string}` | undefined;
+    resetTokenExpiry?: Date | undefined;
 
     private static defaultConfiguration: Configuration = {
-        darkTheme: false,
         privateAccount: false,
         suggestionInProfile: true,
         PushNotifications: {
@@ -53,6 +54,8 @@ export class UserEntity implements IUserEntity {
         this.links = data.links || [];
         this.cover = data.cover || "";
         this.avatar = data.avatar || "";
+        this.resetToken = data.resetToken || undefined;
+        this.resetTokenExpiry = data.resetTokenExpiry || undefined;
     }
 
     validate() {
@@ -85,7 +88,7 @@ export class UserEntity implements IUserEntity {
         return true
     };
 
-    
+
     get() {
         return Object.freeze({
             username: this.username,
@@ -99,9 +102,11 @@ export class UserEntity implements IUserEntity {
             bio: this.bio,
             links: this.links,
             cover: this.cover,
-            avatar: this.avatar
+            avatar: this.avatar,
+            resetToken: this.resetToken,
+            resetTokenExpiry: this.resetTokenExpiry,
         })
-    }    
+    }
     //  remember there are other methods like object.assign, object.keys
     //  which can achieve a similiar, but not exact behaviour.  
 }
