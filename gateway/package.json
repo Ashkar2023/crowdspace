@@ -1,0 +1,17 @@
+{
+  "name": "gateway",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon --watch src/ --ext ts,json --ignore .git --ignore node_modules --exec \"tsc && node --env-file=.env dist/index.js\"",
+    "dev:debug": "nodemon --watch src/ --ext ts,json --ignore .git --ignore node_modules --exec \"tsc && node inspect --env-file=.env dist/index.js\""
+  },
+  "dependencies": {
+    "http-proxy": "^1.18.1"
+  },
+  "devDependencies": {
+    "@types/http-proxy": "^1.17.15",
+    "nodemon": "^3.1.7"
+  }
+}
