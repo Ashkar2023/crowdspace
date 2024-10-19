@@ -1,12 +1,12 @@
 import { ResponseCreator } from "@crowdspace/common";
 import { Request } from "express";
-import { IPasswordController } from "./interfaces/password-controller.interface.js";
+import { IPasswordController } from "../interfaces/password-controller.interface.js";
 import { ISettingsInteractorFacade } from "@interactors/interfaces/ifacade/settings-interactor-facade.interface.js";
 
 export class PasswordController implements IPasswordController {
 
     constructor(
-        private SettingsInteractorFacade : ISettingsInteractorFacade
+        private SettingsInteractorFacade: ISettingsInteractorFacade
     ) {
 
     }

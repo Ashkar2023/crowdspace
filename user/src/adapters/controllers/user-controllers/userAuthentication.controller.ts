@@ -1,19 +1,31 @@
 import { Request } from "express";
-import { IUserAuthController } from "./interfaces/userAuth-controller.interface.js";
+import { IUserAuthController } from "../interfaces/userAuth-controller.interface.js";
 import { ResponseCreator, expirationDate } from "@crowdspace/common";
 import { IAuthInteractorFacade } from "@interactors/interfaces/ifacade/auth-interactor-facade.interface.js";
+import { IValidationService } from "../interfaces/service/validation-service.interface.js";
 
 export class UserAuthController implements IUserAuthController {
     
     constructor(
-        private AuthInteractorFacade: IAuthInteractorFacade
+        private _AuthInteractorFacade: IAuthInteractorFacade,
+        private _validator : IValidationService,
     ) { }
 
 
     async loginUser(req: Request) {
         const { credential, password, type } = req.body;
 
-        const { user, refreshToken, accessToken } = await this.AuthInteractorFacade.authenticateUser({
+        /*  VALIDATION */
+        this._validator.validateCredentialType(type);
+        if(type==="email"){
+            this._validator.validateEmail(credential);
+        }else if(type==="username"){
+            this._validator.validateUsername(credential);
+        }
+
+        /* NoSQL sanitization */
+
+        const { user, refreshToken, accessToken } = await this._AuthInteractorFacade.authenticateUser({
             credential,
             password,
             type
@@ -26,7 +38,7 @@ export class UserAuthController implements IUserAuthController {
             .setHeaders({
                 "Set-Cookie": [
                     `ajwt=${accessToken}; Path=/; Expires=${expirationDate(5, "minute")}; httpOnly;`,
-                    `rjwt=${refreshToken}; Path=/; httpOnly;`
+                    `rjwt=${refreshToken}; Path=/; Expires=${expirationDate(1, "week")}; httpOnly;`
                 ]
             })
             .setMessage("User authenticated")
@@ -45,25 +57,25 @@ export class UserAuthController implements IUserAuthController {
             .setStatusCode(200)
             .setHeaders({
                 "Set-Cookie": [
-                    `ajwt=; Path=/; Expires=${expirationDate(-1, "day")}; Max-Age=0; httpOnly;`,
+                    `ajwt=; Path=/; Expires=${expirationDate(-1, "day")}; Max-Age=0; httpOnly;`, //WHEN HOSTING - Add Domain
                     `rjwt=; Path=/; Expires=${expirationDate(-1, "day")}; Max-Age=0; httpOnly;`
                 ]
             })
-            .setMessage("User logged out")
+            .setMessage("Logout successful")
             .get();
     }
 
     async refreshAccess(req: Request) {
         const { rjwt } = req.cookies;
 
-        const refreshToken = await this.AuthInteractorFacade.refreshAccessToken(rjwt);
+        const refreshToken = await this._AuthInteractorFacade.refreshAccessToken(rjwt);
 
         const response = new ResponseCreator();
         return response
             .setStatusCode(200)
             .setMessage("token re-authenticated")
             .setHeaders({
-                "Set-Cookie": [`ajwt=${refreshToken}; Path=/; Expires=${expirationDate(5, "minute")}; httpOnly;`]
+                "Set-Cookie": [`ajwt=${refreshToken}; Path=/; Expires=${expirationDate(5, "minute")}; httpOnly;`] //WHEN HOSTING - Add Domain
             })
             .get();
     };

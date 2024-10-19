@@ -38,6 +38,7 @@ export type IUser = {
     password: string,
     gender?: "M" | "F",
     isVerified?: boolean,
+    isBanned?: boolean,
     blockedUsers?: ObjectId[]
     configuration?: Configuration,
     bio?: string,
@@ -52,6 +53,5 @@ export type IUser = {
 // USER ENTITY - with user state & behaviour
 export interface IUserEntity extends IUser {
     validate: () => void,
-    validateConfig: () => boolean,
     get: () => IUser
 }

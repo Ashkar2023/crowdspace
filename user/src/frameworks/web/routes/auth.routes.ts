@@ -15,7 +15,7 @@ export function buildAuthRoutes({ router, authContoller, middlewares }: {
 
     router.post("/register", createCallback(authContoller.registerUser.bind(authContoller)));
 
-    router.post("/login", createCallback(authContoller.loginUser.bind(authContoller)))
+    router.post("/login", createCallback(authContoller.loginUser.bind(authContoller)));
 
     router.post("/oauth-callback", createCallback(authContoller.googleAuthSignup.bind(authContoller)));
 

@@ -11,9 +11,6 @@
         "outDir": "dist",
         "baseUrl": ".",
         "paths": {
-            // "@controllers/*": ["src/adapters/controllers/*"],
-            // "@repository/*": ["src/adapters/repository/*"],
-            // "@routes/*": ["src/frameworks/routes/*"],
             "@adapters/*": ["src/adapters/*"],
             "@interactors/*": ["src/interactors/*"],
             "@frameworks/*": ["src/frameworks/*"],

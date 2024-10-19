@@ -1,7 +1,7 @@
 import { BadRequestError, decode, sign, UnauthorizedError } from "@crowdspace/common";
-import { IHashService } from "./interfaces/services/hash-service.interface.js";
-import { IUserRepository } from "./interfaces/repositories/user-repository.interface.js";
-import { IUserAuthenticationUsecase } from "./interfaces/auth/authentication-usecase.interface.js";
+import { IHashService } from "../interfaces/services/hash-service.interface.js";
+import { IUserRepository } from "../interfaces/repositories/user-repository.interface.js";
+import { IUserAuthenticationUsecase } from "../interfaces/user-usecase/auth/authentication-usecase.interface.js";
 
 export type loginData = {
     credential: string,
@@ -10,21 +10,18 @@ export type loginData = {
 }
 
 export class UserAuthenticationImp implements IUserAuthenticationUsecase{
-    private UserRepository:IUserRepository;
-    private HashService: IHashService
-
+    
     constructor(
-        userRepository:IUserRepository,
-        hashService: IHashService
+        private _UserRepository:IUserRepository,
+        private _HashService: IHashService
     ){
-        this.UserRepository = userRepository; 
-        this.HashService = hashService; 
+
     }
 
     async authenticateUser(data: loginData) {
         const { credential, password, type } = data;
 
-        const userFound = await this.UserRepository.findUser(credential, type, "+password");
+        const userFound = await this._UserRepository.findUser(credential, type, "+password");
 
         if (!userFound) {
             throw new BadRequestError("Invalid Credentials", 404);
@@ -33,7 +30,7 @@ export class UserAuthenticationImp implements IUserAuthenticationUsecase{
         let comparison = true; // for oauth
 
         if (password !== "nil") {
-            comparison = await this.HashService.comparePassword(password, userFound.password);
+            comparison = await this._HashService.comparePassword(password, userFound.password);
         }
 
         if (!comparison) {

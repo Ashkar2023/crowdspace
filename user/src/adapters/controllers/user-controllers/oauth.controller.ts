@@ -1,6 +1,4 @@
-import { IUserRegistrationUsecase } from "@interactors/interfaces/auth/registration-usecase.interface.js";
-import { IOAuthController } from "./interfaces/oauth-controller.interface.js";
-import { IUserAuthenticationUsecase } from "@interactors/interfaces/auth/authentication-usecase.interface.js";
+import { IOAuthController } from "../interfaces/oauth-controller.interface.js";
 import { Request } from "express";
 import { ResponseCreator, expirationDate } from "@crowdspace/common";
 import { oauthConfig } from "@src/config/oauth.js";
@@ -9,7 +7,6 @@ import { OAuth2Client } from "google-auth-library";
 import { IAuthInteractorFacade } from "@interactors/interfaces/ifacade/auth-interactor-facade.interface.js";
 
 export class OAuthController implements IOAuthController{
-   
     constructor(
         private AuthInteractorFacade : IAuthInteractorFacade
     ){}

@@ -48,6 +48,11 @@ const UserSchema = new Schema<IUser>({
         required: true,
         select: false
     },
+    isBanned:{
+        type:Boolean,
+        required:true,
+        default:false
+    },
     isVerified: {
         type: Boolean,
         required: true,

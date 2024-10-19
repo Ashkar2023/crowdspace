@@ -4,62 +4,64 @@ import { IOAuthController } from "../interfaces/oauth-controller.interface.js";
 import { IUserAuthController } from "../interfaces/userAuth-controller.interface.js";
 import { IUserRegistrationController } from "../interfaces/userRegistration-controller.interface.js";
 import { IVerificationController } from "../interfaces/verification-controller.interface.js";
-import { OAuthController } from "../oauth.controller.js";
-import { UserAuthController } from "../userAuth.controller.js";
-import { UserRegistrationController } from "../userRegistration.controller.js";
-import { VerificationController } from "../verification.controller.js";
+import { OAuthController } from "../user-controllers/oauth.controller.js";
+import { UserAuthController } from "../user-controllers/userAuthentication.controller.js";
+import { UserRegistrationController } from "../user-controllers/userRegistration.controller.js";
+import { VerificationController } from "../user-controllers/verification.controller.js";
 import { Request } from "express";
+import { IValidationService } from "../interfaces/service/validation-service.interface.js";
 
 export class AuthControllerFacade implements IAuthControllerFacade {
-    private OAuthControllerInstance: IOAuthController;
-    private UserAuthControllerInstance: IUserAuthController;
-    private UserRegistrationControllerInstance: IUserRegistrationController;
-    private VerificationControllerInstance: IVerificationController;
+    private _OAuthControllerInstance: IOAuthController;
+    private _UserAuthControllerInstance: IUserAuthController;
+    private _UserRegistrationControllerInstance: IUserRegistrationController;
+    private _VerificationControllerInstance: IVerificationController;
 
     constructor(
-        private AuthInteractorFacade: IAuthInteractorFacade,
+        private _AuthInteractorFacade: IAuthInteractorFacade,
+        validatorService: IValidationService,
     ) {
-        this.OAuthControllerInstance = new OAuthController(AuthInteractorFacade);
-        this.UserAuthControllerInstance = new UserAuthController(AuthInteractorFacade);
-        this.UserRegistrationControllerInstance = new UserRegistrationController(AuthInteractorFacade);
-        this.VerificationControllerInstance = new VerificationController(AuthInteractorFacade);
+        this._OAuthControllerInstance = new OAuthController(_AuthInteractorFacade);
+        this._UserAuthControllerInstance = new UserAuthController(_AuthInteractorFacade,validatorService);
+        this._UserRegistrationControllerInstance = new UserRegistrationController(_AuthInteractorFacade,validatorService);
+        this._VerificationControllerInstance = new VerificationController(_AuthInteractorFacade);
     }
 
     // User Registration Controller
     async registerUser(req: Request) {
-        return await this.UserRegistrationControllerInstance.registerUser(req);
+        return await this._UserRegistrationControllerInstance.registerUser(req);
     };
 
     async checkUsernameExists(req: Request) {
-        return await this.UserRegistrationControllerInstance.checkUsernameExists(req);
+        return await this._UserRegistrationControllerInstance.checkUsernameExists(req);
     }
 
 
     // User Authentication Controller
     async loginUser(req: Request) {
-        return await this.UserAuthControllerInstance.loginUser(req);
+        return await this._UserAuthControllerInstance.loginUser(req);
     }
     async logoutUser(req: Request) {
-        return await this.UserAuthControllerInstance.logoutUser(req);
+        return await this._UserAuthControllerInstance.logoutUser(req);
     }
 
     async refreshAccess(req: Request) {
-        return await this.UserAuthControllerInstance.refreshAccess(req);
+        return await this._UserAuthControllerInstance.refreshAccess(req);
     }
 
 
     //OAuth Controller
     async googleAuthSignup(req: Request) {
-        return await this.OAuthControllerInstance.googleAuthSignup(req);
+        return await this._OAuthControllerInstance.googleAuthSignup(req);
     }
 
     
     //Verification Controller
     async generateAndSendOtp(req: Request) {
-        return await this.VerificationControllerInstance.generateAndSendOtp(req);
+        return await this._VerificationControllerInstance.generateAndSendOtp(req);
     }
 
     async verifyAccount(req: Request) {
-        return await this.VerificationControllerInstance.verifyAccount(req);
+        return await this._VerificationControllerInstance.verifyAccount(req);
     }
 }

@@ -1,4 +1,4 @@
-import { UUID } from "crypto";
+// import { UUID } from "crypto";
 import { IOtp } from "./interfaces/otp-entity.interface.js";
 
 export class OTPEntity implements IOtp {

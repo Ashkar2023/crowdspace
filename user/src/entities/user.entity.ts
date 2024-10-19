@@ -1,4 +1,3 @@
-import { BadRequestError } from "@crowdspace/common";
 import { Configuration, IUser, IUserEntity } from "@entities/interfaces/user-entity.interface.js";
 import { Schema } from "mongoose";
 
@@ -9,6 +8,7 @@ export class UserEntity implements IUserEntity {
     password: string;
     gender?: "M" | "F" | undefined;
     isVerified?: boolean | undefined;
+    isBanned: boolean;
     blockedUsers?: Schema.Types.ObjectId[] | undefined;
     configuration?: Configuration | undefined;
     bio?: string | undefined;
@@ -48,6 +48,7 @@ export class UserEntity implements IUserEntity {
         this.password = data.password;
         this.gender = data.gender || undefined;
         this.isVerified = data.isVerified || false;
+        this.isBanned = false;
         this.blockedUsers = data.blockedUsers || [];
         this.configuration = data.configuration || undefined;
         this.bio = data.bio || "";
@@ -62,32 +63,6 @@ export class UserEntity implements IUserEntity {
         //
     };
 
-    private isNull(value: any): boolean {
-        if (value !== false || value !== true) return true
-        else return false
-    }
-
-    // this was made for fun. This function makes no difference
-    validateConfig(config: Record<string, any> | undefined = this.configuration) {
-        if (!config) {
-            throw new BadRequestError("No config found!");
-        }
-
-        for (const key in config) {
-            if (Object.prototype.hasOwnProperty.bind(config, key)) {
-                if (typeof key === "object") {
-                    this.validateConfig(config[key]);
-                } else {
-                    if (!this.isNull(config[key])) {
-                        throw new BadRequestError("Invalid Configuration in Entity");
-                    };
-                }
-            }
-        }
-
-        return true
-    };
-
 
     get() {
         return Object.freeze({
@@ -96,6 +71,7 @@ export class UserEntity implements IUserEntity {
             password: this.password,
             displayname: this.displayname,
             isVerified: this.isVerified,
+            isBanned:this.isBanned,
             gender: this.gender,
             blockedUsers: this.blockedUsers,
             configuration: this.configuration,

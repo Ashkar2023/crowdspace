@@ -24,7 +24,7 @@ export class Mailer implements IMailService {
             if (error) {
                 throw new Error("SMTP host connection error");
             } else {
-                console.log("Server is ready to take our messages \n",
+                console.log("Server is ready to send email \n",
                     success
                 ); //DELETE
             }

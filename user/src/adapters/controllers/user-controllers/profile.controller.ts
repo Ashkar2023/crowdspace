@@ -1,5 +1,5 @@
 import { ISettingsInteractorFacade } from "@interactors/interfaces/ifacade/settings-interactor-facade.interface.js";
-import { IProfileController } from "./interfaces/profile-controller.interface.js";
+import { IProfileController } from "../interfaces/profile-controller.interface.js";
 import { ResponseCreator } from "@crowdspace/common";
 import { Request } from "express";
 

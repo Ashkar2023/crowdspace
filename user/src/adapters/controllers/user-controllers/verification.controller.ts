@@ -1,7 +1,7 @@
 import { Request } from "express";
-import { IVerificationController } from "./interfaces/verification-controller.interface.js";
+import { IVerificationController } from "../interfaces/verification-controller.interface.js";
 import { ResponseCreator, BadRequestError } from "@crowdspace/common";
-import { IOtpUsecase } from "@interactors/interfaces/auth/otp-usecase.interface.js";
+import { IOtpUsecase } from "@interactors/interfaces/user-usecase/auth/otp-usecase.interface.js";
 import { IAuthInteractorFacade } from "@interactors/interfaces/ifacade/auth-interactor-facade.interface.js";
 
 export class VerificationController implements IVerificationController {

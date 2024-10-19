@@ -19,7 +19,6 @@ export const verifyAccessToken: RequestHandler = async (req, res, next) => {
         if (result) next();
 
     } catch (error) {
-        // SHOULD DELEGATE TO GLOBAL ERROR HANDLER
         if (error instanceof Error) {
             console.log("error: ", error.message) // DELETE
             
@@ -47,7 +46,6 @@ export const verifyRefreshToken: RequestHandler = async (req, res, next) => {
         if (result) next();
         
     } catch (error) {
-        // SHOULD DELEGATE TO GLOBAL ERROR HANDLER
         if (error instanceof Error) {
             console.log("error: ", error.message) // DELETE
 

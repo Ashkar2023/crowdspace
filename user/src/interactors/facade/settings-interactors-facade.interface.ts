@@ -1,14 +1,14 @@
-import { ITokenUsecase } from "@interactors/interfaces/auth/token-usecase.interface.js";
-import { IUserChecksUsecase } from "@interactors/interfaces/auth/user-checks-usecase.interface.js";
+import { ITokenUsecase } from "@interactors/interfaces/user-usecase/auth/token-usecase.interface.js";
+import { IUserChecksUsecase } from "@interactors/interfaces/user-usecase/auth/user-checks-usecase.interface.js";
 import { ISettingsInteractorFacade } from "@interactors/interfaces/ifacade/settings-interactor-facade.interface.js";
 import { IUserRepository } from "@interactors/interfaces/repositories/user-repository.interface.js";
 import { IHashService } from "@interactors/interfaces/services/hash-service.interface.js";
-import { IPasswordUpdateUsecase } from "@interactors/interfaces/settings/password-update-usecase.interface.js";
-import { IProfileUpdateUsecase, ProfileSettingDTO } from "@interactors/interfaces/settings/profile-update-usecase.interface.js";
-import { PasswordUpdateImp } from "@interactors/password-update.interactor.js";
-import { ProfileImp } from "@interactors/profile-update.interactor.js";
-import { TokenImp } from "@interactors/token.interactor.js";
-import { UserChecksImp } from "@interactors/user-checks.interactor.js";
+import { IPasswordUpdateUsecase } from "@interactors/interfaces/user-usecase/settings/password-update-usecase.interface.js";
+import { IProfileUpdateUsecase, ProfileSettingDTO } from "@interactors/interfaces/user-usecase/settings/profile-update-usecase.interface.js";
+import { PasswordUpdateImp } from "@interactors/user-interactors/password-update.interactor.js";
+import { ProfileImp } from "@interactors/user-interactors/profile-update.interactor.js";
+import { TokenImp } from "@interactors/user-interactors/token.interactor.js";
+import { UserChecksImp } from "@interactors/user-interactors/user-checks.interactor.js";
 
 export class SettingsInteractorFacade implements ISettingsInteractorFacade {
     private ProfileUpdateInstance: IProfileUpdateUsecase;

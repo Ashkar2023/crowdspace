@@ -4,14 +4,14 @@ import { IOtpRepository } from "@interactors/interfaces/repositories/otp-reposit
 import { IUserRepository } from "@interactors/interfaces/repositories/user-repository.interface.js";
 import { IHashService } from "@interactors/interfaces/services/hash-service.interface.js";
 import { IMailService } from "@interactors/interfaces/services/mailer-service.interface.js";
-import { IUserAuthenticationUsecase, loginData } from "@interactors/interfaces/auth/authentication-usecase.interface.js";
-import { IOtpUsecase } from "@interactors/interfaces/auth/otp-usecase.interface.js";
-import { IUserRegistrationUsecase } from "@interactors/interfaces/auth/registration-usecase.interface.js";
-import { OtpImp } from "@interactors/otp.interactor.js";
-import { UserAuthenticationImp } from "@interactors/user-authentication.interactor.js";
-import { UserRegistrationImp } from "@interactors/user-registration.interactor.js";
-import { IUserChecksUsecase } from "@interactors/interfaces/auth/user-checks-usecase.interface.js";
-import { UserChecksImp } from "@interactors/user-checks.interactor.js";
+import { IUserAuthenticationUsecase, loginData } from "@interactors/interfaces/user-usecase/auth/authentication-usecase.interface.js";
+import { IOtpUsecase } from "@interactors/interfaces/user-usecase/auth/otp-usecase.interface.js";
+import { IUserRegistrationUsecase } from "@interactors/interfaces/user-usecase/auth/registration-usecase.interface.js";
+import { OtpImp } from "@interactors/user-interactors/otp.interactor.js";
+import { UserAuthenticationImp } from "@interactors/user-interactors/user-authentication.interactor.js";
+import { UserRegistrationImp } from "@interactors/user-interactors/user-registration.interactor.js";
+import { IUserChecksUsecase } from "@interactors/interfaces/user-usecase/auth/user-checks-usecase.interface.js";
+import { UserChecksImp } from "@interactors/user-interactors/user-checks.interactor.js";
 
 export class AuthInteractorFacade implements IAuthInteractorFacade {
     private UserAuthenticationInstance: IUserAuthenticationUsecase;

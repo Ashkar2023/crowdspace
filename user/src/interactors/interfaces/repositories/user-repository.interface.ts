@@ -1,6 +1,6 @@
 import { HydratedDocument, UpdateWriteOpResult } from "mongoose";
 import { IUser } from "../../../entities/interfaces/user-entity.interface.js";
-import { ProfileSettingDTO } from "../settings/profile-update-usecase.interface.js";
+import { ProfileSettingDTO } from "../user-usecase/settings/profile-update-usecase.interface.js";
 
 export type credentialType = "email" | "username";
 

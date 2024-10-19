@@ -1,12 +1,12 @@
 import { BadRequestError } from "@crowdspace/common";
 import { IUser } from "@entities/interfaces/user-entity.interface.js";
 import { credentialType, IUserRepository } from "@interactors/interfaces/repositories/user-repository.interface.js";
-import { ProfileSettingDTO } from "@interactors/interfaces/settings/profile-update-usecase.interface.js";
+import { ProfileSettingDTO } from "@interactors/interfaces/user-usecase/settings/profile-update-usecase.interface.js";
 import { Model, Types } from "mongoose";
 
 
 
-export class userRepositoryImp implements IUserRepository {
+export class UserRepositoryImp implements IUserRepository {
     private model: Model<IUser>;
 
     constructor(userModel: Model<IUser>) {

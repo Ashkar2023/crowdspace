@@ -1,11 +1,9 @@
 import { Request } from "express";
 import { ISettingsControllerFacade } from "../interfaces/ifacade/settings-controller-facade.interface.js";
 import { IProfileController } from "../interfaces/profile-controller.interface.js";
-import { ProfileController } from "../profile.controller.js";
+import { ProfileController } from "../user-controllers/profile.controller.js";
 import { ISettingsInteractorFacade } from "@interactors/interfaces/ifacade/settings-interactor-facade.interface.js";
-import { IResponse } from "@crowdspace/common";
-import { IPasswordUpdateUsecase } from "@interactors/interfaces/settings/password-update-usecase.interface.js";
-import { PasswordController } from "../password.controller.js";
+import { PasswordController } from "../user-controllers/password.controller.js";
 import { IPasswordController } from "../interfaces/password-controller.interface.js";
 
 export class SettingsControllerFacade implements ISettingsControllerFacade {
