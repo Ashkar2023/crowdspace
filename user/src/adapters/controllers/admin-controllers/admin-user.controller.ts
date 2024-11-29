@@ -13,9 +13,17 @@ export class AdminUserController implements IAdminUserController {
     }
 
     async getUsers(req: Request) {
-        // destructure req for filters(pagination)
+        /* destructure req for filters(pagination) */
+        const { page = 1, limit = 10 } = req.query;
 
-        const result = await this.AdminUserInteractorFacadeInstance.fetchUsers();
+        /* Validat query params */
+
+
+
+        const result = await this.AdminUserInteractorFacadeInstance.fetchUsers(
+            parseInt(page as string),
+            parseInt(limit as string)
+        );
 
         const response = new ResponseCreator();
         return response.setMessage("Users Fetched")

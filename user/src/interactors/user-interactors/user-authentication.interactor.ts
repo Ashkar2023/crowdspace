@@ -1,4 +1,4 @@
-import { BadRequestError, decode, sign, UnauthorizedError } from "@crowdspace/common";
+import { BadRequestError, decodeJWT, signJWT, UnauthorizedError } from "@crowdspace/common";
 import { IHashService } from "../interfaces/services/hash-service.interface.js";
 import { IUserRepository } from "../interfaces/repositories/user-repository.interface.js";
 import { IUserAuthenticationUsecase } from "../interfaces/user-usecase/auth/authentication-usecase.interface.js";
@@ -9,12 +9,12 @@ export type loginData = {
     type: "email" | "username"
 }
 
-export class UserAuthenticationImp implements IUserAuthenticationUsecase{
-    
+export class UserAuthenticationImp implements IUserAuthenticationUsecase {
+
     constructor(
-        private _UserRepository:IUserRepository,
+        private _UserRepository: IUserRepository,
         private _HashService: IHashService
-    ){
+    ) {
 
     }
 
@@ -47,7 +47,7 @@ export class UserAuthenticationImp implements IUserAuthenticationUsecase{
             change the methods from the common package to a service implementation.
             priority : HIGH 
         */
-        const accessToken = await sign({
+        const accessToken = await signJWT({
             secret: (process.env.TOKEN_SECRET as string),
             payload: {
                 iss: process.env.ISSUER as string,
@@ -58,8 +58,8 @@ export class UserAuthenticationImp implements IUserAuthenticationUsecase{
             },
             tokenType: "ACCESS"
         })
-        
-        const refreshToken = await sign({
+
+        const refreshToken = await signJWT({
             secret: (process.env.TOKEN_SECRET as string),
             payload: {
                 iss: process.env.ISSUER as string,
@@ -73,6 +73,7 @@ export class UserAuthenticationImp implements IUserAuthenticationUsecase{
 
         const santizedUser = userFound.toObject();
 
+
         return {
             user: santizedUser,
             refreshToken,
@@ -80,10 +81,14 @@ export class UserAuthenticationImp implements IUserAuthenticationUsecase{
         };
     }
 
+    // TO REMOVE as this has been implemented in
     async refreshAccessToken(cookie: string) {
-        const { sub, username } = decode(cookie);
+        const { sub, username } = decodeJWT(cookie);
 
-        const accessToken = await sign({
+        // check for user in database and verify
+        // rather than blindly regenerating the access token
+
+        const accessToken = await signJWT({
             secret: (process.env.TOKEN_SECRET as string),
             payload: {
                 iss: process.env.ISSUER as string,

@@ -79,8 +79,8 @@ const UserSchema = new Schema<IUser>({
     timestamps: true,
     toObject: {
         transform(doc, ret) {
-            delete ret._id
-            delete ret.password;
+            // delete ret._id
+            // delete ret.password;
         },
     }
 })

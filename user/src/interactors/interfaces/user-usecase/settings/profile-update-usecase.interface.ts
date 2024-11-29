@@ -1,5 +1,5 @@
 
-export type ProfileSettingDTO = {
+export type T_ProfileSetting = {
     username: string, //as acc finder
     links: string[],
     bio: string,
@@ -7,6 +7,6 @@ export type ProfileSettingDTO = {
 }
 
 export interface IProfileUpdateUsecase {
-    updateProfile: (settings: ProfileSettingDTO, userId: string) => Promise<ProfileSettingDTO>
+    updateProfile: (settings: T_ProfileSetting, userId: string) => Promise<T_ProfileSetting>
     updateUsername: (newUsername: string, userId: string) => Promise<string>
 }

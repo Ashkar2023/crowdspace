@@ -8,7 +8,7 @@ export function buildSettingsRouter({ router, settingsController, middlewares }:
     middlewares: Record<string, any>
 }) {
 
-    router.use(middlewares.verifyAccessToken);
+    // router.use(middlewares.verifyAccessToken); DELETE
 
     router.patch("/profile",
         createCallback(settingsController.updateProfile.bind(settingsController))

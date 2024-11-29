@@ -1,6 +1,6 @@
 import { BadRequestError, ConflictError, InternalServerError, UnauthorizedError } from "@crowdspace/common";
 import { IUserRepository } from "../interfaces/repositories/user-repository.interface.js";
-import { IProfileUpdateUsecase, ProfileSettingDTO } from "../interfaces/user-usecase/settings/profile-update-usecase.interface.js";
+import { IProfileUpdateUsecase, T_ProfileSetting } from "../interfaces/user-usecase/settings/profile-update-usecase.interface.js";
 import { IUserChecksUsecase } from "../interfaces/user-usecase/auth/user-checks-usecase.interface.js";
 
 export class ProfileImp implements IProfileUpdateUsecase {
@@ -11,7 +11,7 @@ export class ProfileImp implements IProfileUpdateUsecase {
     ) {
     }
 
-    async updateProfile(settings: ProfileSettingDTO, userId: string) {
+    async updateProfile(settings: T_ProfileSetting, userId: string) {
 
         const userFound = await this._UserRepository.findUserById(userId);
 

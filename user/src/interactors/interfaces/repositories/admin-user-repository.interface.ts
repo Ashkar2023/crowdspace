@@ -4,12 +4,12 @@ import { HydratedDocument } from "mongoose";
 export interface IAdminUsersRepository {
 
     // pagination required
-    getUsers(): Promise<{ users: HydratedDocument<IUser>[], totalUsers: number }>;
+    getUsers(page: number, limit: number): Promise<{ users: HydratedDocument<IUser>[], totalUsers: number }>;
 
     banUser(userId: string): Promise<IUser | null>;
-    
+
     unbanUser(userId: string): Promise<IUser | null>;
-    
+
     findUserById: (userId: string, select?: string) => Promise<HydratedDocument<IUser> | null>;
 
     // findUserByEmail(email: string): Promise<User | null>;

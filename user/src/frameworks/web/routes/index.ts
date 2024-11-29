@@ -6,17 +6,19 @@ import { HashServiceImp } from "@frameworks/services/hash.service.js";
 import { Mailer } from "@frameworks/services/mail.service.js";
 import { OtpModel } from "@frameworks/db/models/otp.model.js";
 import { OtpRepositoryImp } from "@frameworks/db/repository/otp-repository.js";
-import { verifyAccessToken, verifyRefreshToken } from "../middlewares/token.middlewares.js";
 import { AuthInteractorFacade, SettingsInteractorFacade } from "@interactors/index.js";
 import { AuthControllerFacade, SettingsControllerFacade } from "@adapters/controllers/index.js";
 import { buildSettingsRouter } from "./settings.routes.js";
 import { buildAdminAuthRouter } from "./admin-auth.routes.js";
 import { AdminAuthController } from "@adapters/controllers/admin-controllers/admin-auth.controller.js";
 import { buildAdminUserRouter } from "./admin-user.routes.js";
-import { AdminUserController } from "@adapters/controllers/admin-controllers/admin-user-controller.js";
+import { AdminUserController } from "@adapters/controllers/admin-controllers/admin-user.controller.js";
 import { AdminUserInteractorFacade } from "@interactors/facade/admin-user-interactor.facade.js";
 import { AdminUsersRepository } from "@frameworks/db/repository/admin-users-repository.js";
 import { ValidationService } from "@frameworks/services/validation.service.js";
+import { buildUserRoutes } from "./profile.routes.js";
+import { UserControllerFacade } from "@adapters/controllers/facade/user-controller.facade.js";
+import { ProfileInteractorFacade } from "@interactors/facade/profile-interactor.facade.js";
 
 
 //repository
@@ -41,6 +43,8 @@ const SettingsInteractorFacadeInstance = new SettingsInteractorFacade(
     HashServiceInstance
 );
 
+const ProfileInteractorFacadeInstance = new ProfileInteractorFacade(UserRepositoryInstance)
+
 const AdminUserInteractorFacadeInstance = new AdminUserInteractorFacade(AdminUsersRepositoryInstance);
 
 
@@ -52,6 +56,8 @@ const AuthControllerInstance = new AuthControllerFacade(
 
 const SettingsControllerInstance = new SettingsControllerFacade(SettingsInteractorFacadeInstance);
 
+const UserControllerInstance = new UserControllerFacade(ProfileInteractorFacadeInstance);
+
 const AdminUserControllerInstance = new AdminUserController(AdminUserInteractorFacadeInstance)
 
 const AdminAuthControllerInstance = new AdminAuthController() // controllers are written without interactors. Change logic to interactors 
@@ -60,18 +66,19 @@ const AdminAuthControllerInstance = new AdminAuthController() // controllers are
 export const authRouter = buildAuthRoutes({
     router: Router(),
     authContoller: AuthControllerInstance,
-    middlewares: {
-        verifyAccessToken,
-        verifyRefreshToken
-    }
+    middlewares: {}
 });
 
 export const settingsRouter = buildSettingsRouter({
     router: Router(),
     settingsController: SettingsControllerInstance,
-    middlewares: {
-        verifyAccessToken
-    }
+    middlewares: {}
+})
+
+export const userRouter = buildUserRoutes({ //rename 
+    router: Router(),
+    UserController: UserControllerInstance,
+    middlewares: {}
 })
 
 

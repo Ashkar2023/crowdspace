@@ -23,12 +23,10 @@ export function buildAuthRoutes({ router, authContoller, middlewares }: {
 
     router.post("/verify-otp", createCallback(authContoller.verifyAccount.bind(authContoller)));
 
-    router.get("/logout",
-        [middlewares.verifyAccessToken],createCallback(authContoller.logoutUser.bind(authContoller)));
+    /* Protected Routes */
+    router.get("/logout", createCallback(authContoller.logoutUser.bind(authContoller)));
 
-    router.get("/token-refresh",
-        [middlewares.verifyRefreshToken],
-        createCallback(authContoller.refreshAccess.bind(authContoller)));
+    router.get("/token-refresh", createCallback(authContoller.refreshAccess.bind(authContoller)));
 
         
     /* // router.patch("/forgot-pwd") */

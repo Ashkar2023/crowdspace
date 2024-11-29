@@ -4,41 +4,41 @@ import { ISettingsInteractorFacade } from "@interactors/interfaces/ifacade/setti
 import { IUserRepository } from "@interactors/interfaces/repositories/user-repository.interface.js";
 import { IHashService } from "@interactors/interfaces/services/hash-service.interface.js";
 import { IPasswordUpdateUsecase } from "@interactors/interfaces/user-usecase/settings/password-update-usecase.interface.js";
-import { IProfileUpdateUsecase, ProfileSettingDTO } from "@interactors/interfaces/user-usecase/settings/profile-update-usecase.interface.js";
+import { IProfileUpdateUsecase, T_ProfileSetting } from "@interactors/interfaces/user-usecase/settings/profile-update-usecase.interface.js";
 import { PasswordUpdateImp } from "@interactors/user-interactors/password-update.interactor.js";
 import { ProfileImp } from "@interactors/user-interactors/profile-update.interactor.js";
 import { TokenImp } from "@interactors/user-interactors/token.interactor.js";
 import { UserChecksImp } from "@interactors/user-interactors/user-checks.interactor.js";
 
 export class SettingsInteractorFacade implements ISettingsInteractorFacade {
-    private ProfileUpdateInstance: IProfileUpdateUsecase;
-    private PasswordUpdateInstance: IPasswordUpdateUsecase;
-    private TokenInstance: ITokenUsecase
-    private UserChecksInstance: IUserChecksUsecase;
+    private _ProfileUpdateInstance: IProfileUpdateUsecase;
+    private _PasswordUpdateInstance: IPasswordUpdateUsecase;
+    private _TokenInstance: ITokenUsecase
+    private _UserChecksInstance: IUserChecksUsecase;
 
     constructor(
         private UserRepository: IUserRepository,
         private HashService: IHashService,
     ) {
-        this.UserChecksInstance = new UserChecksImp(UserRepository);
-        this.PasswordUpdateInstance = new PasswordUpdateImp(UserRepository, HashService);
-        this.ProfileUpdateInstance = new ProfileImp(UserRepository, this.UserChecksInstance);
-        this.TokenInstance = new TokenImp();
+        this._UserChecksInstance = new UserChecksImp(UserRepository);
+        this._PasswordUpdateInstance = new PasswordUpdateImp(UserRepository, HashService);
+        this._ProfileUpdateInstance = new ProfileImp(UserRepository, this._UserChecksInstance);
+        this._TokenInstance = new TokenImp();
     }
 
-    async updateProfile(settings: ProfileSettingDTO, userId: string) {
-        return await this.ProfileUpdateInstance.updateProfile(settings, userId);
+    async updateProfile(settings: T_ProfileSetting, userId: string) {
+        return await this._ProfileUpdateInstance.updateProfile(settings, userId);
     }
 
     async updatePassword(userId: string, oldPassword: string, newPassword: string) {
-        return await this.PasswordUpdateInstance.updatePassword(userId, oldPassword, newPassword);
+        return await this._PasswordUpdateInstance.updatePassword(userId, oldPassword, newPassword);
     };
 
     decodeToken(jwt: string) {
-        return this.TokenInstance.decodeToken(jwt);
+        return this._TokenInstance.decodeToken(jwt);
     }
 
     async updateUsername(newUsername: string, userId: string) {
-        return await this.ProfileUpdateInstance.updateUsername(newUsername, userId);
+        return await this._ProfileUpdateInstance.updateUsername(newUsername, userId);
     }
 }

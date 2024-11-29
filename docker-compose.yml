@@ -1,0 +1,22 @@
+name: "crowdspace"
+
+services:
+  minio-server:
+    image: minio/minio:latest
+    ports:
+        - "4100:4100"
+        - "4200:4200"
+    environment:
+        MINIO_ROOT_USER: admin
+        MINIO_ROOT_PASSWORD: password
+    volumes:
+        - minio-volume:/data
+    command: server --address ":4100" --console-address ":4200" /data
+  rabbitmq-server:
+    image: rabbitmq:management
+    ports:
+        - "5672:5672"
+        - "15672:15672"
+
+volumes:
+    minio-volume:

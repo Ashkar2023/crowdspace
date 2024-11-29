@@ -16,7 +16,7 @@ export class Mailer implements IMailService {
             pool: true
         })
         
-        this.verifySmtp();
+        /* this.verifySmtp(); // Uncomment */
     }
 
     private verifySmtp() {

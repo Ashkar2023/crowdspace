@@ -1,7 +1,6 @@
 import { connect, disconnect } from "mongoose";
 import { styleText } from "node:util";
 
-// export async function connectDb(url: string) {
 export async function connectDb(url:string) {
     if (url) {
         connect(url)

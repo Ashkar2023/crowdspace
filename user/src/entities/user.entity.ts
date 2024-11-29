@@ -1,5 +1,6 @@
 import { Configuration, IUser, IUserEntity } from "@entities/interfaces/user-entity.interface.js";
 import { Schema } from "mongoose";
+import { UUID } from "node:crypto";
 
 export class UserEntity implements IUserEntity {
     username: string;
@@ -15,7 +16,7 @@ export class UserEntity implements IUserEntity {
     links?: string[] | undefined;
     cover?: string | undefined;
     avatar?: string | undefined;
-    resetToken?: `${string}-${string}-${string}-${string}-${string}` | undefined;
+    resetToken?: UUID | undefined;
     resetTokenExpiry?: Date | undefined;
 
     private static defaultConfiguration: Configuration = {

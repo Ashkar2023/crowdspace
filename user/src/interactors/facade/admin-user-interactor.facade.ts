@@ -20,8 +20,8 @@ export class AdminUserInteractorFacade implements IAdminUserInteractorFacade{
         this.AdminUnbanUserInteractorInstance = new AdminUnbanUserImp(AdminUsersRepo)
     }
 
-    async fetchUsers(){
-        return await this.AdminGetUsersInteractorInstance.fetchUsers();
+    async fetchUsers(page:number, limit:number){
+        return await this.AdminGetUsersInteractorInstance.fetchUsers(page, limit);
     }
 
     async banUser(userId: string){

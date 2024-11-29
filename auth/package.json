@@ -1,0 +1,19 @@
+{
+    "name": "auth",
+    "version": "1.0.0",
+    "type": "module",
+    "main": "dist/index.js",
+    "license": "MIT",
+    "scripts": {
+        "dev": "nodemon -w src/ --ext ts,cts,mts,json --ignore node_modules --ignore dist --exec \"yarn run build && node --env-file=.env dist/index.js\" ",
+        "build": "rimraf dist && tsc && tsc-alias"
+    },
+    "dependencies": {
+        "@crowdspace/common": "*",
+        "cookie-parser": "^1.4.7",
+        "express": "^4.21.1",
+        "mongoose": "^8.8.2",
+        "morgan": "^1.10.0",
+        "nodemon": "^3.1.7"
+    }
+}

@@ -1,6 +1,6 @@
 import { IPasswordController } from "../password-controller.interface.js";
-import { IProfileController } from "../profile-controller.interface.js";
+import { IProfileUpdateController } from "../profile-update-controller.interface.js";
 
 export interface ISettingsControllerFacade extends
-    IProfileController,
+    IProfileUpdateController,
     IPasswordController { }

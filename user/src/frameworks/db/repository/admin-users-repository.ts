@@ -9,13 +9,16 @@ export class AdminUsersRepository implements IAdminUsersRepository {
         this.model = userModel;
     }
 
-    
-    async getUsers() {
+
+    async getUsers(page: number, limit: number) {
         const result = await this.model.aggregate([
             {
                 $facet: {
                     "users": [
-                        { $match: {} }
+                        { $match: {} },
+                        { $sort: { "createdAt": -1 } },
+                        { $skip: (page - 1) * limit },
+                        { $limit: limit },
                     ],
                     "totalUsers": [
                         { $count: "count" }
@@ -23,21 +26,21 @@ export class AdminUsersRepository implements IAdminUsersRepository {
                 }
             }
         ])
-        
+
         const finalResult = result[0];
-        
+
         return {
             users: finalResult.users,
             totalUsers: finalResult.totalUsers[0].count,
         }
     }
-    
+
 
     async findUserById(userId: string, select: string = "") {
         return await this.model.findById(userId).select(select);
     }
 
-    
+
     async banUser(userId: string) {
         return await this.model.findOneAndUpdate({ _id: new Types.ObjectId(userId) },
             {

@@ -1,17 +1,27 @@
 {
-  "name": "gateway",
-  "version": "1.0.0",
-  "main": "dist/index.js",
-  "license": "MIT",
-  "scripts": {
-    "dev": "nodemon --watch src/ --ext ts,json --ignore .git --ignore node_modules --exec \"tsc && node --env-file=.env dist/index.js\"",
-    "dev:debug": "nodemon --watch src/ --ext ts,json --ignore .git --ignore node_modules --exec \"tsc && node inspect --env-file=.env dist/index.js\""
-  },
-  "dependencies": {
-    "http-proxy": "^1.18.1"
-  },
-  "devDependencies": {
-    "@types/http-proxy": "^1.17.15",
-    "nodemon": "^3.1.7"
-  }
+    "name": "gateway",
+    "version": "1.0.0",
+    "main": "dist/index.js",
+    "license": "MIT",
+    "type": "module",
+    "scripts": {
+        "dev": "nodemon --watch src/ --ext ts,json --ignore .git --ignore node_modules --exec \"yarn run build && node --env-file=.env dist/index.js\"",
+        "build": "rimraf dist/ && tsc && tsc-alias",
+        "devn": "nodemon",
+        "dev:debug": "nodemon --watch src/ --ext ts,json --ignore .git --ignore node_modules --exec \"tsc && node inspect --env-file=.env dist/index.js\""
+    },
+    "dependencies": {
+        "cookie-parser": "^1.4.7",
+        "cors": "^2.8.5",
+        "express": "^4.21.1",
+        "http-proxy-middleware": "^3.0.3",
+        "morgan": "^1.10.0",
+        "rimraf": "^6.0.1"
+    },
+    "devDependencies": {
+        "@types/node": "^22.10.0",
+        "nodemon": "^3.1.7",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.7.2"
+    }
 }

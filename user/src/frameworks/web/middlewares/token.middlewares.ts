@@ -1,4 +1,4 @@
-import { TokenError, verify } from "@crowdspace/common";
+import { TokenError, verifyJWT } from "@crowdspace/common";
 import { RequestHandler } from "express";
 
 export const verifyAccessToken: RequestHandler = async (req, res, next) => {
@@ -7,7 +7,7 @@ export const verifyAccessToken: RequestHandler = async (req, res, next) => {
 
         if (!ajwt) throw new Error("Access Token not found");
 
-        const result = await verify({
+        const result = await verifyJWT({
             jwt: ajwt,
             secret: process.env.TOKEN_SECRET as string,
             issuerAndAudience: {
@@ -34,7 +34,7 @@ export const verifyRefreshToken: RequestHandler = async (req, res, next) => {
         
         if (!rjwt) throw new Error("Refresh Token not found");
         
-        const result = await verify({
+        const result = await verifyJWT({
             jwt: rjwt,
             secret: process.env.TOKEN_SECRET as string,
             issuerAndAudience: {

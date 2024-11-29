@@ -1,4 +1,4 @@
-import { decode } from "@crowdspace/common";
+import { decodeJWT } from "@crowdspace/common";
 import { ITokenUsecase } from "../interfaces/user-usecase/auth/token-usecase.interface.js";
 
 export class TokenImp implements ITokenUsecase{
@@ -8,6 +8,6 @@ export class TokenImp implements ITokenUsecase{
     }
 
     decodeToken(jwt: string){
-        return decode(jwt)
+        return decodeJWT(jwt)
     }
 }
