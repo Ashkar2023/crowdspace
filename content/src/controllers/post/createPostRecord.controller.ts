@@ -1,4 +1,4 @@
-import { PostRepoImp } from "repositories/repos.index.js";
+import { PostRepoImp } from "repositories/repositories.index.js";
 
 const createPostRecord = async (message: any) => {
     try {

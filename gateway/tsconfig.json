@@ -12,6 +12,7 @@
         "noUnusedLocals": false,
     "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
   },
+  "removeComments": true,
   "include": ["src"],
   "exclude": ["dist", "node_modules"],
   "ts-node": {

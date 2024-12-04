@@ -1,7 +1,7 @@
 import { BadRequestError, ResponseCreator } from "@crowdspace/common";
 import { Request, response } from "express";
 import { isValidObjectId, Schema, Types } from "mongoose";
-import { LikeRepoImp, PostRepoImp } from "repositories/repos.index.js";
+import { LikeRepoImp, PostRepoImp } from "repositories/repositories.index.js";
 
 export const likePost = async (req: Request) => {
     const post_id = req.params.postId;

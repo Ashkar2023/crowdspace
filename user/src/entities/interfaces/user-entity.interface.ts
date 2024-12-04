@@ -47,6 +47,9 @@ export type IUser = {
     avatar?: string,
     resetToken?:UUID,
     resetTokenExpiry?:Date
+    postsCount?:number,
+    followersCount?:number,
+    followingsCount?:number
 }
 
 

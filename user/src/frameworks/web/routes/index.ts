@@ -1,11 +1,11 @@
 import { Router } from "express";
 import { userModel } from "@frameworks/db/models/user.model.js";
 import { buildAuthRoutes } from "./auth.routes.js";
-import { UserRepositoryImp } from "@frameworks/db/repository/user-repository.js";
+import { UserRepositoryImp } from "@frameworks/db/repository/user.repository.js";
 import { HashServiceImp } from "@frameworks/services/hash.service.js";
 import { Mailer } from "@frameworks/services/mail.service.js";
 import { OtpModel } from "@frameworks/db/models/otp.model.js";
-import { OtpRepositoryImp } from "@frameworks/db/repository/otp-repository.js";
+import { OtpRepositoryImp } from "@frameworks/db/repository/otp.repository.js";
 import { AuthInteractorFacade, SettingsInteractorFacade } from "@interactors/index.js";
 import { AuthControllerFacade, SettingsControllerFacade } from "@adapters/controllers/index.js";
 import { buildSettingsRouter } from "./settings.routes.js";
@@ -14,17 +14,19 @@ import { AdminAuthController } from "@adapters/controllers/admin-controllers/adm
 import { buildAdminUserRouter } from "./admin-user.routes.js";
 import { AdminUserController } from "@adapters/controllers/admin-controllers/admin-user.controller.js";
 import { AdminUserInteractorFacade } from "@interactors/facade/admin-user-interactor.facade.js";
-import { AdminUsersRepository } from "@frameworks/db/repository/admin-users-repository.js";
+import { AdminUsersRepository } from "@frameworks/db/repository/admin-users.repository.js";
 import { ValidationService } from "@frameworks/services/validation.service.js";
-import { buildUserRoutes } from "./profile.routes.js";
+import { buildUserRoutes } from "./user.routes.js";
 import { UserControllerFacade } from "@adapters/controllers/facade/user-controller.facade.js";
-import { ProfileInteractorFacade } from "@interactors/facade/profile-interactor.facade.js";
+import { UserInteractorFacade } from "@interactors/facade/user-interactor.facade.js";
+import { FollowRepositoryImp } from "@frameworks/db/repository/follow.repository.js";
 
 
 //repository
 const UserRepositoryInstance = new UserRepositoryImp(userModel);
 const AdminUsersRepositoryInstance = new AdminUsersRepository(userModel);
 const OtpRepositoryInstance = new OtpRepositoryImp(OtpModel);
+const FollowRepositoryInstance = new FollowRepositoryImp();
 
 //services
 const HashServiceInstance = new HashServiceImp();
@@ -43,7 +45,7 @@ const SettingsInteractorFacadeInstance = new SettingsInteractorFacade(
     HashServiceInstance
 );
 
-const ProfileInteractorFacadeInstance = new ProfileInteractorFacade(UserRepositoryInstance)
+const UserInteractorFacadeInstance = new UserInteractorFacade(UserRepositoryInstance, FollowRepositoryInstance)
 
 const AdminUserInteractorFacadeInstance = new AdminUserInteractorFacade(AdminUsersRepositoryInstance);
 
@@ -56,7 +58,7 @@ const AuthControllerInstance = new AuthControllerFacade(
 
 const SettingsControllerInstance = new SettingsControllerFacade(SettingsInteractorFacadeInstance);
 
-const UserControllerInstance = new UserControllerFacade(ProfileInteractorFacadeInstance);
+const UserControllerInstance = new UserControllerFacade(UserInteractorFacadeInstance);
 
 const AdminUserControllerInstance = new AdminUserController(AdminUserInteractorFacadeInstance)
 
@@ -75,7 +77,7 @@ export const settingsRouter = buildSettingsRouter({
     middlewares: {}
 })
 
-export const userRouter = buildUserRoutes({ //rename 
+export const userRouter = buildUserRoutes({
     router: Router(),
     UserController: UserControllerInstance,
     middlewares: {}

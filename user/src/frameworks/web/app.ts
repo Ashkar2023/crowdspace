@@ -51,7 +51,8 @@ app.use("/settings", settingsRouter)
 app.use("/admin", adminAuthRouter)
 app.use("/admin", adminUserRouter)
 
-app.use("/profile",userRouter)
+app.use("/profile",userRouter);
+app.use("/users",userRouter);
 
 app.use("/test",(req:any,res:any)=>res.send("VAMOS"));
 

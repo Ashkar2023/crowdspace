@@ -11,11 +11,17 @@
         "outDir": "dist",
         "baseUrl": "./src/",
         "paths": {
-            "@controllers/*":["controllers/*"],
-            "@routers/*":["routers/*"],
-            "~types/*":["types/*"],
+            "@controllers/*": [
+                "controllers/*"
+            ],
+            "@routers/*": [
+                "routers/*"
+            ],
+            "~types/*": [
+                "types/*"
+            ],
         },
-        
+        "removeComments": true,
         "noUnusedLocals": false,
         "skipDefaultLibCheck": true, /* Skip type checking .d.ts files that are included with TypeScript. */
     },

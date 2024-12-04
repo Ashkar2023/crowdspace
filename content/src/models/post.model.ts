@@ -22,7 +22,7 @@ const postSchema = new Schema<T_Post>({
     caption: {
         type: String,
         required: false,
-        maxlength: 500
+        maxlength: 2000
     },
     tags: {
         type: [String],

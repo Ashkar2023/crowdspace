@@ -52,13 +52,16 @@ export class UserRepositoryImp implements IUserRepository {
         }
     };
 
+
     async findUserById(userId: string, select: string = "-_id") {
         return await this.model.findById(userId).select(select);
     }
 
+
     async updatePassword(email: string, password: string) {
         return await this.model.updateOne({ email }, { $set: { password } });
     }
+
 
     async updateUsername(userId: string, newUsername: string) {
         return await this.model.updateOne(
@@ -71,13 +74,16 @@ export class UserRepositoryImp implements IUserRepository {
         )
     }
 
-
-
+    // add if the user follows or not
     async getProfile(username: string) {
         return await this.model.findOne({ username }).select([
             "username",
             "displayname",
             "gender",
+            "followersCount",
+            "followingsCount",
+            // "configurations", set privateAccount on top level fields in document
+            "postsCount",
             "bio",
             "links",
             "cover",

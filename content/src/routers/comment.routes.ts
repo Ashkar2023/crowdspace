@@ -2,9 +2,9 @@ import { createComment, deleteComment } from "@controllers/index.js";
 import { createCallback } from "@crowdspace/common";
 import { Router } from "express";
 
-const commentRouter = Router();
-
 // prefixed with '/comments'
+
+const commentRouter = Router();
 
 commentRouter.post("/", createCallback(createComment));
 

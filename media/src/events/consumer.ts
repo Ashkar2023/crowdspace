@@ -1,6 +1,5 @@
 import { asyncEvents, decodeEventMessage } from "@crowdspace/common";
 import { consumerChannel } from "./index.js";
-import { PostRepoImp } from "repositories/repositories.index.js";
 
 consumerChannel.consume("post",
     async (event) => {
@@ -11,14 +10,12 @@ consumerChannel.consume("post",
         /* CREATE DTO for types (IMPORTANT) */
         const message = decodeEventMessage(event?.content!);
 
-        if (message.event === asyncEvents.media_upload_success) {
-            const result = await PostRepoImp.createPost(message.body);
-            consumerChannel.ack(event)
+        if (message.event === asyncEvents.post_deleted) {
+            message.mediaUrls.forEach((media_url: string) => {
+                console.log(media_url);
+                //FINISH
+            });
         }
-
-        // if (message.event === asyncEvents.post_deleted){
-        // const result = await CommentRe
-        // }
     },
     {
         noAck: false

@@ -1,7 +1,7 @@
 import { BadRequestError, ResponseCreator } from "@crowdspace/common";
 import { Request } from "express";
 import { isValidObjectId } from "mongoose";
-import { CommentRepoImp } from "repositories/repos.index.js";
+import { CommentRepoImp } from "repositories/repositories.index.js";
 
 export const getPostComments = async (req: Request) => {
     const { postId } = req.params;

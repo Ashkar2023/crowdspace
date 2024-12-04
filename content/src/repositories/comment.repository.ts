@@ -34,4 +34,7 @@ export class CommentRepository {
         return await this.#model.find({ post_id: postId }).populate("author");
     }
 
+    async findComment(commentId: string){
+        return await this.#model.findById(commentId);
+    }
 }

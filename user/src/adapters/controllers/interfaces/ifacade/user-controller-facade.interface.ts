@@ -1,4 +1,4 @@
-import { IProfileController } from "../profile-controller.interface.js";
+import { IUserController } from "../user-controller.interface.js";
 
 export interface IUserControllerFacade
-    extends IProfileController { }
+    extends IUserController { }

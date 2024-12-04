@@ -48,10 +48,10 @@ const UserSchema = new Schema<IUser>({
         required: true,
         select: false
     },
-    isBanned:{
-        type:Boolean,
-        required:true,
-        default:false
+    isBanned: {
+        type: Boolean,
+        required: true,
+        default: false
     },
     isVerified: {
         type: Boolean,
@@ -75,6 +75,21 @@ const UserSchema = new Schema<IUser>({
     bio: String,
     cover: String,
     avatar: String,
+    followingsCount: {
+        type: Number,
+        default: 0,
+        required: true
+    },
+    followersCount: {
+        type: Number,
+        default: 0,
+        required: true
+    },
+    postsCount: {
+        type: Number,
+        default: 0,
+        required: true,
+    }
 }, {
     timestamps: true,
     toObject: {

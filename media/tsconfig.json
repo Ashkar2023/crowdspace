@@ -30,6 +30,7 @@
                 "src/controllers/*"
             ],
         },
+        "removeComments": true,
         "noUnusedLocals": false,
         "skipDefaultLibCheck": true, /* Skip type checking .d.ts files that are included with TypeScript. */
     },

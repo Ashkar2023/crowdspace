@@ -1,7 +1,8 @@
-import { model, Schema } from "mongoose";
-import { ReportStatus } from "~types/report.types.js";
+import { randomUUID } from "crypto";
+import { model, Schema, Types } from "mongoose";
+import { IReport, ReportReasons, ReportStatus, ReportTargets } from "~types/report.types.js";
 
-const reportSchema = new Schema(
+const reportSchema = new Schema<IReport>(
     {
         reported_by: {
             type: Schema.Types.ObjectId,
@@ -13,27 +14,37 @@ const reportSchema = new Schema(
         },
         target_type: {
             type: String,
-            enum: ['post', 'comment', 'community'],
+            enum: Object.values(ReportTargets),
             required: true,
         },
         reason: {
             type: String,
             required: true,
-
+            enum: Object.values(ReportReasons)
         },
         description: {
             type: String,
-            default: '',
+            default: null,
+            maxlength: 500
         },
         status: {
             type: String,
             enum: Object.values(ReportStatus),
             default: ReportStatus.pending,
+        },
+        tokenId: {
+            type: Schema.Types.UUID,
+            default: () => randomUUID()
         }
     },
     {
-        timestamps: true
+        timestamps: true,
+        toObject: {
+            transform(doc, ret) {
+                delete ret._id;
+            },
+        }
     }
 );
 
-module.exports = model('Report', reportSchema);
+export default model('report', reportSchema, "reports");

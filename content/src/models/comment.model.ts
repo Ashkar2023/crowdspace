@@ -21,6 +21,8 @@ const commentSchema = new Schema<IComment>({
         ref: 'comments',
         default: null
     },
+}, {
+    timestamps: true
 });
 
 export default model('comment', commentSchema, "comments");

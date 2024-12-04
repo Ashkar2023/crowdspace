@@ -14,7 +14,7 @@ userPublicRoutes.post([
 ],
     proxy<Request, Response>({
         target: process.env.USER_SERVICE,
-        pathRewrite: { '^/user': '' },
+        pathRewrite: { '/user': '' },
         logger: console,
     }),
 );
