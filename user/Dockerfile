@@ -1,13 +1,16 @@
-FROM node:alpine
+# development stage
+FROM node:22-alpine AS development
 
-WORKDIR /user
-COPY . .
+WORKDIR /app
 
-USER root
+COPY ./package.json ./yarn.lock /app/
+
+RUN yarn install --frozen-lockfile
+
+COPY ./user ./user
+
+WORKDIR /app/user
 
 EXPOSE 3000
 
-RUN yarn install
-RUN yarn run build
-
-CMD [ "yarn" ]
+CMD [ "yarn","run","dev" ]

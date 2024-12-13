@@ -6,10 +6,10 @@ import generateRandomPassword from "@src/util/passwordGenerator.js";
 import { OAuth2Client } from "google-auth-library";
 import { IAuthInteractorFacade } from "@interactors/interfaces/ifacade/auth-interactor-facade.interface.js";
 
-export class OAuthController implements IOAuthController{
+export class OAuthController implements IOAuthController {
     constructor(
-        private AuthInteractorFacade : IAuthInteractorFacade
-    ){}
+        private AuthInteractorFacade: IAuthInteractorFacade
+    ) { }
 
     async googleAuthSignup(req: Request) {
 
@@ -56,11 +56,11 @@ export class OAuthController implements IOAuthController{
             .setHeaders({
                 "Set-Cookie": [
                     `ajwt=${accessToken}; Path=/; Expires=${expirationDate(5, "minute")}; httpOnly;`,
-                    `rjwt=${refreshToken}; Path=/; httpOnly;`
+                    `rjwt=${refreshToken}; Path=/; Expires=${expirationDate(1, "week")}; httpOnly;`
                 ]
             })
             .setMessage("User authenticated")
-            .setData({...user,type:"oauth"})
+            .setData({ ...user, type: "oauth" })
             .get();
     }
 }

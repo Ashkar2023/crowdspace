@@ -89,7 +89,8 @@ const UserSchema = new Schema<IUser>({
         type: Number,
         default: 0,
         required: true,
-    }
+    },
+    /* LAST-SEEN Field */
 }, {
     timestamps: true,
     toObject: {
