@@ -5,9 +5,9 @@ export const verifyRefreshToken: RequestHandler = async (req, res, next) => {
     try {
         const rjwt = req.headers.authorization?.split(" ")[1];
 
-        req.cookies.rjwt = rjwt; //Setting values for next handler/controller
-        
         if (!rjwt) throw new Error("Refresh Token not found");
+        
+        req.cookies.rjwt = rjwt; //Setting values for next handler/controller for decoding
 
         const result = await verifyJWT({
             jwt: rjwt,
@@ -21,11 +21,8 @@ export const verifyRefreshToken: RequestHandler = async (req, res, next) => {
         if (result) next();
 
     } catch (error) {
-        console.log("middleware error: ", error) // DELETE
-
         if (error instanceof Error) {
-            const err = new TokenError(error.message, 401, "invalid_refresh");
-            next(err)
+            next(new TokenError(error.message, 401, "invalid_refresh"));
         }
     }
 }

@@ -3,6 +3,7 @@ import authRouter from "@routers/auth.router.js";
 import cookieParser from "cookie-parser";
 import express from "express";
 import loggingMiddleware from "middlewares/logging.middleware.js";
+import morgan from "morgan";
 
 const app = express();
 

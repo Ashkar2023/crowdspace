@@ -4,3 +4,6 @@ dist
 yarn.lock
 
 .env
+
+logs
+**/*.logs
