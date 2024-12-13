@@ -7,6 +7,5 @@
         "node_modules",
         ".git"
     ],
-    "ext": ["ts","json"],
-    "exec": "node --loader ts-node/esm --env-file=.env ./src/index.ts"
+    "ext": "ts,json"
 }

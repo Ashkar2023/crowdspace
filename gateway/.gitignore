@@ -12,4 +12,5 @@ package-lock.json
 yarn.lock
 
 *.log
+logs
 .http

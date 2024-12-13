@@ -12,13 +12,17 @@ export const refreshAccessToken = async (req: Request) => {
         }
     });
 
-    const data = await authResponse.json();
+    const parsedData = await authResponse.json();
+
+    if (!parsedData.success && authResponse.status === 401 && parsedData.error === 'invalid_refresh') {
+        throw new TokenError("invalid refresh token", 401, "invalid_refresh");
+    }
 
     const response = new ResponseCreator();
     return response
         // setHeaders() is only setting one header right now, change to multiple headers setup
-        .setHeaders({ "Set-cookie": `ajwt=${data.body.newAccessToken}; path=/; Expires=${expirationDate(5, 'minute')}; httpOnly;` })
-        .setMessage(data.message)
+        .setHeaders({ "Set-cookie": `ajwt=${parsedData.body.newAccessToken}; path=/; Expires=${expirationDate(5, 'minute')}; httpOnly;` })
+        .setMessage(parsedData.message)
         .setStatusCode(200)
         .get();
 };

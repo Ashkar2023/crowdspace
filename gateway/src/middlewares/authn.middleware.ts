@@ -4,7 +4,6 @@ import { NextFunction, Request, Response } from "express";
 const userAuthMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { ajwt } = req.cookies;
-
         if (!ajwt) {
             throw new TokenError("access token not found", 401, "invalid_access");
         }
@@ -17,9 +16,8 @@ const userAuthMiddleware = async (req: Request, res: Response, next: NextFunctio
         })
 
         const { body, success } = await response.json();
-        console.log(body, "----------")
-        if (success) {
 
+        if (success) {
             req.headers["x-logged-in-user"] = body.userId;
 
             next()
