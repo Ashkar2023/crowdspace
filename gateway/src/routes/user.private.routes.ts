@@ -6,7 +6,7 @@ const userPrivateRoutes = Router();
 userPrivateRoutes.all("/*",
     proxy<Request, Response>({
         target: process.env.USER_SERVICE,
-        pathRewrite: { '^/user': '' },
+        pathRewrite: { '/user': '' },
         logger: console,
     }),
 )

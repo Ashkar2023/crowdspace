@@ -6,7 +6,7 @@ const usersRoutes = Router();
 usersRoutes.all("/*",
     proxy<Request, Response>({
         target: process.env.USER_SERVICE,
-        pathRewrite: { '/': '/users/' },
+        pathRewrite: { '/': '' },
         logger: console,
         on: {
             proxyReq(proxyReq, req, res) {

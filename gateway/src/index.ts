@@ -16,6 +16,7 @@ import reportRouter from "./routes/report.routes.js";
 import usersRoutes from "./routes/users.routes.js";
 import { createProxyMiddleware } from "http-proxy-middleware";
 import chatRouter from "./routes/chat.routes.js";
+import { styleText } from "node:util";
 
 const app = express().disable("x-powered-by");
 
@@ -37,8 +38,7 @@ app.use(cors({
 
 app.use(logMiddleware);
 
-// User routes
-app.use("/user", userPublicRoutes);
+app.use("/user", userPublicRoutes); // For gateway /user -> /
 
 app.use(cookieParser());
 
@@ -46,14 +46,14 @@ app.get("/auth/token-refresh", createCallback(refreshAccessToken));
 
 app.use(userAuthMiddleware); //Calls to Auth service
 
-app.use("/user", userPrivateRoutes);
-app.use("/users", usersRoutes)
+app.use("/user", userPrivateRoutes); // For gateway /user -> /
+app.use("/users", usersRoutes); // For interservices /users -> /users
 app.use("/media", mediaRouter);
 app.use("/profile", profileRoutes);
 app.use("/comments", commentRouter);
 app.use("/posts", postRouter);
 app.use("/reports", reportRouter);
-app.use("/chats",chatRouter)
+app.use("/chats", chatRouter)
 
 // socket connections
 app.use('/socket/chat', createProxyMiddleware({
@@ -61,10 +61,16 @@ app.use('/socket/chat', createProxyMiddleware({
     ws: true,
     logger: console,
     on: {
-        
+
     }
 }))
 
+// @ts-ignore
+app.use((error: Error, req, res, next) => {
+    console.log(styleText("red", error.message))
+    console.log(styleText("bgBlue", error.stack!))
+    next(error)
+})
 
 /* Global Error Handler */
 app.use(globalErrorHadler);
