@@ -7,6 +7,6 @@ export type IChat = {
         body: string | null,
         msg_type: msgContentType
     },
-    participants: Schema.Types.ObjectId[],
+    participants: Types.ObjectId[],
     unread_messages: number
 }

@@ -5,8 +5,8 @@ import { IMessage, msgContentType } from "~types/message.type.js";
 export class MessageRepository {
     #model: Model<IMessage> = messageModel;
 
-    async fetchMessages(chat_id: Types.ObjectId) {
-        return await this.#model.find({ chat_id: chat_id }).sort({ createdAt: -1 });
+    async findMessages(chat_id: Types.ObjectId) {
+        return await this.#model.find({ chat_id }).sort({ createdAt: 1 });
     }
 
     async createMessage(

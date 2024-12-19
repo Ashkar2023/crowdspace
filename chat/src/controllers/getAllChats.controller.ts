@@ -1,12 +1,12 @@
 import { ResponseCreator } from "@crowdspace/common";
 import { Request } from "express";
-import { isValidObjectId, Types } from "mongoose";
+import { Types } from "mongoose";
 import { chatRepoImp } from "repositories/index.repos.js";
 
-export const getChats = async (req: Request) => {
+export const getAllChats = async (req: Request) => {
     const loggedInUser = req.headers["x-logged-in-user"] as string;
 
-    const chats = await chatRepoImp.getAllChats(new Types.ObjectId(loggedInUser))
+    const chats = await chatRepoImp.findAllChats(new Types.ObjectId(loggedInUser))
 
     const response = new ResponseCreator();
     return response
