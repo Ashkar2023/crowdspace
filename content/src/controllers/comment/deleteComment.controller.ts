@@ -1,7 +1,7 @@
 import { BadRequestError, DatabaseOpError, ResponseCreator } from "@crowdspace/common";
 import { Request } from "express";
 import { isValidObjectId } from "mongoose";
-import { CommentRepoImp } from "repositories/repositories.index.js";
+import { CommentRepoImp } from "repositories/index.repositories.js";
 
 export const deleteComment = async (req: Request) => {
     const { commentId } = req.params;

@@ -1,9 +1,9 @@
 import { AllSettledQueryResult, BadRequestError, DatabaseOpError, ResponseCreator } from "@crowdspace/common";
 import { Request } from "express";
 import { HydratedDocument, isValidObjectId, Types } from "mongoose";
-import { CommentRepoImp, PostRepoImp } from "repositories/repositories.index.js";
-import { IComment } from "~types/comment.types.js";
-import { T_Post } from "~types/post.types.js";
+import { CommentRepoImp, PostRepoImp } from "repositories/index.repositories.js";
+import type { IComment } from "~types/comment.types.js";
+import type { T_Post } from "~types/post.types.js";
 
 export const createComment = async (req: Request) => {
     const { post_id, commentBody, replyFor } = req.body;

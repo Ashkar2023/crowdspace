@@ -1,6 +1,6 @@
 import { ResponseCreator } from "@crowdspace/common";
 import { Request } from "express";
-import { PostRepoImp } from "repositories/repositories.index.js";
+import { PostRepoImp } from "repositories/index.repositories.js";
 
 export const getUserPosts = async (req: Request) => {
     const userId = req.params.user_id;

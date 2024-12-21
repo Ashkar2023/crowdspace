@@ -1,7 +1,7 @@
 import { BadRequestError, ResponseCreator, UnauthorizedError } from "@crowdspace/common";
 import { Request } from "express";
 import { isValidObjectId, Types } from "mongoose";
-import { ReportRepoImp } from "repositories/repositories.index.js";
+import { ReportRepoImp } from "repositories/index.repositories.js";
 
 export const reportPost = async (req: Request) => {
     const reported_by = req.headers["x-logged-in-user"] as string;

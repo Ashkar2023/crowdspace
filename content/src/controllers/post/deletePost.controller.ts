@@ -1,7 +1,7 @@
 import { asyncEvents, BadRequestError, encodeEventMessage, ResponseCreator } from "@crowdspace/common";
 import ContentMsgBroker, { publisherChannel } from "events/index.js";
 import { Request } from "express";
-import { PostRepoImp } from "repositories/repositories.index.js";
+import { PostRepoImp } from "repositories/index.repositories.js";
 
 export const deletePost = async (req: Request) => {
     const { postId } = req.params;
@@ -22,11 +22,13 @@ export const deletePost = async (req: Request) => {
             return item.media_url;
         })
     })
-    const published = publisherChannel.publish("content-exchange", "", bodyObject);
 
-    if (!published) {
-        //learn rabbitmq errors
-    }
+    // // 👇 This would throw error as it is not acknowledged in the media as of now, uncomment when the logic is written in media service
+    // const published = publisherChannel.publish("content-exchange", "", bodyObject); 
+
+    // if (!published) {
+    //     //learn rabbitmq errors
+    // }
 
     const response = new ResponseCreator();
     return response
