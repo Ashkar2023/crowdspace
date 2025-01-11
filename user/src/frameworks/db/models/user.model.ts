@@ -90,13 +90,19 @@ const UserSchema = new Schema<IUser>({
         default: 0,
         required: true,
     },
+    role: {
+        type: String,
+        enum: ["user", "admin"],
+        default: "user"
+    }
     /* LAST-SEEN Field */
 }, {
     timestamps: true,
     toObject: {
         transform(doc, ret) {
             // delete ret._id
-            // delete ret.password;
+            delete ret.password;
+            delete ret.__v;
         },
     }
 })

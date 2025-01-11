@@ -42,49 +42,57 @@ export class UserAuthenticationImp implements IUserAuthenticationUsecase {
             });
         }
 
+        /*
+            TOKEN refresh already moved to AUTH service, change this token generation to a call to auth service  
+         */
         /* 
-            TIGHT COUPLING, CHANGE to dependency injection
-            change the methods from the common package to a service implementation.
-            priority : HIGH 
+        TIGHT COUPLING, CHANGE to dependency injection
+        change the methods from the common package to a service implementation.
+        priority : HIGH 
         */
-        const accessToken = await signJWT({
-            secret: (process.env.TOKEN_SECRET as string),
-            payload: {
-                iss: process.env.ISSUER as string,
-                aud: process.env.AUDIENCE as string,
-                sub: userFound._id,
-                username: userFound.username,
-                type: "ACCESS"
+       const accessToken = await signJWT({
+           secret: (process.env.TOKEN_SECRET as string),
+           payload: {
+               iss: process.env.ISSUER as string,
+               aud: process.env.AUDIENCE as string,
+               sub: userFound._id,
+               username: userFound.username,
+               type: "ACCESS",
+               role: userFound.role
             },
             tokenType: "ACCESS"
         })
-
+        
         const refreshToken = await signJWT({
             secret: (process.env.TOKEN_SECRET as string),
             payload: {
                 iss: process.env.ISSUER as string,
                 aud: process.env.AUDIENCE as string,
                 sub: userFound._id,
-                type: "REFRESH"
+                type: "REFRESH",
+                role: userFound.role
             },
             tokenType: "REFRESH"
         })
-
-
+        
+        
         const santizedUser = userFound.toObject();
-
-
+        
         return {
             user: santizedUser,
             refreshToken,
             accessToken
         };
     }
-
-    // TO REMOVE as this has been implemented in
+    
+    /*
+        TOKEN refresh already moved to AUTH service
+        No need of this here  
+     */
     async refreshAccessToken(cookie: string) {
-        const { sub, username } = decodeJWT(cookie);
-
+        const { sub, username, role } = decodeJWT(cookie);
+        console.log("refreshAccessToken - role", role)
+        // issue 003
         // check for user in database and verify
         // rather than blindly regenerating the access token
 
@@ -95,7 +103,8 @@ export class UserAuthenticationImp implements IUserAuthenticationUsecase {
                 aud: process.env.AUDIENCE as string,
                 sub: sub,
                 username: username,
-                type: "ACCESS"
+                type: "ACCESS",
+                role:role // vulnerable fix issue 003
             },
             tokenType: "ACCESS"
         })

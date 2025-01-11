@@ -1,3 +1,4 @@
+import { BadRequestError } from "@crowdspace/common";
 import chatModel from "models/chat.model.js";
 import { Model, Types } from "mongoose";
 import { IChat } from "~types/chat.type.js";
@@ -29,6 +30,10 @@ export class ChatRepository {
         user_id: Types.ObjectId,
         receiver_id: Types.ObjectId,
     ) {
+        if(user_id.toString() === receiver_id.toString() ){
+            throw new BadRequestError("Cannot create chat with yourself");
+        }
+
         const doc = await this.#model.create({
             participants: [user_id, receiver_id].sort(),
         })

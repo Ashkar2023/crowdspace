@@ -9,4 +9,8 @@ export interface IUserProfileUsecase {
             outgoingFollow: HydratedDocument<IFollow> | null,
             incomingFollow: HydratedDocument<IFollow> | null
         }>
+
+    getUserBasicProfile: (userId: string) => Promise<HydratedDocument<IUser> | null>
+
+    getMultipleUsersBasicProfile: (user_ids: string[]) => Promise<HydratedDocument<IUser>[]>
 }

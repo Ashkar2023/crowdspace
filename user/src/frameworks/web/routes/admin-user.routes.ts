@@ -12,12 +12,6 @@ export function buildAdminUserRouter({
     // middlewares: Record<string, RequestHandler>
 }) {
 
-    // CHANGE admin middleware
-    router.use((req: Request, res: Response, next: NextFunction) => {
-        if(!req.session.user) throw new UnauthorizedError("Session not found",401,undefined,"invalid_session");
-        else next(); 
-    })
-
     router.post("/users", createCallback(adminUserController.getUsers.bind(adminUserController)));
 
     router.patch("/user/:userId/ban",createCallback(adminUserController.banUser.bind(adminUserController)))

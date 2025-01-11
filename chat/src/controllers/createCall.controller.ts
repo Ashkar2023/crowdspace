@@ -6,21 +6,23 @@ export const createCallAndEmit = (socket: Socket, io: Server) => {
 
     return async function (callData: callMetadata) {
         try {
-            // if(io room exists)
 
             socket.join(callData.roomId);
 
-            const parsedReceiverSocket = getSocketId(callData.receiverId);
+            const parsedReceiverSocket = RetrieveCorrespondingId(callData.receiverId);
 
-            console.table({parsedReceiverSocket})
+            console.table({ parsedReceiverSocket })
             if (!parsedReceiverSocket) {
                 return socket.emit(SocketEvents.call_user_offline, "user offline");
             }
 
             io.to(parsedReceiverSocket).emit(SocketEvents.call_incoming, {
                 roomId: callData.roomId,
-                receiverId:callData.receiverId,
-                userBasic: (await (await fetch(process.env.USER_SERVICE + "/basic/" + getSocketId(socket.id))).json()).body // handle errors
+                receiverId: callData.receiverId,
+                userBasic: (
+                    await (
+                        await fetch(process.env.USER_SERVICE + "/basic/" + RetrieveCorrespondingId(socket.id))
+                    ).json()).body // handle errors
             });
 
         } catch (error) {

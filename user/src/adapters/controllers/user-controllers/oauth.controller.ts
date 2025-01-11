@@ -40,6 +40,7 @@ export class OAuthController implements IOAuthController {
                 username: userData.name.replace(/ /g, "_").toLowerCase(),
                 password: generateRandomPassword(),
                 avatar: userData.picture,
+                role: "user",
                 isVerified: true // ADD TYPE:oauth to doc
             })
         }

@@ -1,6 +1,6 @@
 import { BadRequestError, ResponseCreator } from "@crowdspace/common";
 import { Request } from "express";
-import { CommentRepoImp } from "repositories/index.repositories.js";
+import { CommentRepoImp } from "repositories/repositories.index.js";
 
 export const editComment = async (req: Request) => {
     const loggedInUser = req.headers["x-logged-in-user"] as string;

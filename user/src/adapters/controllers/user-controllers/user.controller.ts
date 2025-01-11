@@ -2,7 +2,7 @@ import { IUserInteractorFacade } from "@interactors/interfaces/ifacade/user-inte
 import { IUserController } from "../interfaces/user-controller.interface.js";
 import { BadRequestError, IResponse, ResponseCreator } from "@crowdspace/common";
 import { Request } from "express";
-import { isValidObjectId, ObjectId, Types } from "mongoose";
+import { isValidObjectId, Types } from "mongoose";
 
 export class UserController implements IUserController {
 
@@ -30,6 +30,31 @@ export class UserController implements IUserController {
             .get();
     };
 
+    async getUserBasicProfile(req: Request) {
+        const userId = req.params.user_id;
+
+        const userBasicProfile = await this._UserInteractorFacade.getUserBasicProfile(userId);
+
+        const response = new ResponseCreator();
+        return response
+            .setStatusCode(200)
+            .setMessage("user basic profile fetched")
+            .setData({ ...userBasicProfile?.toObject() })
+            .get();
+    }
+
+    async getMultipleUsersBasicProfile(req: Request) {
+        const { user_ids } = req.body;
+
+        const profiles = await this._UserInteractorFacade.getMultipleUsersBasicProfile(user_ids);
+
+        const response = new ResponseCreator();
+        return response
+            .setStatusCode(200)
+            .setMessage(profiles.length ? "profiles fetched" : "no profiles found")
+            .setData({ profiles })
+            .get();
+    };
 
     async followUser(req: Request) {
         const loggedinUser = req.headers["x-logged-in-user"] as string;
@@ -90,4 +115,62 @@ export class UserController implements IUserController {
             .setData(follows)
             .get();
     }
+
+    async search(req: Request) {
+        const { q } = req.query;
+
+        const results = await this._UserInteractorFacade.search(q as string);
+
+        const response = new ResponseCreator();
+        return response
+            .setStatusCode(200)
+            .setMessage("search success")
+            .setData({ results })
+            .get();
+    }
+
+    async removeFollower(req: Request) {
+        const { follower_id } = req.params;
+        const loggedInUserId = req.headers["x-logged-in-user"] as string;
+
+        // VALIDATE
+
+        const deleted = await this._UserInteractorFacade.removeFollower(follower_id, loggedInUserId);
+
+        const response = new ResponseCreator();
+        return response
+            .setStatusCode(200)
+            .setMessage("follower removed")
+            .setData({})
+            .get();
+    }
+
+    async getFollowers(req: Request) {
+        const page = req.query.page as string;
+        const loggedInUserId = req.headers["x-logged-in-user"] as string;
+
+        const followers = await this._UserInteractorFacade.getFollowers(loggedInUserId, +page)
+        
+        const response = new ResponseCreator();
+        return response
+        .setStatusCode(200)
+        .setMessage("followers fetched")
+        .setData(followers)
+        .get();
+    };
+    
+    async getFollowings(req: Request) {
+        const page = req.query.page as string;
+        const loggedInUserId = req.headers["x-logged-in-user"] as string;
+        
+        const followings = await this._UserInteractorFacade.getFollowings(loggedInUserId, +page)
+
+        const response = new ResponseCreator();
+        return response
+            .setStatusCode(200)
+            .setMessage("followings fetched")
+            .setData(followings)
+            .get();
+
+    };
 }

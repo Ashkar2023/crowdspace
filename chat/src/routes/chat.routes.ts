@@ -1,5 +1,5 @@
 import { getAllChats } from "@controllers/getAllChats.controller.js";
-import getChat from "@controllers/getChat.js";
+import getChat from "@controllers/getChat.controller.js";
 import getChatByUser from "@controllers/getChatByUser.controller.js";
 import getMessages from "@controllers/getMessages.controller.js";
 import { createCallback } from "@crowdspace/common";

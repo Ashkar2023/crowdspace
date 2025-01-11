@@ -21,6 +21,10 @@ const commentSchema = new Schema<IComment>({
         ref: 'comments',
         default: null
     },
+    edited: {
+        type: Boolean,
+        default: false
+    }
 }, {
     timestamps: true
 });

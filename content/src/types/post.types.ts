@@ -47,7 +47,7 @@ export type PostCreateFields = {
     tags: string[],
     media: Media[],
     visibility: PostVisibilty,
-    thumbnail?: string
+    thumbnail?: string //remove from a post
     mentions: Types.ObjectId[],
 }
 

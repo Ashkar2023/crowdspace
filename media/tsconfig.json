@@ -7,6 +7,7 @@
         "forceConsistentCasingInFileNames": true, /* Ensure that casing is correct in imports. */
         "strict": true, /* Enable all strict type-checking options. */
         "strictNullChecks": true,
+        "resolveJsonModule": true,
         "noImplicitAny": true,
         "outDir": "dist",
         "baseUrl": ".",
@@ -29,6 +30,15 @@
             "@controllers/*": [
                 "src/controllers/*"
             ],
+            "@config/*": [
+                "src/config/*"
+            ],
+            "@utils/*": [
+                "src/utils/*"
+            ],
+            "@src/*": [
+                "src/*"
+            ]
         },
         "removeComments": true,
         "noUnusedLocals": false,

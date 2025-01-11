@@ -49,7 +49,8 @@ export type IUser = {
     resetTokenExpiry?:Date
     postsCount?:number,
     followersCount?:number,
-    followingsCount?:number
+    followingsCount?:number,
+    role: "admin" | "user"
 }
 
 

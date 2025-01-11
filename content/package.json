@@ -5,7 +5,7 @@
     "type": "module",
     "main": "dist/index.js",
     "scripts": {
-        "devn": "node --env-file=.env --loader ts-node/esm src/index.ts",
+        "devn": "node --loader ts-node/esm --env-file=.env ./src/index.ts",
         "dev": "nodemon",
         "build": "rimraf dist && tsc && tsc-alias"
     },
@@ -20,7 +20,6 @@
     },
     "devDependencies": {
         "@types/node": "^22.7.7",
-        "nodemon": "^3.1.7",
         "rimraf": "^6.0.1",
         "tsc-alias": "^1.8.10"
     }

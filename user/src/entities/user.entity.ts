@@ -18,6 +18,7 @@ export class UserEntity implements IUserEntity {
     avatar?: string | undefined;
     resetToken?: UUID | undefined;
     resetTokenExpiry?: Date | undefined;
+    role: "admin" | "user";
 
     private static defaultConfiguration: Configuration = {
         privateAccount: false,
@@ -58,6 +59,7 @@ export class UserEntity implements IUserEntity {
         this.avatar = data.avatar || "";
         this.resetToken = data.resetToken || undefined;
         this.resetTokenExpiry = data.resetTokenExpiry || undefined;
+        this.role = data.role ?? "user"
     }
 
     validate() {
@@ -82,6 +84,7 @@ export class UserEntity implements IUserEntity {
             avatar: this.avatar,
             resetToken: this.resetToken,
             resetTokenExpiry: this.resetTokenExpiry,
+            role:this.role
         })
     }
     //  remember there are other methods like object.assign, object.keys

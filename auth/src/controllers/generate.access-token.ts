@@ -2,7 +2,7 @@ import { decodeJWT, ResponseCreator, signJWT } from "@crowdspace/common";
 import { Request } from "express";
 
 export const generateAccessToken = async (req: Request) => {
-    const { sub, username } = decodeJWT(req.cookies.rjwt);
+    const { sub, username,role } = decodeJWT(req.cookies.rjwt);
 
     // check for user in database and verify
     // rather than blindly regenerating the access token
@@ -13,6 +13,7 @@ export const generateAccessToken = async (req: Request) => {
             iss: process.env.ISSUER as string,
             aud: process.env.AUDIENCE as string,
             sub: sub,
+            role: role,
             username: username,
             type: "ACCESS"
         },

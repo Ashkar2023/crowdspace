@@ -1,13 +1,16 @@
-import { BadRequestError, ConflictError } from "@crowdspace/common";
+import { BadRequestError, ConflictError, consumerEvents, encodeEventMessage, rabbitmqConfig } from "@crowdspace/common";
 import { IFollow } from "@entities/interfaces/follow.interface.js";
+import { publisherChannel } from "@frameworks/services/events/events.service.js";
 import { IFollowRepository } from "@interactors/interfaces/repositories/follow-repository.interface.js";
+import { IUserRepository } from "@interactors/interfaces/repositories/user-repository.interface.js";
 import { IUserFollowUsecase } from "@interactors/interfaces/user-usecase/user/userFollow-usecase.interface.js";
-import { HydratedDocument, Types } from "mongoose";
+import { HydratedDocument, isValidObjectId, Types } from "mongoose";
 
 class UserFollowImp implements IUserFollowUsecase {
 
     constructor(
         private _FollowRepository: IFollowRepository,
+        private _UserRepository: IUserRepository
     ) {
 
     }
@@ -27,7 +30,22 @@ class UserFollowImp implements IUserFollowUsecase {
 
         const createFollow = await this._FollowRepository.doFollow(user_id, followee_id, followee_private);
 
-        /* UPDATE follow count by firing an event to message Broker */
+        const followingsUpdated = await this._UserRepository.updateFollowingsCount(user_id, "inc")
+        const followeeFollowersUpdated = await this._UserRepository.updateFollowersCount(followee_id, "inc")
+
+        // Anti-pattern in Clean 👇
+        const bodyBuffer = encodeEventMessage(consumerEvents.follow, {
+            recipient_id: followee_id, //redundant but the notifications handler(chat service) resolves socket id with this field
+            follower_id: user_id,
+            followee_id,
+            follow_doc_id: createFollow
+        });
+        
+        publisherChannel.publish(
+            rabbitmqConfig.exchanges.notificationFanout.name,
+            rabbitmqConfig.routingKeys.user.notificationFanout,
+            bodyBuffer
+        );
 
         return createFollow;
     }
@@ -38,13 +56,27 @@ class UserFollowImp implements IUserFollowUsecase {
         followee_id: Types.ObjectId
     ) {
 
+        const followExists = await this._FollowRepository
+            .followExists(user_id, followee_id);
+
+        if (!followExists) {
+            throw new ConflictError("can't unfollow an unfollowed user");
+        }
+
         const removedFollow = await this._FollowRepository.doUnfollow(user_id, followee_id);
 
         if (!removedFollow) {
             throw new BadRequestError("you are not following this user")
         }
 
-        // update follow count by event queue
+        const followingsUpdated = await this._UserRepository.updateFollowingsCount(user_id, "dec")
+        const followeeFollowersUpdated = await this._UserRepository.updateFollowersCount(followee_id, "dec")
+
+        // Anti-pattern in Clean 👇
+        const bodyBuffer = encodeEventMessage(consumerEvents.unfollow, {
+            notification_id: removedFollow._id
+        });
+        publisherChannel.publish("content-exchange", "notify", bodyBuffer);
 
         return removedFollow;
     }
@@ -64,6 +96,40 @@ class UserFollowImp implements IUserFollowUsecase {
         };
     }
 
+    async removeFollower(follower_id: string, loggedInUserId: string) {
+
+        if (!isValidObjectId(follower_id)) {
+            throw new BadRequestError("Invalid follower id");
+        }
+
+        const deleted = await this._FollowRepository.removeFollower(
+            new Types.ObjectId(follower_id),
+            new Types.ObjectId(loggedInUserId)
+        );
+
+        return deleted
+    };
+
+    async getFollowings(user_id: string, page: number) {
+
+        if (!isValidObjectId(user_id)) {
+            throw new BadRequestError("Invalid user id");
+        }
+
+        const followings = await this._FollowRepository.getFollowings(new Types.ObjectId(user_id), page);
+
+        return followings
+    }
+
+    async getFollowers(user_id: string, page: number) {
+        if (!isValidObjectId(user_id)) {
+            throw new BadRequestError("Invalid user id");
+        }
+
+        const followers = await this._FollowRepository.getFollowings(new Types.ObjectId(user_id), page);
+
+        return followers
+    }
 }
 
 export default UserFollowImp;

@@ -1,21 +1,15 @@
-import { asyncEvents, decodeEventMessage } from "@crowdspace/common";
+import { consumerEvents, decodeEventMessage, rabbitmqConfig } from "@crowdspace/common";
 import { consumerChannel } from "./index.js";
 
-consumerChannel.consume("post",
-    async (event) => {
-        if (!event) {
-            throw new Error("Event from Post queue Null/Undefined");
+consumerChannel.consume(rabbitmqConfig.queues.media,
+    async (message) => {
+        if (!message?.content) {
+            console.log("message event null");
+            return
         }
 
-        /* CREATE DTO for types (IMPORTANT) */
-        const message = decodeEventMessage(event?.content!);
+        const { body, event } = decodeEventMessage(message.content);
 
-        if (message.event === asyncEvents.post_deleted) {
-            message.mediaUrls.forEach((media_url: string) => {
-                console.log(media_url);
-                //FINISH
-            });
-        }
     },
     {
         noAck: false

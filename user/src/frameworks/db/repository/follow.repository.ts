@@ -91,10 +91,58 @@ export class FollowRepositoryImp implements IFollowRepository {
             {
                 $facet: {
                     "followers": [
-                        { $match: { followee_id: user_id } }
+                        {
+                            $match: { followee_id: user_id }
+                        },
+                        {
+                            $lookup: {
+                                from: "users",
+                                foreignField: "_id",
+                                localField: "follower_id",
+                                pipeline: [
+                                    {
+                                        $project: {
+                                            username: 1,
+                                            displayname: 1,
+                                            avatar: 1
+                                        }
+                                    }
+                                ],
+                                as: "follower_info"
+                            }
+                        },
+                        {
+                            $addFields: {
+                                follower_info: { $arrayElemAt: ["$follower_info", 0] }
+                            }
+                        }
                     ],
                     "followings": [
-                        { $match: { follower_id: user_id } }
+                        {
+                            $match: { follower_id: user_id }
+                        },
+                        {
+                            $lookup: {
+                                from: "users",
+                                foreignField: "_id",
+                                localField: "followee_id",
+                                pipeline: [
+                                    {
+                                        $project: {
+                                            username: 1,
+                                            displayname: 1,
+                                            avatar: 1
+                                        }
+                                    }
+                                ],
+                                as: "followee_info"
+                            }
+                        },
+                        {
+                            $addFields: {
+                                followee_info: { $arrayElemAt: ["$followee_info", 0] }
+                            }
+                        }
                     ]
                 }
             },
@@ -108,7 +156,93 @@ export class FollowRepositoryImp implements IFollowRepository {
             }
         ]);
 
-        console.log(result)
         return result[0];
+    }
+
+    async removeFollower(follower_id: Types.ObjectId, loggedInUserId: Types.ObjectId) {
+        return await this.#model.findOneAndDelete({ followee_id: loggedInUserId, follower_id });
+    }
+
+    async getFollowers(followee_id: Types.ObjectId, page: number) {
+        const result = await this.#model.aggregate([
+            {
+                $match: {
+                    followee_id
+                }
+            },
+            {
+                $skip: (page - 1) * 1
+            },
+            {
+                $limit: 1
+            },
+            {
+                $lookup:{
+                    from:"users",
+                    foreignField:"_id",
+                    localField:"follower_id",
+                    pipeline:[
+                        {
+                            $project:{
+                                avatar:1,
+                                displayname:1,
+                                username:1
+                            }
+                        }
+                    ],
+                    as:"follower_info"
+                }
+            },
+            {
+                $addFields: {
+                    follower_info: { $arrayElemAt: ["$follower_info", 0] }
+                }
+            }
+        ])
+
+        return result;
+    }
+
+    
+    async getFollowings(follower_id: Types.ObjectId, page: number) {
+        const result = await this.#model.aggregate([
+            {
+                $match: {
+                    follower_id
+                }
+            },
+            {
+                $skip: (page - 1) * 1
+            },
+            {
+                $limit: 1
+            },
+            {
+                $lookup:{
+                    from:"users",
+                    foreignField:"_id",
+                    localField:"followee_id",
+                    pipeline:[
+                        {
+                            $project:{
+                                avatar:1,
+                                displayname:1,
+                                username:1
+                            }
+                        }
+                    ],
+                    as:"followee_info"
+                }
+            },
+            {
+                $addFields: {
+                    followee_info: { $arrayElemAt: ["$followee_info", 0] }
+                }
+            }
+        ])
+
+        console.log("Followings",result)
+
+        return result;
     }
 }

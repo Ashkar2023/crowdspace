@@ -1,10 +1,11 @@
 // //Socket controller
-import { SocketEvents } from "@crowdspace/common";
+import { consumerEvents, encodeEventMessage, rabbitmqConfig, SocketEvents } from "@crowdspace/common";
+import { publisherChannel } from "events/index.js";
 import { HydratedDocument, isValidObjectId, Schema, Types } from "mongoose";
 import { chatRepoImp, messageRepoImp } from "repositories/index.repos.js";
 import redisClient from "services/redis.client.js";
 import { Server, Socket } from "socket.io";
-import { getParsedReceiver } from "utils/getParsedReciever.js";
+import { parseReceiverId } from "utils/getParsedReciever.js";
 import { IChat } from "~types/chat.type.js";
 import { IMessage } from "~types/message.type.js";
 
@@ -89,15 +90,24 @@ const writeMessage = (socket: Socket, io: Server) => {
         );
 
         let participants = cachedChat?.participants ?? chatDoc?.participants;
-        const parsedReceiver = getParsedReceiver(participants!, userId)
-        const receiverSocketId = getSocketId(parsedReceiver);
-        console.table({ parsedReceiver, receiverSocketId });// REMOVE
+        const receiverId = parseReceiverId(participants!, userId)
+        const receiverSocketId = RetrieveCorrespondingId(receiverId);
 
         try {
             const messageStored = await storeMessagePromise; // awaited here to run the other tasks parallely for time saving
             console.log("messageStored", messageStored.id);
 
             io.to([receiverSocketId, socket.id]).emit(SocketEvents.recv_msg, messageStored); // Latency waiting for the message to store
+
+            publisherChannel.publish(
+                rabbitmqConfig.exchanges.notificationFanout.name,
+                rabbitmqConfig.routingKeys.chat.notificationFanout,
+                encodeEventMessage(consumerEvents.new_message,
+                    {
+                        ...messageStored.toObject(),
+                        receiverSocketId
+                    }
+                ));
 
         } catch (error) {
             if (error instanceof Error) {

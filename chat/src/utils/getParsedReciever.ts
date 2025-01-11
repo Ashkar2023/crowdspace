@@ -2,7 +2,7 @@ import { Types } from "mongoose"
 
 type Participants = Types.ObjectId[] | string;
 
-export const getParsedReceiver = (participants: Participants, userId: string): string => {
+export const parseReceiverId = (participants: Participants, userId: string): string => {
     console.log(typeof participants)
     let userIdArray: string[] = [];
 

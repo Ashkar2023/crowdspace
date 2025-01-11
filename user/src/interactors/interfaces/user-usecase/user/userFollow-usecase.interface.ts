@@ -19,4 +19,9 @@ export interface IUserFollowUsecase {
         followersCount: number,
         followingsCount: number
     }>
+
+    removeFollower: (follower_id: string, loggedInUserId: string) => Promise<HydratedDocument<IFollow> | null>;
+
+    getFollowers: (user_id: string, page: number) => Promise<HydratedDocument<IFollow>[]>
+    getFollowings: (user_id: string, page: number) => Promise<HydratedDocument<IFollow>[]>
 }

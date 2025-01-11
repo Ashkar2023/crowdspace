@@ -23,8 +23,8 @@ export enum ReportReasons {
 
 export enum ReportTargets {
     POST = 'post',
-    COMMENT = 'comment',
-    COMMUNITY = 'community'
+    // COMMENT = 'comment',
+    // COMMUNITY = 'community'
 }
 
 export interface IReportRequiredFields {

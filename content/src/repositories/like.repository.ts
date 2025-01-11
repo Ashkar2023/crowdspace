@@ -24,7 +24,8 @@ export class LikeRepository {
             },
             {
                 upsert: true,
-                includeResultMetadata: true
+                includeResultMetadata: true,
+                new: true
             });
 
         return result

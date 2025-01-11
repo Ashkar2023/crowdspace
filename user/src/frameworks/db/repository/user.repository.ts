@@ -2,7 +2,7 @@ import { BadRequestError } from "@crowdspace/common";
 import { IUser } from "@entities/interfaces/user-entity.interface.js";
 import { credentialType, IUserRepository } from "@interactors/interfaces/repositories/user-repository.interface.js";
 import { T_ProfileSetting } from "@interactors/interfaces/user-usecase/settings/profile-update-usecase.interface.js";
-import { HydratedDocument, Model, Types } from "mongoose";
+import { Model, Types, UpdateWriteOpResult } from "mongoose";
 
 
 
@@ -53,10 +53,13 @@ export class UserRepositoryImp implements IUserRepository {
     };
 
 
-    async findUserById(userId: string, select: string = "-_id") {
+    async findUserById(userId: string, select: string = "") {
         return await this.model.findById(userId).select(select);
     }
 
+    async findMultipleUsersById(user_ids: string[], select: string = "") {
+        return await this.model.find({ _id: { $in: user_ids } }).select(select);
+    };
 
     async updatePassword(email: string, password: string) {
         return await this.model.updateOne({ email }, { $set: { password } });
@@ -92,4 +95,34 @@ export class UserRepositoryImp implements IUserRepository {
         ]);
     };
 
+    async updateFollowersCount(userId: Types.ObjectId, action: "dec" | "inc") {
+        const result = action === "inc" ?
+            await this.model.updateOne({ _id: userId }, { $inc: { followersCount: 1 } }) :
+            await this.model.updateOne({ _id: userId }, { $inc: { followersCount: -1 } })
+
+        return result.modifiedCount === 0 ? null : result;
+    }
+
+    async updateFollowingsCount(userId: Types.ObjectId, action: "dec" | "inc") {
+
+        const result = action === "inc" ?
+            await this.model.updateOne({ _id: userId }, { $inc: { followingsCount: 1 } }) :
+            await this.model.updateOne({ _id: userId }, { $inc: { followingsCount: -1 } })
+
+        return result.modifiedCount === 0 ? null : result;
+    }
+
+    async search(query: string) {
+        return this.model.aggregate([
+            {
+                $match: {
+                    username: { $regex: query, $options: "i" }
+                }
+            }
+        ])
+    }
+
+    async updateProfileAvatar(user_id: Types.ObjectId, media_path: string) {
+        return await this.model.updateOne({ _id: user_id }, { $set: { avatar: media_path } });
+    }
 }

@@ -1,4 +1,5 @@
 import { createComment, deleteComment } from "@controllers/index.js";
+import { editComment } from "@controllers/comment/editComment.controller.js";
 import { createCallback } from "@crowdspace/common";
 import { Router } from "express";
 
@@ -8,8 +9,8 @@ const commentRouter = Router();
 
 commentRouter.post("/", createCallback(createComment));
 
-commentRouter.delete("/:commentId", createCallback(deleteComment));
-
-// edit
+commentRouter.route("/:commentId")
+    .delete(createCallback(deleteComment))
+    .patch(createCallback(editComment));
 
 export default commentRouter;

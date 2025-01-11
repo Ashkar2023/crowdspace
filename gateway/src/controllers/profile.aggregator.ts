@@ -8,15 +8,6 @@ export const getUserProfile = async (req: Request) => {
 
     let requestedProfileUserId = loggedInUserId;
 
-    /**
-     * CHANGE IMPORTANT
-     * Using ObjectId's for now. should change both JWT & other usecases of userId to UUID 
-     *  
-     * After changing it to UUID, should retrieve the userId from the database if the posts are having userId only,
-     * Or add the UUID to the posts documents
-     *   
-     */
-
     let aggregatedBody: any = {}
 
     if (loggedInUsername !== username) { // Case for handling Direct link retrievals, Ex: Client searching manually with username or opening a shared link

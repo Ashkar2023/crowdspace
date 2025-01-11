@@ -1,8 +1,8 @@
-import { globalErrorHadler, TGlobalErrorHandler } from "@crowdspace/common";
+import { globalErrorHadler } from "@crowdspace/common";
 import { connectDb } from "@frameworks/db/db.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import express from "express";
+import express, { NextFunction, Request } from "express";
 import session from "express-session";
 import { adminAuthRouter, adminUserRouter, authRouter, settingsRouter, userRouter } from "./routes/index.js";
 import logMiddleware from "./middlewares/log.middleware.js";
@@ -10,6 +10,8 @@ import logMiddleware from "./middlewares/log.middleware.js";
 const app = express().disable("x-powered-by");
 connectDb(process.env.DB_URL as string);
 
+import "@frameworks/services/events/events.service.js";
+import "@frameworks/services/events/consumer.js";
 
 app.use(cors({
     methods: 'GET,PUT,POST,PATCH,DELETE',
@@ -51,10 +53,8 @@ app.use("/settings", settingsRouter)
 app.use("/admin", adminAuthRouter)
 app.use("/admin", adminUserRouter)
 
-app.use("/profile",userRouter);
-app.use("/users",userRouter);
-
-app.use("/test",(req:any,res:any)=>res.send("VAMOS"));
+app.use(["/profile","/"], userRouter);
+// app.use("/", userRouter);
 
 /* global error handling */
 app.use(globalErrorHadler); // enhance the global error handler later

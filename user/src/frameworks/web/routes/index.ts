@@ -10,7 +10,7 @@ import { AuthInteractorFacade, SettingsInteractorFacade } from "@interactors/ind
 import { AuthControllerFacade, SettingsControllerFacade } from "@adapters/controllers/index.js";
 import { buildSettingsRouter } from "./settings.routes.js";
 import { buildAdminAuthRouter } from "./admin-auth.routes.js";
-import { AdminAuthController } from "@adapters/controllers/admin-controllers/admin-auth.controller.js";
+// import { AdminAuthController } from "@adapters/controllers/admin-controllers/admin-auth.controller.js";
 import { buildAdminUserRouter } from "./admin-user.routes.js";
 import { AdminUserController } from "@adapters/controllers/admin-controllers/admin-user.controller.js";
 import { AdminUserInteractorFacade } from "@interactors/facade/admin-user-interactor.facade.js";
@@ -20,6 +20,8 @@ import { buildUserRoutes } from "./user.routes.js";
 import { UserControllerFacade } from "@adapters/controllers/facade/user-controller.facade.js";
 import { UserInteractorFacade } from "@interactors/facade/user-interactor.facade.js";
 import { FollowRepositoryImp } from "@frameworks/db/repository/follow.repository.js";
+import { AdminAuthController } from "@adapters/controllers/admin-controllers/admin-auth.controller.js";
+import { UserAuthenticationImp } from "@interactors/user-interactors/user-authentication.interactor.js";
 
 
 //repository
@@ -51,7 +53,7 @@ const AdminUserInteractorFacadeInstance = new AdminUserInteractorFacade(AdminUse
 
 
 // Controller Facades
-const AuthControllerInstance = new AuthControllerFacade(
+const AuthControllerFacadeInstance = new AuthControllerFacade(
     AuthInteractorFacadeInstance,
     ValidationServiceInstance
 );
@@ -62,12 +64,12 @@ const UserControllerInstance = new UserControllerFacade(UserInteractorFacadeInst
 
 const AdminUserControllerInstance = new AdminUserController(AdminUserInteractorFacadeInstance)
 
-const AdminAuthControllerInstance = new AdminAuthController() // controllers are written without interactors. Change logic to interactors 
+const AdminAuthControllerInstance = new AdminAuthController(AuthControllerFacadeInstance); // given a userAuthInterface implemented facade
 
 // USER
 export const authRouter = buildAuthRoutes({
     router: Router(),
-    authContoller: AuthControllerInstance,
+    authContoller: AuthControllerFacadeInstance,
     middlewares: {}
 });
 

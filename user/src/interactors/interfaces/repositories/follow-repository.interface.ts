@@ -29,7 +29,16 @@ export interface IFollowRepository {
     getFollowersAndFollowees: (user_id: Types.ObjectId) => Promise<{
         followers: HydratedDocument<IFollow>[] | [],
         followings: HydratedDocument<IFollow>[] | [],
-        followersCount:number,
-        followingsCount:number
+        followersCount: number,
+        followingsCount: number
     }>
+
+    removeFollower: (
+        follower_id: Types.ObjectId,
+        loggedInUserId: Types.ObjectId
+    ) => Promise<HydratedDocument<IFollow> | null>;
+
+    getFollowers: (followee_id: Types.ObjectId, page: number) =>  Promise<HydratedDocument<IFollow>[]>
+
+    getFollowings: (followee_id: Types.ObjectId, page: number) =>  Promise<HydratedDocument<IFollow>[]>
 }

@@ -1,4 +1,4 @@
-import { RabbitMQ } from "@crowdspace/common";
+import { RabbitMQ, rabbitmqConfig } from "@crowdspace/common";
 
 // connect
 const MediaMsgBroker = RabbitMQ.getInstance();
@@ -8,9 +8,14 @@ await MediaMsgBroker.init(process.env.RABBITMQ_ENDPOINT!);
 export const consumerChannel = await MediaMsgBroker.makeChannel("consumer");
 export const publisherChannel = await MediaMsgBroker.makeChannel("publisher");
 
+const { exchanges, queues, routingKeys } = rabbitmqConfig;
 
-await consumerChannel.assertExchange("content-exchange", "direct", { durable: false })
-await consumerChannel.assertQueue("post", {});
+await consumerChannel.assertExchange(
+    exchanges.contentDirect.name,
+    exchanges.contentDirect.type,
+    { durable: false }
+)
 
+await consumerChannel.assertQueue(queues.media); // current service queue
 
 export default MediaMsgBroker;

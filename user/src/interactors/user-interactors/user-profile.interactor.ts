@@ -1,7 +1,9 @@
 import { BadRequestError } from "@crowdspace/common";
+import { IUser } from "@entities/interfaces/user-entity.interface.js";
 import { IFollowRepository } from "@interactors/interfaces/repositories/follow-repository.interface.js";
 import { IUserRepository } from "@interactors/interfaces/repositories/user-repository.interface.js";
 import { IUserProfileUsecase } from "@interactors/interfaces/user-usecase/user/userProfile-usecase.interface.js";
+import { HydratedDocument } from "mongoose";
 import { Types } from "mongoose";
 
 export class UserProfileImp implements IUserProfileUsecase {
@@ -11,6 +13,14 @@ export class UserProfileImp implements IUserProfileUsecase {
         private _FollowRepository: IFollowRepository
     ) {
 
+    }
+
+    async getUserBasicProfile(userId: string) {
+        const userBasicProfile = await this._UserRepository.findUserById(userId,
+            "username displayname avatar"
+        )
+
+        return userBasicProfile;
     }
 
     async getUserProfile(username: string, loggedInUserId: string) {
@@ -28,8 +38,14 @@ export class UserProfileImp implements IUserProfileUsecase {
         return {
             profile: userProfile,
             ...connection
-            // outgoingFollow: connection.outgoingFollow,
-            // incomingFollow: connection.incomingFollow
         }
     }
+
+    async getMultipleUsersBasicProfile(user_ids: string[]) {
+        const profiles = await this._UserRepository.findMultipleUsersById(user_ids,
+            "username displayname avatar"
+        )
+
+        return profiles 
+    };
 }

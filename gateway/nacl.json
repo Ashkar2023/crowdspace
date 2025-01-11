@@ -1,0 +1,85 @@
+[
+    {
+        "group": "user",
+        "permissions": [
+            {
+                "resource": "users/*",
+                "methods": "*",
+                "action": "allow"
+            },
+            {
+                "resource": "user/*",
+                "methods": "*",
+                "action": "allow"
+            },
+            {
+                "resource": "comments/*",
+                "methods": "*",
+                "action": "allow"
+            },
+            {
+                "resource": "reports/*",
+                "methods": [
+                    "POST",
+                    "DELETE"
+                ],
+                "action": "allow"
+            },
+            {
+                "resource": "media/*",
+                "methods": "*",
+                "action": "allow"
+            },
+            {
+                "resource": "posts/*",
+                "methods": "*",
+                "action": "allow"
+            },
+            {
+                "resource": "chats/*",
+                "methods": "*",
+                "action": "allow"
+            },
+            {
+                "resource": "notifications/*",
+                "methods": "*",
+                "action": "allow"
+            },
+            {
+                "resource": "profile/*",
+                "methods": "*",
+                "action": "allow"
+            },
+            {
+                "resource": "socket/chat",
+                "methods": "*",
+                "action": "allow"
+            },
+            {
+                "resource": "search",
+                "methods": [
+                    "GET"
+                ],
+                "action": "allow"
+            }
+        ]
+    },
+    {
+        "group": "admin",
+        "permissions": [
+            {
+                "resource": "*",
+                "methods": "*",
+                "action": "allow"
+            },
+            {
+                "resource": "*",
+                "methods": [
+                    "DELETE",
+                    "PATCH"
+                ],
+                "action": "allow"
+            }
+        ]
+    }
+]

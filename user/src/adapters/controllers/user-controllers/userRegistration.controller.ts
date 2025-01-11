@@ -62,7 +62,8 @@ export class UserRegistrationController implements IUserRegistrationController {
             username: userData.username,
             email: userData.email,
             password: userData.password,
-            displayname: userData.displayname
+            displayname: userData.displayname,
+            role:"user"
         });
 
         const response = new ResponseCreator();

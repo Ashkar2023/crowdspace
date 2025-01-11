@@ -1,9 +1,10 @@
-import { asyncEvents, DateForPath, encodeEventMessage, ResponseCreator } from "@crowdspace/common";
+import { consumerEvents, DateForPath, encodeEventMessage, InternalServerError, rabbitmqConfig, ResponseCreator } from "@crowdspace/common";
 import { Request } from "express";
 import s3Api from "../../services/s3.client.js";
 import { PutObjectCommand, S3ServiceException } from "@aws-sdk/client-s3";
 import { publisherChannel } from "@events/index.js";
 import { Media, MediaEnum } from "~types/post.types.js";
+import { mediaStorageConfig } from "@config/media-storage.config.js";
 
 export const postMediaUpload = async (req: Request) => {
 
@@ -20,10 +21,11 @@ export const postMediaUpload = async (req: Request) => {
 
     for (let index = 0; index < mediaFiles.length; index++) {
         const media = mediaFiles[index];
-        const mediaPath = DateForPath() + media.originalname.replace(/[^\w\-._]/g, "");
-        const bucketName = "post";
-
-        // const mediaUrl = new URL(`/${bucketName}/${mediaPath}`, process.env.MINIO_ENDPOINT);
+        /**
+         * only alphanumeric, _ . - supported path name
+         */
+        const mediaPath = DateForPath() + media.originalname.replace(/[^\w\-._]/g, ""); //
+        const bucketName = mediaStorageConfig.buckets.post;
 
         const uploadObject = new PutObjectCommand({
             Bucket: bucketName,
@@ -48,11 +50,17 @@ export const postMediaUpload = async (req: Request) => {
                             MediaEnum.IMAGE :
                             MediaEnum.VIDEO)
                 });
+            }else{
+                throw new Error(uploaded.$metadata.httpStatusCode?.toString());
             }
         } catch (error) {
+            /* LEARN S3 req res & error handling */
             if (error instanceof S3ServiceException) {
+                console.log(error.message);
+            }else{
                 console.log(error);
             }
+            throw new InternalServerError("upload failed", 500);
         }
     }
 
@@ -68,11 +76,15 @@ export const postMediaUpload = async (req: Request) => {
     }
 
     const dataBuffer = encodeEventMessage(
-        asyncEvents.media_upload_success,
+        consumerEvents.media_upload_success,
         bodyObject
     )
 
-    const published = publisherChannel.publish("content-exchange", "", dataBuffer);
+    const published = publisherChannel.publish(
+        rabbitmqConfig.exchanges.contentDirect.name, // content exchange - general name
+        rabbitmqConfig.routingKeys.content.contentDirect, // content queue (of content service) 
+        dataBuffer
+    );
 
     if (!published) {
         //handle message failure

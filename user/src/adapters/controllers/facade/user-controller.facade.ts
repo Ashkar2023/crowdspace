@@ -17,6 +17,14 @@ export class UserControllerFacade implements IUserControllerFacade {
     async getUserProfile(req: Request) {
         return await this._UserControllerInstance.getUserProfile(req);
     }
+    
+    async getUserBasicProfile(req: Request){
+        return await this._UserControllerInstance.getUserBasicProfile(req);
+    };
+
+    async getMultipleUsersBasicProfile(req: Request){
+        return await this._UserControllerInstance.getMultipleUsersBasicProfile(req);
+    };
 
     async followUser(req: Request) {
         return await this._UserControllerInstance.followUser(req);
@@ -28,5 +36,21 @@ export class UserControllerFacade implements IUserControllerFacade {
 
     async getFollows(req: Request) {
         return await this._UserControllerInstance.getFollows(req);
+    }
+
+    async search(req:Request){
+        return await this._UserControllerInstance.search(req);
+    }
+    
+    async removeFollower(req: Request){
+        return await this._UserControllerInstance.removeFollower(req);
+    }
+    
+    async getFollowers(req: Request){
+        return await this._UserControllerInstance.getFollowers(req)
+    };
+
+    async getFollowings(req: Request){
+        return await this._UserControllerInstance.getFollowings(req);
     }
 }

@@ -1,4 +1,4 @@
-import { RabbitMQ } from "@crowdspace/common";
+import { RabbitMQ, rabbitmqConfig } from "@crowdspace/common";
 
 const ContentMsgBroker = RabbitMQ.getInstance();
 
@@ -8,9 +8,31 @@ await ContentMsgBroker.init(process.env.RABBITMQ_ENDPOINT!);
 export const consumerChannel = await ContentMsgBroker.makeChannel("consumer");
 export const publisherChannel = await ContentMsgBroker.makeChannel("publisher");
 
+const { exchanges, queues, routingKeys } = rabbitmqConfig;
 
-await consumerChannel.assertExchange("content-exchange", "direct", { durable: false })
-await consumerChannel.assertQueue("post", {});
-await consumerChannel.bindQueue("post","content-exchange","")
+await consumerChannel.assertExchange(
+    exchanges.contentDirect.name,
+    exchanges.contentDirect.type,
+    { durable: false }
+)
+
+await consumerChannel.assertExchange(
+    exchanges.notificationFanout.name,
+    exchanges.notificationFanout.type,
+    { durable: false }
+)
+
+await consumerChannel.assertQueue(queues.content); //current service queue
+await consumerChannel.assertQueue(queues.chat);
+await consumerChannel.bindQueue(
+    queues.content,
+    exchanges.contentDirect.name,
+    routingKeys.content.contentDirect
+)
+await consumerChannel.bindQueue(
+    queues.chat,
+    exchanges.notificationFanout.name,
+    routingKeys.chat.notificationFanout
+)
 
 export default ContentMsgBroker;

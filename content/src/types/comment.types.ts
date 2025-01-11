@@ -5,4 +5,5 @@ export interface IComment {
     author: Types.ObjectId;
     commentBody: string;
     replyFor?: Types.ObjectId;
+    edited?: boolean
 }

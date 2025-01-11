@@ -1,4 +1,4 @@
-import { TokenError } from "@crowdspace/common";
+import { TokenError, UnauthorizedError } from "@crowdspace/common";
 import { NextFunction, Request, Response } from "express";
 
 const userAuthMiddleware = async (req: Request, res: Response, next: NextFunction) => {
@@ -23,6 +23,8 @@ const userAuthMiddleware = async (req: Request, res: Response, next: NextFunctio
             next()
         } else if (response.status === 401 && body.error === "invalid_access") {
             throw new TokenError("Invalid access token", response.status, "invalid_access");
+        } else if (response.status === 403 && body.error === "access_denied") {
+            throw new UnauthorizedError("Access denied", 403);
         }
 
     } catch (error) {

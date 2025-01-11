@@ -1,7 +1,7 @@
 import cookieParser from "cookie-parser";
 import express from "express";
-import postRouter from "./routers/posts.router.js";
 import { pingS3 } from "./services/s3.client.js";
+import { postRouter, profileRouter } from "@routers/routers.index.js";
 
 /* Message Events setup */
 import "./events/index.js"; // imports statically. Works before executing other code
@@ -14,6 +14,7 @@ app.use(express.json()); //accepts options
 app.use(cookieParser());
 
 app.use("/media", postRouter)
+app.use("/media", profileRouter)
 
 app.listen(process.env.PORT, () => {
     console.log("Media running at port: ", process.env.PORT);

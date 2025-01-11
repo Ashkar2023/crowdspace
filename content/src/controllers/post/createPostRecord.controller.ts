@@ -1,16 +1,16 @@
-import { PostRepoImp } from "repositories/index.repositories.js";
+// import { PostRepoImp } from "repositories/index.repositories.js";
 
-const createPostRecord = async (message: any) => {
-    try {
-        const saved = await PostRepoImp.createPost(message.body);
-        return saved;
-    } catch (error) {
-        if (error instanceof Error) {
-            console.log(error);
-        } else {
-            console.log('An unknown error occurred at creaetePostRecord');
-        }
-    }
-}
+// const createPostRecord = async (message: any) => {
+//     try {
+//         const saved = await PostRepoImp.createPost(message.body);
+//         return saved;
+//     } catch (error) {
+//         if (error instanceof Error) {
+//             console.log(error);
+//         } else {
+//             console.log('An unknown error occurred at creaetePostRecord');
+//         }
+//     }
+// }
 
-export default createPostRecord
+// export default createPostRecord

@@ -1,22 +1,105 @@
 name: "crowdspace"
 
 services:
+
   minio-server:
     image: minio/minio:latest
     ports:
-        - "4100:4100"
-        - "4200:4200"
+      - "4100:4100"
+      - "4200:4200"
     environment:
-        MINIO_ROOT_USER: admin
-        MINIO_ROOT_PASSWORD: password
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: password
     volumes:
-        - minio-volume:/data
+      - minio-volume:/data
     command: server --address ":4100" --console-address ":4200" /data
+
   rabbitmq-server:
     image: rabbitmq:management
     ports:
-        - "5672:5672"
-        - "15672:15672"
+      - "5672:5672"
+      - "15672:15672"
+
+  redis-server:
+    image: redis:alpine
+    ports:
+      - '6379:6379'
+
+  redis-monitoring:
+    image: redis/redisinsight
+    container_name: redismon
+    ports:
+      - '5540:5540'
+      - '8001:8001'
+  # gateway:
+  #   build:
+  #     context: .
+  #     dockerfile: ./gateway/Dockerfile
+  #   env_file:
+  #     - ./gateway/.env
+  #   volumes:
+  #     - /app/node_modules
+  #     - ./gateway:/app/gateway
+  #     - ./common:/app/common
+  #   ports:
+  #     - '9000:9000'
+  #   command: [ "yarn", "run", "dev" ]
+
+  # user:
+  #   build:
+  #     context: .
+  #     dockerfile: ./user/Dockerfile
+  #   env_file:
+  #     - ./user/.env
+  #   volumes:
+  #     - ./user:/app/user
+  #     - ./common:/app/common
+  #     - /app/user/node_modules
+  #   ports:
+  #     - '3000:3000'
+  #   command: [ "yarn", "run", "dev" ]
+
+  # auth:
+  #   build:
+  #     context: .
+  #     dockerfile: ./auth/Dockerfile
+  #   env_file:
+  #     - ./auth/.env
+  #   volumes:
+  #     - ./auth:/app/auth
+  #     - ./common:/app/common
+  #     - /app/auth/node_modules
+  #   ports:
+  #     - '3030:3030'
+  #   command: [ "yarn", "run", "dev" ]
+  
+  # media:
+  #   build:
+  #     context: .
+  #     dockerfile: ./media/Dockerfile
+  #   env_file:
+  #     - ./media/.env
+  #   volumes:
+  #     - ./media:/app/media
+  #     - ./common:/app/common
+  #     - /app/media/node_modules
+  #   ports:
+  #     - '4000:4000'
+  #   command: [ "yarn", "run", "dev" ]
+
+  # content:
+  #   build:
+  #     context: .
+  #     dockerfile: ./content/Dockerfile
+  #   env_file:
+  #     - ./content/.env
+  #   volumes:
+  #     - ./content:/app/content
+  #     - ./common:/app/common
+  #     - /app/content/node_modules
+  #   ports:
+  #     - '5000:5000'
+  #   command: [ "yarn", "run", "dev" ]
 
 volumes:
-    minio-volume:
+  minio-volume:

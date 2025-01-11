@@ -1,7 +1,7 @@
-import { asyncEvents, BadRequestError, encodeEventMessage, ResponseCreator } from "@crowdspace/common";
+import { consumerEvents, BadRequestError, encodeEventMessage, ResponseCreator } from "@crowdspace/common";
 import ContentMsgBroker, { publisherChannel } from "events/index.js";
 import { Request } from "express";
-import { PostRepoImp } from "repositories/index.repositories.js";
+import { PostRepoImp } from "repositories/repositories.index.js";
 
 export const deletePost = async (req: Request) => {
     const { postId } = req.params;
@@ -16,7 +16,7 @@ export const deletePost = async (req: Request) => {
     const deleted = await PostRepoImp.deletePost(postId);
     console.log(deleted);
 
-    const bodyObject = encodeEventMessage(asyncEvents.post_deleted, {
+    const bodyObject = encodeEventMessage(consumerEvents.post_deleted, {
         postId: postToDelete._id,
         mediaUrls: postToDelete.media.map(item => {
             return item.media_url;

@@ -1,7 +1,6 @@
 import { BadRequestError, cleanObject, DatabaseOpError, ResponseCreator } from '@crowdspace/common';
 import { Request } from 'express';
-import { HydratedDocument } from 'mongoose';
-import { PostRepoImp } from 'repositories/index.repositories.js';
+import { PostRepoImp } from 'repositories/repositories.index.js';
 import { T_Post } from '~types/post.types.js';
 
 export const editPost = async (req: Request) => {
@@ -25,7 +24,7 @@ export const editPost = async (req: Request) => {
 
     if (post?.author.toString() === loggedInUser) {
         updated = await PostRepoImp.editPost(postId, cleanObject(
-            {
+            { // this is for cleaning values that are not in the body(values which are not edited/touched)
                 visibility,
                 tags,
                 archived,

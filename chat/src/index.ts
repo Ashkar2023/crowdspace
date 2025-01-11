@@ -1,4 +1,4 @@
-import express from "express";
+import express, { RequestHandler } from "express";
 import { Server } from "socket.io";
 import http from "http";
 import ChatRouter from "routes/chat.routes.js";
@@ -13,12 +13,13 @@ import { acceptCall } from "@controllers/acceptCall.controller.js";
 import { RTC_Answer_handler, RTC_Offer_handler } from "@controllers/rtcOfferControllers.js";
 import { exchangeIceCandidates } from "@controllers/rtcIceCandidates.controller.js";
 import { joinLobby } from "@controllers/joinLobby.controller.js";
+import { endCallAndEmit } from "@controllers/endCall.controller.js";
 
 const app = express();
 const httpServer = new http.Server(app);
 
 
-const io = new Server(httpServer, {
+export const io = new Server(httpServer, {
     cors: {
         origin: "http://localhost:5173",
         maxAge: 3600,
@@ -45,10 +46,22 @@ await connectRedis();
 const onlineUsersMap: { [key: string]: string } = {};
 
 declare global {
-    var getSocketId: (userId: string) => string
+    /**
+     * Mapped user IDs <-> socket IDs.
+     * 
+     * @param id - A user ID or socket ID.
+     * @returns The mapped socket ID or user ID.
+     */
+    var RetrieveCorrespondingId: (userId: string) => string
+
+    namespace Express {
+        export interface Request {
+            io: Server
+        }
+    }
 }
 
-global.getSocketId = (userId: string): string => {
+global.RetrieveCorrespondingId = (userId: string): string => {
     return onlineUsersMap[userId];
 }
 
@@ -65,10 +78,12 @@ io.on("connect", (socket) => {
 
     socket.on(SocketEvents.call_create, createCallAndEmit(socket, io));
 
+    socket.on(SocketEvents.call_end, endCallAndEmit(socket, io));
+
     socket.on(SocketEvents.call_user_join_lobby, joinLobby(socket, io));
-    
+
     socket.on(SocketEvents.call_join, acceptCall(socket, io));
-    
+
     socket.on(SocketEvents.call_decline, declineCall(socket, io));
 
     socket.on(SocketEvents.rtc_offer_send, RTC_Offer_handler(socket, io));
@@ -104,7 +119,20 @@ setTimeout(() => {
     console.log("---------USERID---------|----------SOCKET_ID------")
 }, 1000);
 
+const attatchSocketIo: RequestHandler = (req, res, next) => {
+    req.io = io;
+    next();
+}
+
+app.use(attatchSocketIo)
 
 app.use("/chats", ChatRouter);
 
 app.use(globalErrorHadler);
+
+// for waiting for the global method to be defined
+// make the function into a module if possible so dynamic import can be avoided
+(async function () {
+    await import("./events/index.js");
+    await import("./events/notification.consumer.js");
+})();

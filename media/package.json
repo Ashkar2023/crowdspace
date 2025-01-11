@@ -1,11 +1,11 @@
 {
     "name": "media",
-    "version": "0.0.0",
-    "private": true,
+    "version": "1.0.0",
+    "main": "dist/index.js",
+    "license": "MIT",
     "type": "module",
     "scripts": {
-        "dev": "nodemon --watch src/ --ext ts,json --ignore node_modules --ignore .gitignore --exec \"yarn run build && node --env-file=.env dist/index.js\" ",
-        "dev:no-env": "nodemon --watch src/ --ext ts,json --ignore node_modules --ignore .gitignore --exec \"yarn run build && node dist/index.js\" ",
+        "dev": "nodemon --watch src/ --ext ts,json --ignore node_modules --ignore .gitignore --exec \"npm run build && node --env-file=.env dist/index.js\" ",
         "build": "rimraf dist && tsc && tsc-alias"
     },
     "dependencies": {
@@ -14,15 +14,13 @@
         "@types/multer": "^1.4.12",
         "amqplib": "^0.10.4",
         "cookie-parser": "~1.4.4",
-        "express": "~4.16.1",
+        "express": "^4.21.2",
         "multer": "^1.4.5-lts.1"
     },
     "devDependencies": {
         "@types/amqplib": "^0.10.5",
         "@types/node": "^22.9.0",
-        "nodemon": "^3.1.7",
         "rimraf": "^6.0.1",
-        "tsc-alias": "^1.8.10",
-        "typescript": "^5.6.3"
+        "tsc-alias": "^1.8.10"
     }
 }

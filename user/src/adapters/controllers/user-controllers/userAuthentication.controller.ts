@@ -67,7 +67,7 @@ export class UserAuthController implements IUserAuthController {
 
     async refreshAccess(req: Request) {
         const { rjwt } = req.cookies;
-
+        
         const refreshToken = await this._AuthInteractorFacade.refreshAccessToken(rjwt);
 
         const response = new ResponseCreator();

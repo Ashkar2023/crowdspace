@@ -1,19 +1,21 @@
 import cookieParser from "cookie-parser";
 import express, { ErrorRequestHandler } from "express";
 import { connect } from "mongoose";
-import cors from "cors"
+import cors from "cors";
 
 // Message Events setup
 import "./events/index.js";
-import "./events/post.consumer.js";
+import "./events/consumer.js";
+
 import { styleText } from "util";
-import userContentRouter from "@routers/user.routes.js";
-import commentRouter from "@routers/comment.routes.js";
-import postRouter from "@routers/post.routes.js";
+import userContentRouter from "@routers/user-routes/user.routes.js";
+import commentRouter from "@routers/user-routes/comment.routes.js";
+import postRouter from "@routers/user-routes/post.routes.js";
 import loggingMiddleware from "middlewares/logging.middleware.js";
 import { globalErrorHadler, TokenError } from "@crowdspace/common";
-import { TokenErrorType } from "@crowdspace/common/dist/constants/token.error.js";
-import reportRouter from "@routers/report.routes.js";
+import reportRouter from "@routers/user-routes/report.routes.js";
+import { adminRouter } from "@routers/index.router.js";
+import notificationRouter from "@routers/user-routes/notification.routes.js";
 
 const app = express();
 
@@ -47,28 +49,20 @@ app.use(express.json());
 app.use(loggingMiddleware)
 app.use(cookieParser());
 
+app.use("/admin", adminRouter)
+
 app.use("/users", userContentRouter)
 
 app.use("/comments", commentRouter);
 
 app.use("/posts", postRouter);
 
-app.use("/reports",reportRouter)
+app.use("/reports", reportRouter)
+
+app.use("/notifications", notificationRouter);
 
 app.listen(process.env.PORT, () => {
     console.log("Content service running at http://localhost:" + process.env.PORT);
 })
 
-const ErrorHandler: ErrorRequestHandler = (err: TokenError, req, res, next) => {
-    console.log(err);
-    res.status(err.statusCode).json({
-        message: err.message,
-        error: err.error,
-        body: err.body,
-        success:false
-    })
-    // next();
-};
-app.use(ErrorHandler);
-
-// app.use(globalErrorHadler);
+app.use(globalErrorHadler);

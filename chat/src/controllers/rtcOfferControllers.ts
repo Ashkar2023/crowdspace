@@ -7,7 +7,6 @@ export const RTC_Offer_handler = (socket: Socket, io: Server) => {
         try {
 
             socket.to(roomId).emit(SocketEvents.rtc_offer_receive, { offer, roomId }); // dont parse the json
-            console.log(offer)
 
         } catch (error) {
             if (error instanceof Error) {
@@ -24,7 +23,6 @@ export const RTC_Answer_handler = (socket: Socket, io: Server) => {
         try {
 
             socket.to(roomId).emit(SocketEvents.rtc_answer_receive, { answer, roomId });
-            console.log(answer)
 
         } catch (error) {
             if (error instanceof Error) {
