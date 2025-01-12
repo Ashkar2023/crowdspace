@@ -1,5 +1,5 @@
 import { model, MongooseError, Schema, Types } from "mongoose";
-import { IMessage, msgContentType } from "~types/message.type.js";
+import { IMessage, messageStatus, msgContentType } from "~types/message.type.js";
 
 const messageSchema = new Schema<IMessage>({
     chat_id: {
@@ -20,6 +20,12 @@ const messageSchema = new Schema<IMessage>({
         enum: Object.values(msgContentType),
         default: msgContentType.text
     },
+    status: {
+        type: String,
+        required: true,
+        enum: Object.values(messageStatus),
+        default:messageStatus.sent
+    },
     media_url: {
         type: String,
     },
@@ -31,6 +37,7 @@ const messageSchema = new Schema<IMessage>({
     timestamps: true
 })
 
+/* Use indexes */
 
 messageSchema.pre("save", function (next) {
     if (this.content_type === msgContentType.text && !this.body?.trim()) {

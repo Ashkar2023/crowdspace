@@ -24,11 +24,13 @@ const chatSchema = new Schema<IChat>({
     unread_messages: {
         type: Number,
         required: true,
-        default: 0
+        default: 0,
+        min: 0
     }
 }, {
     timestamps: true
 })
 
+/* Use indexes */
 
 export default model("chat", chatSchema, "chats");

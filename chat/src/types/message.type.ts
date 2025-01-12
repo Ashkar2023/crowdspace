@@ -6,6 +6,12 @@ export enum msgContentType {
     text = "text"
 }
 
+export enum messageStatus {
+    delivered = "delivered",
+    seen = "seen",
+    sent = "sent"
+}
+
 export type IMessage = {
     chat_id: Types.ObjectId,
     content_type: msgContentType,
@@ -15,4 +21,5 @@ export type IMessage = {
     reciever: string, // this is not in databas model so string
     reply_to: Types.ObjectId | undefined,
     deleted: boolean,
+    status: messageStatus
 }
