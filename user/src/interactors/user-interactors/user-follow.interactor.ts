@@ -126,7 +126,7 @@ class UserFollowImp implements IUserFollowUsecase {
             throw new BadRequestError("Invalid user id");
         }
 
-        const followers = await this._FollowRepository.getFollowings(new Types.ObjectId(user_id), page);
+        const followers = await this._FollowRepository.getFollowers(new Types.ObjectId(user_id), page);
 
         return followers
     }

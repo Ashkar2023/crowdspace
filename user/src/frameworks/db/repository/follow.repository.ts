@@ -171,10 +171,10 @@ export class FollowRepositoryImp implements IFollowRepository {
                 }
             },
             {
-                $skip: (page - 1) * 1
+                $skip: (page - 1) * 2
             },
             {
-                $limit: 1
+                $limit: 2
             },
             {
                 $lookup:{
@@ -212,10 +212,10 @@ export class FollowRepositoryImp implements IFollowRepository {
                 }
             },
             {
-                $skip: (page - 1) * 1
+                $skip: (page - 1) * 2
             },
             {
-                $limit: 1
+                $limit: 2
             },
             {
                 $lookup:{
