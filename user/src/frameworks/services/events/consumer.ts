@@ -55,6 +55,6 @@ consumerChannel.consume(rabbitmqConfig.queues.user,
         }
     },
     {
-        noAck: false
+        noAck: true
     }
 )
