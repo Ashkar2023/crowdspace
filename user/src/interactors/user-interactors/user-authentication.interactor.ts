@@ -1,4 +1,4 @@
-import { BadRequestError, decodeJWT, signJWT, UnauthorizedError } from "@crowdspace/common";
+import { BadRequestError, decodeJWT, signJWT, TokenError, UnauthorizedError } from "@crowdspace/common";
 import { IHashService } from "../interfaces/services/hash-service.interface.js";
 import { IUserRepository } from "../interfaces/repositories/user-repository.interface.js";
 import { IUserAuthenticationUsecase } from "../interfaces/user-usecase/auth/authentication-usecase.interface.js";
@@ -25,6 +25,10 @@ export class UserAuthenticationImp implements IUserAuthenticationUsecase {
 
         if (!userFound) {
             throw new BadRequestError("Invalid Credentials", 404);
+        }
+
+        if(userFound.isBanned){
+            throw new BadRequestError("Account banned",403)
         }
 
         let comparison = true; // for oauth
