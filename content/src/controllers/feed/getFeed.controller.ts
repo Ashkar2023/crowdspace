@@ -1,20 +1,28 @@
 import { createUserBasicDict, IBasicUser, injectProfiles, parseUniqueIds, ResponseCreator } from '@crowdspace/common';
 import { Request } from 'express'
-import { PostRepoImp } from 'repositories/repositories.index.js';
+import { HydratedDocument, Types } from 'mongoose';
+import { LikeRepoImp, PostRepoImp } from 'repositories/repositories.index.js';
+import { T_Post } from '~types/post.types.js';
 
 export const getFeed = async (req: Request) => {
     const loggedInUser = req.headers["x-logged-in-user"] as string;
+    const page = req.query.page;
 
-    const posts = await PostRepoImp.getFeed(loggedInUser);
+    const posts = await PostRepoImp.getFeed(loggedInUser, page ? +page : 0 ); //validation is not good enough
 
-    const uniqueIds = parseUniqueIds(posts, "author");
+    const postsIds = posts.map(post => post._id);
+
+    const likesOnPosts = await LikeRepoImp.findLikes(postsIds);
+    const likedPostIdSet = new Set(likesOnPosts.map(like=>like.post_id.toString()));
+
+    const uniqueAuthorIds = parseUniqueIds(posts, "author");
 
     const { body, message } = await (
         await fetch(process.env.USER_SERVICE + "/basic",
             {
                 method: "POST",
                 body: JSON.stringify({
-                    user_ids: Array.from(uniqueIds)
+                    user_ids: Array.from(uniqueAuthorIds)
                 }),
                 headers: {
                     "Content-Type": "application/json"
@@ -25,12 +33,16 @@ export const getFeed = async (req: Request) => {
 
     // try giving types to these methods to obtain typescript knowledge
     const profilesDict = createUserBasicDict(body.profiles);
-    const postsWithAuthor = injectProfiles(posts, profilesDict, "author"); 
+    const postsWithAuthor = injectProfiles(posts, profilesDict, "author") as HydratedDocument<T_Post>[];
+    const finalPosts = postsWithAuthor.map(post=>({
+        ...post,
+        liked: likedPostIdSet.has(post._id.toString())
+    }))
 
     const response = new ResponseCreator();
     return response
         .setStatusCode(200)
         .setMessage("feed fetched")
-        .setData({ posts: postsWithAuthor })
+        .setData({ posts: finalPosts })
         .get();
 }

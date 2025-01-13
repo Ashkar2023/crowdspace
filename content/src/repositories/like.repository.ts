@@ -37,4 +37,8 @@ export class LikeRepository {
 
     /* QUERY all like in descending sort */
 
+    async findLikes(postIds: Types.ObjectId[]): Promise<HydratedDocument<ILike>[]> {
+        return this.#model.find({ post_id: { $in: postIds } });
+    }
+
 }

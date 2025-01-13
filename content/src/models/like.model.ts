@@ -7,11 +7,13 @@ const likeSchema = new Schema<ILike>({
         required: true,
         ref: 'posts',
     },
-    author:{
-        type:Schema.Types.ObjectId,
-        required:true,
+    author: {
+        type: Schema.Types.ObjectId,
+        required: true,
     }
 });
 
+likeSchema.index({ post_id: 1 })
+likeSchema.index({ author: 1 })
 
 export default model('like', likeSchema, "likes");

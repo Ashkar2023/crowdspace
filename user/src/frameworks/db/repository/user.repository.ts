@@ -113,7 +113,7 @@ export class UserRepositoryImp implements IUserRepository {
     }
 
     async search(query: string) {
-        return this.model.aggregate([
+        return this.model.aggregate<IUser>([
             {
                 $match: {
                     username: { $regex: query, $options: "i" }

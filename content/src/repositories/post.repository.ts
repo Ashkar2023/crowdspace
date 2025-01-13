@@ -1,6 +1,7 @@
 import postModel from "models/post.model.js";
 import { DeleteResult, Document, HydratedDocument, Model, Types } from "mongoose";
 import { IComment } from "~types/comment.types.js";
+import { ILike } from "~types/like.types.js";
 import { PostCreateFields, PostEnum, T_Post } from "~types/post.types.js";
 
 class PostRepository {
@@ -37,16 +38,18 @@ class PostRepository {
         return await this.#model.findByIdAndUpdate(postId, { $set: updates }, { new: true });
     }
 
-    async getFeed(userId: string): Promise<HydratedDocument<T_Post>[]> {
+    async getFeed(userId: string, page: number = 0): Promise<HydratedDocument<T_Post>[]> {
         // const response = await this.#model.aggregate<T_Post>([
         //     {
-        //         $match: {
-
+        //         $match: {}
+        //     },
+        //     {
+        //         $addFields: {
+        //             "like": {}
         //         }
         //     }
         // ])
-
-        const response = await this.#model.find({});
+        const response = await this.#model.find({}).skip((page - 1) * 3).limit(3);
 
         return response
     }
