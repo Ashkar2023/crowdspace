@@ -10,7 +10,7 @@
     },
     "dependencies": {
         "@aws-sdk/client-s3": "^3.693.0",
-        "@crowdspace/common": "*",
+        "@cr0wdspace/common": "^0.0.2",
         "@types/multer": "^1.4.12",
         "amqplib": "^0.10.4",
         "cookie-parser": "~1.4.4",

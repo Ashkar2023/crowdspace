@@ -1,4 +1,4 @@
-import { BadRequestError, ConflictError, InternalServerError, UnauthorizedError } from "@crowdspace/common";
+import { BadRequestError, ConflictError, InternalServerError, UnauthorizedError } from "@cr0wdspace/common";
 import { IUserRepository } from "../interfaces/repositories/user-repository.interface.js";
 import { IProfileUpdateUsecase, T_ProfileSetting } from "../interfaces/user-usecase/settings/profile-update-usecase.interface.js";
 import { IUserChecksUsecase } from "../interfaces/user-usecase/auth/user-checks-usecase.interface.js";

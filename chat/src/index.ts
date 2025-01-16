@@ -2,7 +2,7 @@ import express, { RequestHandler } from "express";
 import { Server } from "socket.io";
 import http from "http";
 import ChatRouter from "routes/chat.routes.js";
-import { globalErrorHadler, SocketEvents } from "@crowdspace/common";
+import { globalErrorHadler, SocketEvents } from "@cr0wdspace/common";
 import writeMessage from "@controllers/writeMessages.controller.js";
 import { connect } from "mongoose";
 import { connectRedis } from "services/redis.client.js";
@@ -18,7 +18,7 @@ import { endCallAndEmit } from "@controllers/endCall.controller.js";
 const app = express();
 const httpServer = new http.Server(app);
 
-
+// make socket.io a service
 export const io = new Server(httpServer, {
     cors: {
         origin: "http://localhost:5173",

@@ -1,4 +1,4 @@
-import { globalErrorHadler } from "@crowdspace/common";
+import { globalErrorHadler } from "@cr0wdspace/common";
 import { connectDb } from "@frameworks/db/db.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -12,6 +12,11 @@ connectDb(process.env.DB_URL as string);
 
 import "@frameworks/services/events/events.service.js";
 import "@frameworks/services/events/consumer.js";
+import { RedisService } from "@frameworks/services/redis.service.js";
+
+const redisImp = RedisService.getInstance()
+await redisImp.connect();
+await redisImp.storeBannedUsers();
 
 app.use(cors({
     methods: 'GET,PUT,POST,PATCH,DELETE',

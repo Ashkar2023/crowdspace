@@ -1,4 +1,4 @@
-import { BadRequestError, decodeJWT, signJWT, TokenError, UnauthorizedError } from "@crowdspace/common";
+import { BadRequestError, decodeJWT, signJWT, TokenError, UnauthorizedError } from "@cr0wdspace/common";
 import { IHashService } from "../interfaces/services/hash-service.interface.js";
 import { IUserRepository } from "../interfaces/repositories/user-repository.interface.js";
 import { IUserAuthenticationUsecase } from "../interfaces/user-usecase/auth/authentication-usecase.interface.js";

@@ -11,7 +11,7 @@
         "dev:debug": "nodemon --watch src/ --ext ts,json --ignore .git --ignore node_modules --exec \"tsc && node inspect --env-file=.env dist/index.js\""
     },
     "dependencies": {
-        "@crowdspace/common": "*",
+        "@cr0wdspace/common": "^0.0.2",
         "cookie-parser": "^1.4.7",
         "cors": "^2.8.5",
         "express": "^4.21.1",

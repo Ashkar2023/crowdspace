@@ -1,4 +1,4 @@
-import { ISchemaValidator } from "@crowdspace/common";
+import { ISchemaValidator } from "@cr0wdspace/common";
 
 export interface IValidationService extends ISchemaValidator {
     validateEmail(email: string): boolean | never;

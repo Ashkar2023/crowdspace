@@ -1,4 +1,4 @@
-import { consumerEvents, BadRequestError, encodeEventMessage, NotificationKind, ResponseCreator, rabbitmqConfig } from "@crowdspace/common";
+import { consumerEvents, BadRequestError, encodeEventMessage, NotificationKind, ResponseCreator, rabbitmqConfig } from "@cr0wdspace/common";
 import { publisherChannel } from "events/index.js";
 import { Request, response } from "express";
 import { isValidObjectId, Schema, Types } from "mongoose";

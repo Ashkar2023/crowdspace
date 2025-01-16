@@ -1,5 +1,5 @@
 import { IAdminUserControllerFacade } from "@adapters/controllers/interfaces/ifacade/admin-user-controller-facade.interface.js";
-import { createCallback, UnauthorizedError } from "@crowdspace/common";
+import { createCallback, UnauthorizedError } from "@cr0wdspace/common";
 import { NextFunction, Request, Response, Router } from "express";
 
 export function buildAdminUserRouter({

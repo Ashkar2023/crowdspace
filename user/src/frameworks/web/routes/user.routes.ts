@@ -1,5 +1,5 @@
 import { IUserController } from "@adapters/controllers/interfaces/user-controller.interface.js"
-import { createCallback } from "@crowdspace/common"
+import { createCallback } from "@cr0wdspace/common"
 import { Router } from "express"
 
 export function buildUserRoutes({ router, UserController }: {

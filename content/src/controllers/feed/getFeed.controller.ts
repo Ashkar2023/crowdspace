@@ -1,4 +1,4 @@
-import { createUserBasicDict, IBasicUser, injectProfiles, parseUniqueIds, ResponseCreator } from '@crowdspace/common';
+import { createUserBasicDict, IBasicUser, injectProfiles, parseUniqueIds, ResponseCreator } from '@cr0wdspace/common';
 import { Request } from 'express'
 import { HydratedDocument, Types } from 'mongoose';
 import { LikeRepoImp, PostRepoImp } from 'repositories/repositories.index.js';
@@ -6,6 +6,7 @@ import { T_Post } from '~types/post.types.js';
 
 export const getFeed = async (req: Request) => {
     const loggedInUser = req.headers["x-logged-in-user"] as string;
+    const str = req.query
     const page = req.query.page;
 
     const posts = await PostRepoImp.getFeed(loggedInUser, page ? +page : 0 ); //validation is not good enough
@@ -36,7 +37,7 @@ export const getFeed = async (req: Request) => {
     const postsWithAuthor = injectProfiles(posts, profilesDict, "author") as HydratedDocument<T_Post>[];
     const finalPosts = postsWithAuthor.map(post=>({
         ...post,
-        liked: likedPostIdSet.has(post._id.toString())
+        liked: likedPostIdSet.has(post.id)
     }))
 
     const response = new ResponseCreator();

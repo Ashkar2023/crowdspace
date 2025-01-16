@@ -1,4 +1,4 @@
-import { decodeJWT, ResponseCreator, signJWT } from "@crowdspace/common";
+import { decodeJWT, ResponseCreator, signJWT } from "@cr0wdspace/common";
 import { Request } from "express";
 
 export const generateAccessToken = async (req: Request) => {

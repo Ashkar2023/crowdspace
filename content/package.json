@@ -11,7 +11,7 @@
     },
     "license": "MIT",
     "dependencies": {
-        "@crowdspace/common": "*",
+        "@cr0wdspace/common":"0.0.2",
         "cookie-parser": "^1.4.7",
         "cors": "^2.8.5",
         "express": "^4.21.1",

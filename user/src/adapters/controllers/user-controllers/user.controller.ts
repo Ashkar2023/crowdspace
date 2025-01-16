@@ -1,6 +1,6 @@
 import { IUserInteractorFacade } from "@interactors/interfaces/ifacade/user-interactor.facade.interface.js";
 import { IUserController } from "../interfaces/user-controller.interface.js";
-import { BadRequestError, IResponse, ResponseCreator } from "@crowdspace/common";
+import { BadRequestError, IResponse, ResponseCreator } from "@cr0wdspace/common";
 import { Request } from "express";
 import { isValidObjectId, Types } from "mongoose";
 

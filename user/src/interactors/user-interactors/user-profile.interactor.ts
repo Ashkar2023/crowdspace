@@ -1,4 +1,4 @@
-import { BadRequestError } from "@crowdspace/common";
+import { BadRequestError } from "@cr0wdspace/common";
 import { IUser } from "@entities/interfaces/user-entity.interface.js";
 import { IFollowRepository } from "@interactors/interfaces/repositories/follow-repository.interface.js";
 import { IUserRepository } from "@interactors/interfaces/repositories/user-repository.interface.js";

@@ -1,4 +1,4 @@
-import { TokenError, verifyJWT } from "@crowdspace/common";
+import { TokenError, verifyJWT } from "@cr0wdspace/common";
 import { RequestHandler } from "express";
 
 export const verifyAccessToken: RequestHandler = async (req, res, next) => {

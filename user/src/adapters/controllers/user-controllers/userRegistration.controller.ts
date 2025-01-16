@@ -1,6 +1,6 @@
 import { Request } from "express";
 import { IUserRegistrationController } from "../interfaces/userRegistration-controller.interface.js";
-import { ConflictError, ResponseCreator, BadRequestError } from "@crowdspace/common";
+import { ConflictError, ResponseCreator, BadRequestError } from "@cr0wdspace/common";
 import { IAuthInteractorFacade } from "@interactors/interfaces/ifacade/auth-interactor-facade.interface.js";
 import { IValidationService } from "../interfaces/service/validation-service.interface.js";
 

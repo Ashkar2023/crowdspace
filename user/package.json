@@ -14,7 +14,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@crowdspace/common": "*",
+    "@cr0wdspace/common": "^0.0.2",
     "@types/bcryptjs": "^2.4.6",
     "@types/express-session": "^1.18.1",
     "bcryptjs": "^2.4.3",
@@ -25,7 +25,8 @@
     "express-session": "^1.18.1",
     "google-auth-library": "^9.14.1",
     "mongoose": "^8.6.2",
-    "nodemailer": "^6.9.15"
+    "nodemailer": "^6.9.15",
+    "redis": "4.7.0"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.7",

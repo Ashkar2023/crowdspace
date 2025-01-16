@@ -1,5 +1,5 @@
 import { IAdminAuthController } from "@adapters/controllers/interfaces/admin-auth-controller.interface.js";
-import { createCallback } from "@crowdspace/common";
+import { createCallback } from "@cr0wdspace/common";
 import { RequestHandler, Router } from "express";
 
 

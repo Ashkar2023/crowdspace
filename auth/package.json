@@ -9,7 +9,7 @@
         "build": "rimraf dist && tsc && tsc-alias"
     },
     "dependencies": {
-        "@crowdspace/common": "*",
+        "@cr0wdspace/common": "^0.0.2",
         "cookie-parser": "^1.4.7",
         "express": "^4.21.1",
         "mongoose": "^8.8.2",

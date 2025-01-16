@@ -1,4 +1,4 @@
-import { BadRequestError, ConflictError, ResponseCreator } from "@crowdspace/common";
+import { BadRequestError, ConflictError, ResponseCreator } from "@cr0wdspace/common";
 import { Request } from "express";
 import { isValidObjectId, Types } from "mongoose";
 import { LikeRepoImp } from "repositories/repositories.index.js";

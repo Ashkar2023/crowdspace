@@ -1,4 +1,4 @@
-import { BadRequestError } from "@crowdspace/common";
+import { BadRequestError } from "@cr0wdspace/common";
 import { IUser } from "@entities/interfaces/user-entity.interface.js";
 import { credentialType, IUserRepository } from "@interactors/interfaces/repositories/user-repository.interface.js";
 import { T_ProfileSetting } from "@interactors/interfaces/user-usecase/settings/profile-update-usecase.interface.js";
@@ -124,5 +124,10 @@ export class UserRepositoryImp implements IUserRepository {
 
     async updateProfileAvatar(user_id: Types.ObjectId, media_path: string) {
         return await this.model.updateOne({ _id: user_id }, { $set: { avatar: media_path } });
+    }
+
+    async getAllBannedUsers() {
+        const users = await this.model.find({ isBanned: true }).select("_id").lean();
+        return users.map(usr => usr._id.toString());
     }
 }

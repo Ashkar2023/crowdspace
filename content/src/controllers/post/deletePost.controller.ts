@@ -1,4 +1,4 @@
-import { consumerEvents, BadRequestError, encodeEventMessage, ResponseCreator } from "@crowdspace/common";
+import { consumerEvents, BadRequestError, encodeEventMessage, ResponseCreator } from "@cr0wdspace/common";
 import ContentMsgBroker, { publisherChannel } from "events/index.js";
 import { Request } from "express";
 import { PostRepoImp } from "repositories/repositories.index.js";

@@ -1,4 +1,4 @@
-import { NotificationKind } from "@crowdspace/common";
+import { NotificationKind } from "@cr0wdspace/common";
 import { model, Schema } from "mongoose";
 import { INotification } from "~types/notification.types.js";
 

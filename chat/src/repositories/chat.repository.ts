@@ -1,4 +1,4 @@
-import { BadRequestError } from "@crowdspace/common";
+import { BadRequestError } from "@cr0wdspace/common";
 import chatModel from "models/chat.model.js";
 import { Model, Types } from "mongoose";
 import { IChat } from "~types/chat.type.js";

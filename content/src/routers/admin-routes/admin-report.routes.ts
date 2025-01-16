@@ -1,4 +1,4 @@
-import { createCallback } from "@crowdspace/common";
+import { createCallback } from "@cr0wdspace/common";
 import { getReports } from "admin-controllers/report/getReports.controller.js";
 import { updateReportStatus } from "admin-controllers/report/updateReportStatus.js";
 import { Router } from "express";

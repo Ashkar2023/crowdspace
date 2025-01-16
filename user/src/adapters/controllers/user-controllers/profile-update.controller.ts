@@ -1,6 +1,6 @@
 import { ISettingsInteractorFacade } from "@interactors/interfaces/ifacade/settings-interactor-facade.interface.js";
 import { IProfileUpdateController } from "../interfaces/profile-update-controller.interface.js";
-import { ResponseCreator } from "@crowdspace/common";
+import { ResponseCreator } from "@cr0wdspace/common";
 import { Request } from "express";
 
 export class ProfileUpdateController implements IProfileUpdateController {

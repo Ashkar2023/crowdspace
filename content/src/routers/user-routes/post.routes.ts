@@ -4,7 +4,7 @@ import { editPost } from "@controllers/post/editPost.controller.js";
 import { getPostComments } from "@controllers/comment/getPostComments.controller.js";
 import { likePost } from "@controllers/post/likePost.controller.js";
 import { unlikePost } from "@controllers/post/unlikePost.controller.js";
-import { createCallback } from "@crowdspace/common";
+import { createCallback } from "@cr0wdspace/common";
 import { Router } from "express";
 
 // prefixed with '/posts'

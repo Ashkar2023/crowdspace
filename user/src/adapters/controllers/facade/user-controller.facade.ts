@@ -3,7 +3,7 @@ import { IUserControllerFacade } from "../interfaces/ifacade/user-controller-fac
 import { IUserController } from "../interfaces/user-controller.interface.js";
 import { UserController } from "../user-controllers/user.controller.js";
 import { IUserInteractorFacade } from "@interactors/interfaces/ifacade/user-interactor.facade.interface.js";
-import { IResponse } from "@crowdspace/common";
+import { IResponse } from "@cr0wdspace/common";
 
 export class UserControllerFacade implements IUserControllerFacade {
     private _UserControllerInstance: IUserController;

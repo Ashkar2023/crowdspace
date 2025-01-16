@@ -12,7 +12,7 @@ import userContentRouter from "@routers/user-routes/user.routes.js";
 import commentRouter from "@routers/user-routes/comment.routes.js";
 import postRouter from "@routers/user-routes/post.routes.js";
 import loggingMiddleware from "middlewares/logging.middleware.js";
-import { globalErrorHadler, TokenError } from "@crowdspace/common";
+import { globalErrorHadler, TokenError } from "@cr0wdspace/common";
 import reportRouter from "@routers/user-routes/report.routes.js";
 import { adminRouter } from "@routers/index.router.js";
 import notificationRouter from "@routers/user-routes/notification.routes.js";

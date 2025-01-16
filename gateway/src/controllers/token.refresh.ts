@@ -1,4 +1,4 @@
-import { expirationDate, ResponseCreator, TokenError } from "@crowdspace/common";
+import { expirationDate, ResponseCreator, TokenError } from "@cr0wdspace/common";
 import { Request } from "express";
 
 export const refreshAccessToken = async (req: Request) => {

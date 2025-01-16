@@ -1,6 +1,6 @@
 import { IOAuthController } from "../interfaces/oauth-controller.interface.js";
 import { Request } from "express";
-import { ResponseCreator, expirationDate } from "@crowdspace/common";
+import { ResponseCreator, expirationDate } from "@cr0wdspace/common";
 import { oauthConfig } from "@src/config/oauth.js";
 import generateRandomPassword from "@src/util/passwordGenerator.js";
 import { OAuth2Client } from "google-auth-library";

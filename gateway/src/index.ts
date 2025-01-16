@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 
-import { createCallback, decodeJWT, globalErrorHadler, JWTPayload } from "@crowdspace/common";
+import { createCallback, decodeJWT, globalErrorHadler, JWTPayload } from "@cr0wdspace/common";
 import mediaRouter from "./routes/media.routes.js";
 import cookieParser from "cookie-parser";
 import userAuthMiddleware from "./middlewares/authn.middleware.js";
@@ -76,7 +76,6 @@ app.use(userAuthMiddleware); //Calls to Auth service
 app.use((req: Request, res: Response, next: NextFunction) => {
 
     if(req.cookies.ajwt){
-        console.log(req.cookies)
         const decoded = decodeJWT(req.cookies.ajwt);
         req.decoded = decoded;
         console.log('decoded.role', decoded);

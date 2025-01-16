@@ -1,4 +1,4 @@
-import { BadRequestError, ConflictError, consumerEvents, encodeEventMessage, rabbitmqConfig } from "@crowdspace/common";
+import { BadRequestError, ConflictError, consumerEvents, encodeEventMessage, rabbitmqConfig } from "@cr0wdspace/common";
 import { IFollow } from "@entities/interfaces/follow.interface.js";
 import { publisherChannel } from "@frameworks/services/events/events.service.js";
 import { IFollowRepository } from "@interactors/interfaces/repositories/follow-repository.interface.js";

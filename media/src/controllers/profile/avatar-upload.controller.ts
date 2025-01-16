@@ -1,5 +1,5 @@
 import { CreateBucketCommand, PutObjectCommand, S3ServiceException } from "@aws-sdk/client-s3";
-import { consumerEvents, encodeEventMessage, getLoggedInUserId, InternalServerError, rabbitmqConfig, ResponseCreator } from "@crowdspace/common";
+import { consumerEvents, encodeEventMessage, getLoggedInUserId, InternalServerError, rabbitmqConfig, ResponseCreator } from "@cr0wdspace/common";
 import { Request } from "express";
 import { mediaStorageConfig } from "@config/media-storage.config.js";
 import { generateUrlSafeHash } from "@utils/crypto.utils.js";

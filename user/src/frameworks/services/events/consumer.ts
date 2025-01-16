@@ -1,4 +1,4 @@
-import { consumerEvents, decodeEventMessage, encodeEventMessage, rabbitmqConfig } from "@crowdspace/common";
+import { consumerEvents, decodeEventMessage, encodeEventMessage, rabbitmqConfig } from "@cr0wdspace/common";
 import { consumerChannel, publisherChannel } from "./events.service.js";
 import { UserRepositoryImp } from "@frameworks/db/repository/user.repository.js";
 import { userModel } from "@frameworks/db/models/user.model.js";

@@ -1,4 +1,4 @@
-import { BadRequestError, cleanObject, DatabaseOpError, ResponseCreator } from '@crowdspace/common';
+import { BadRequestError, cleanObject, DatabaseOpError, ResponseCreator } from '@cr0wdspace/common';
 import { Request } from 'express';
 import { PostRepoImp } from 'repositories/repositories.index.js';
 import { T_Post } from '~types/post.types.js';

@@ -1,4 +1,4 @@
-import { BadRequestError } from "@crowdspace/common";
+import { BadRequestError } from "@cr0wdspace/common";
 import { IUserRepository } from "../interfaces/repositories/user-repository.interface.js";
 import { IPasswordUpdateUsecase } from "../interfaces/user-usecase/settings/password-update-usecase.interface.js";
 import { IHashService } from "../interfaces/services/hash-service.interface.js";

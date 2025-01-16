@@ -1,4 +1,4 @@
-import { AppError, BadRequestError, ResponseCreator, SocketEvents, createUserBasicDict } from "@crowdspace/common";
+import { AppError, BadRequestError, ResponseCreator, SocketEvents, createUserBasicDict } from "@cr0wdspace/common";
 import { Request } from "express";
 import { isValidObjectId, Types } from "mongoose";
 import { chatRepoImp } from "repositories/index.repos.js";

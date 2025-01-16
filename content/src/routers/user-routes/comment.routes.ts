@@ -1,6 +1,6 @@
 import { createComment, deleteComment } from "@controllers/index.js";
 import { editComment } from "@controllers/comment/editComment.controller.js";
-import { createCallback } from "@crowdspace/common";
+import { createCallback } from "@cr0wdspace/common";
 import { Router } from "express";
 
 // prefixed with '/comments'

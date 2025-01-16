@@ -1,4 +1,4 @@
-import { IResponse } from "@crowdspace/common";
+import { IResponse } from "@cr0wdspace/common";
 import { Request } from "express";
 import { IUserAuthController } from "./userAuth-controller.interface.js";
 

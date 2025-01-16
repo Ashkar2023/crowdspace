@@ -1,4 +1,4 @@
-import { consumerEvents, decodeEventMessage, NotificationKind, rabbitmqConfig, SocketEvents } from "@crowdspace/common";
+import { consumerEvents, decodeEventMessage, NotificationKind, rabbitmqConfig, SocketEvents } from "@cr0wdspace/common";
 import { io } from "../index.js";
 import { consumerChannel } from "./index.js";
 

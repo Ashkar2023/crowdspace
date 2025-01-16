@@ -1,5 +1,5 @@
 import { RequestHandler, Router } from "express";
-import { createCallback } from "@crowdspace/common";
+import { createCallback } from "@cr0wdspace/common";
 import { IAuthControllerFacade } from "@adapters/controllers/interfaces/ifacade/auth-controller-facade.interface.js";
 
 

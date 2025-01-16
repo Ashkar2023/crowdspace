@@ -1,4 +1,4 @@
-import { consumerEvents, decodeEventMessage, rabbitmqConfig } from "@crowdspace/common";
+import { consumerEvents, decodeEventMessage, rabbitmqConfig } from "@cr0wdspace/common";
 import { consumerChannel } from "./index.js";
 
 consumerChannel.consume(rabbitmqConfig.queues.media,

@@ -1,4 +1,4 @@
-import { BadRequestError, ResponseCreator } from "@crowdspace/common";
+import { BadRequestError, ResponseCreator } from "@cr0wdspace/common";
 import { Request } from "express";
 import { Types } from "mongoose";
 import { ReportRepoImp } from "repositories/repositories.index.js";

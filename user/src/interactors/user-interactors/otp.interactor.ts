@@ -1,4 +1,4 @@
-import { generateOTP, BadRequestError } from "@crowdspace/common";
+import { generateOTP, BadRequestError } from "@cr0wdspace/common";
 import { OTPEntity } from "@entities/otp.entity.js";
 import { IOtpUsecase } from "../interfaces/user-usecase/auth/otp-usecase.interface.js";
 import { IUserRepository } from "../interfaces/repositories/user-repository.interface.js";

@@ -1,4 +1,4 @@
-import { createUserBasicDict, IBasicUser, injectProfiles, ResponseCreator } from "@crowdspace/common";
+import { createUserBasicDict, IBasicUser, injectProfiles, ResponseCreator } from "@cr0wdspace/common";
 import { Request } from "express";
 import { Types } from "mongoose";
 import { chatRepoImp } from "repositories/index.repos.js";

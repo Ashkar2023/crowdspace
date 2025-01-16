@@ -1,4 +1,4 @@
-import { ResponseCreator } from "@crowdspace/common";
+import { ResponseCreator } from "@cr0wdspace/common";
 import { Request } from "express";
 import { PostRepoImp } from "repositories/repositories.index.js";
 

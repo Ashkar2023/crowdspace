@@ -1,4 +1,4 @@
-import { BadRequestError, createUserBasicDict, injectProfiles, parseUniqueIds, ResponseCreator } from "@crowdspace/common";
+import { BadRequestError, createUserBasicDict, injectProfiles, parseUniqueIds, ResponseCreator } from "@cr0wdspace/common";
 import { Request } from "express";
 import { isValidObjectId } from "mongoose";
 import { CommentRepoImp } from "repositories/repositories.index.js";

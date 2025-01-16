@@ -1,5 +1,5 @@
 import { ISettingsControllerFacade } from "@adapters/controllers/interfaces/ifacade/settings-controller-facade.interface.js";
-import { createCallback } from "@crowdspace/common";
+import { createCallback } from "@cr0wdspace/common";
 import { Router } from "express";
 
 export function buildSettingsRouter({ router, settingsController, middlewares }: {

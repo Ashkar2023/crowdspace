@@ -1,4 +1,4 @@
-import { NotificationKind } from "@crowdspace/common"
+import { NotificationKind } from "@cr0wdspace/common"
 import { Types } from "mongoose"
 
 

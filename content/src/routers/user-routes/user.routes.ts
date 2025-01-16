@@ -1,5 +1,5 @@
 import { getUserPosts } from "@controllers/index.js";
-import { createCallback } from "@crowdspace/common";
+import { createCallback } from "@cr0wdspace/common";
 import { Router } from "express";
 
 // prefixed with '/users'

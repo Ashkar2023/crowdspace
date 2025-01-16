@@ -1,4 +1,4 @@
-import { createUserBasicDict, injectProfiles, parseUniqueIds, ResponseCreator } from "@crowdspace/common";
+import { createUserBasicDict, injectProfiles, parseUniqueIds, ResponseCreator } from "@cr0wdspace/common";
 import { Request } from "express";
 import { NotificationRepoImp } from "../../repositories/repositories.index.js";
 

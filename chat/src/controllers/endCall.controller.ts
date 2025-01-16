@@ -1,4 +1,4 @@
-import { SocketEvents } from "@crowdspace/common";
+import { SocketEvents } from "@cr0wdspace/common";
 import { Server, Socket } from "socket.io";
 import { callMetadata } from "~types/call.types.js";
 

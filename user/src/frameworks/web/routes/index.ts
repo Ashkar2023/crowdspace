@@ -23,6 +23,9 @@ import { FollowRepositoryImp } from "@frameworks/db/repository/follow.repository
 import { AdminAuthController } from "@adapters/controllers/admin-controllers/admin-auth.controller.js";
 import { UserAuthenticationImp } from "@interactors/user-interactors/user-authentication.interactor.js";
 
+/**
+ *  USE DI (Dependency injection) CONTAINERS INSTEAD OF MANUAL BINDING
+ */
 
 //repository
 const UserRepositoryInstance = new UserRepositoryImp(userModel);

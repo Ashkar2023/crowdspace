@@ -1,5 +1,5 @@
 // //Socket controller
-import { consumerEvents, encodeEventMessage, rabbitmqConfig, SocketEvents } from "@crowdspace/common";
+import { consumerEvents, encodeEventMessage, rabbitmqConfig, SocketEvents } from "@cr0wdspace/common";
 import { publisherChannel } from "events/index.js";
 import { HydratedDocument, isValidObjectId, Schema, Types } from "mongoose";
 import { chatRepoImp, messageRepoImp } from "repositories/index.repos.js";

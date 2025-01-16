@@ -1,4 +1,4 @@
-import { BadRequestError, IResponse, ResponseCreator } from "@crowdspace/common";
+import { BadRequestError, IResponse, ResponseCreator } from "@cr0wdspace/common";
 import { Request } from "express";
 import { IAdminUserController } from "../interfaces/admin-user-controller.interface.js";
 import { IAdminUserInteractorFacade } from "@interactors/interfaces/ifacade/admin-interactor-facade.interface.js";

@@ -1,4 +1,4 @@
-import { SocketEvents } from "@crowdspace/common";
+import { SocketEvents } from "@cr0wdspace/common";
 import { Server, Socket } from "socket.io";
 
 export const joinLobby = (socket: Socket, io: Server) => {

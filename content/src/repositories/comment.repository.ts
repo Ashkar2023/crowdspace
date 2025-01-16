@@ -1,4 +1,4 @@
-import { DatabaseOpError } from "@crowdspace/common";
+import { DatabaseOpError } from "@cr0wdspace/common";
 import commentModel from "models/comment.model.js";
 import { DeleteOneModel, DeleteResult, HydratedDocument, Model, Types } from "mongoose";
 import { IComment } from "~types/comment.types.js";

@@ -1,4 +1,4 @@
-import { BadRequestError, DatabaseOpError, ResponseCreator } from "@crowdspace/common";
+import { BadRequestError, DatabaseOpError, ResponseCreator } from "@cr0wdspace/common";
 import { Request } from "express";
 import { isValidObjectId } from "mongoose";
 import { CommentRepoImp } from "repositories/repositories.index.js";

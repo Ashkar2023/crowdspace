@@ -1,5 +1,5 @@
 import { IValidationService } from "@adapters/controllers/interfaces/service/validation-service.interface.js";
-import { credentialTypeSchema, displaynameSchema, emailSchema, passwordSchema, SchemaValidator, usernameSchema } from "@crowdspace/common";
+import { credentialTypeSchema, displaynameSchema, emailSchema, passwordSchema, SchemaValidator, usernameSchema } from "@cr0wdspace/common";
 
 export class ValidationService extends SchemaValidator implements IValidationService {
 

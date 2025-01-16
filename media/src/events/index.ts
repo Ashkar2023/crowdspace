@@ -1,4 +1,4 @@
-import { RabbitMQ, rabbitmqConfig } from "@crowdspace/common";
+import { RabbitMQ, rabbitmqConfig } from "@cr0wdspace/common";
 
 // connect
 const MediaMsgBroker = RabbitMQ.getInstance();

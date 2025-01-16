@@ -1,4 +1,4 @@
-import { consumerEvents, DateForPath, encodeEventMessage, InternalServerError, rabbitmqConfig, ResponseCreator } from "@crowdspace/common";
+import { consumerEvents, DateForPath, encodeEventMessage, InternalServerError, rabbitmqConfig, ResponseCreator } from "@cr0wdspace/common";
 import { Request } from "express";
 import s3Api from "../../services/s3.client.js";
 import { PutObjectCommand, S3ServiceException } from "@aws-sdk/client-s3";

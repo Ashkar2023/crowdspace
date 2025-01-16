@@ -1,4 +1,4 @@
-import { createCallback } from "@crowdspace/common";
+import { createCallback } from "@cr0wdspace/common";
 import { Router } from "express";
 import multer from "multer"
 import { postMediaUpload } from "../controllers/post-media/post-media-upload.controller.js";

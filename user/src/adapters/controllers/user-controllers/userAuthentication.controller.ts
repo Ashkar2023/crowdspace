@@ -1,6 +1,6 @@
 import { Request } from "express";
 import { IUserAuthController } from "../interfaces/userAuth-controller.interface.js";
-import { ResponseCreator, expirationDate } from "@crowdspace/common";
+import { ResponseCreator, expirationDate } from "@cr0wdspace/common";
 import { IAuthInteractorFacade } from "@interactors/interfaces/ifacade/auth-interactor-facade.interface.js";
 import { IValidationService } from "../interfaces/service/validation-service.interface.js";
 
