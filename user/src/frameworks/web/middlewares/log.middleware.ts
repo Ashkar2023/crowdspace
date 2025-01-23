@@ -1,13 +1,21 @@
-import { truncate, writeFile } from "fs/promises";
-import { createWriteStream, existsSync, PathLike } from "fs";
+import { createWriteStream, existsSync, mkdirSync } from "fs";
 import morgan from "morgan";
+import path from "path";
+import { fileURLToPath } from "url";
 
-const accessLogPath = new URL("../../../../logs/req-res.log", import.meta.url);
+const accessLogPath = new URL("../../logs/entry.log", import.meta.url);
+const accessLogDirPath = path.dirname(fileURLToPath(accessLogPath));
 
-// if(existsSync(accessLogPath)){
-// await truncate(accessLogPath);
-// await writeFile(accessLogPath,"\n");
-// };
+try {
+    console.log(accessLogDirPath)
+    console.log(!existsSync(accessLogDirPath));
+
+    if (!existsSync(accessLogDirPath)) {
+        mkdirSync(accessLogDirPath, { recursive: true });
+    }
+} catch (error) {
+    console.log((error as Error).message)
+}
 
 export const accessLogStream = createWriteStream(accessLogPath, { flags: "a" });
 
