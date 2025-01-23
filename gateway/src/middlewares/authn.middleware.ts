@@ -8,7 +8,7 @@ const userAuthMiddleware = async (req: Request, res: Response, next: NextFunctio
             throw new TokenError("access token not found", 401, "invalid_access");
         }
 
-        const response = await fetch("http://localhost:3030/auth/verify-access", {
+        const response = await fetch(process.env.AUTH_SERVICE + "/auth/verify-access", {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${ajwt}`

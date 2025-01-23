@@ -9,7 +9,7 @@ fs.txt
 app.code-workspace
 
 .bashrc
-.npmrc
+**/.npmrc
 
 .vscode
 stateinfo.txt

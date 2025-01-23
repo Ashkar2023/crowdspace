@@ -31,6 +31,15 @@ services:
     ports:
       - '5540:5540'
       - '8001:8001'
+
+  auth-service:
+#    image: auth-service
+    container_name: auth-svc
+    build:
+      context: ./
+      dockerfile: ./auth/Dockerfile
+    env_file:
+      - ./auth/.env
   # gateway:
   #   build:
   #     context: .

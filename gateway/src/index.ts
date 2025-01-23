@@ -49,7 +49,7 @@ declare global {
 expressacl.config({
     decodedObjectName: "decoded",
     roleSearchPath:"decoded.role",
-    filename: "nacl.json",
+    filename: "racl.json",
     baseUrl: "/",
     denyCallback: (res,) => {
 

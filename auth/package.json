@@ -6,17 +6,27 @@
     "license": "MIT",
     "scripts": {
         "dev": "nodemon -w src/ --ext ts,cts,mts,json --ignore node_modules --ignore dist --exec \"npm run build && node --env-file=.env dist/index.js\" ",
-        "build": "rimraf dist && tsc && tsc-alias"
+        "build": "rimraf dist && tsc && tsc-alias",
+        "start": "node dist/index.js",
+        "docker":"npm run build && npm start"
     },
     "dependencies": {
         "@cr0wdspace/common": "^0.0.2",
         "cookie-parser": "^1.4.7",
         "express": "^4.21.1",
         "mongoose": "^8.8.2",
-        "morgan": "^1.10.0"
+        "morgan": "^1.10.0",
+        "redis": "^4.7.0"
     },
     "devDependencies": {
+        "@types/amqplib": "^0.10.6",
+        "@types/cookie-parser": "^1.4.8",
+        "@types/express": "^4.17.21",
+        "@types/morgan": "^1.9.9",
+        "@types/node": "^22.10.7",
+        "nodemon": "^3.1.9",
         "rimraf": "^6.0.1",
-        "tsc-alias": "^1.8.10"
+        "tsc-alias": "^1.8.10",
+        "typescript": "^5.6.3"
     }
 }
