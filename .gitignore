@@ -13,3 +13,5 @@ app.code-workspace
 
 .vscode
 stateinfo.txt
+TODO.txt
+docker-compose.yml
