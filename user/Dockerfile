@@ -1,25 +1,17 @@
 # development stage
-FROM node:22-alpine AS development
+FROM node:22-alpine AS base
 
 WORKDIR /app/user
 
 COPY ./user/package.json ./
+COPY package-lock.json ./
 
-COPY ./package.json ../
-COPY ./package-lock.json ../
+COPY  .npmrc ./
 
-# app/
-#  |- user/ 
-#       |-package.json
-#  |- workspace package.json 
-#  |- workspace package-lock.json
-
-COPY ./.npmrc ../
-
-RUN npm ci install -w user
+RUN npm ci
 
 COPY ./user ./
 
-EXPOSE 3000
+EXPOSE 5000
 
-CMD [ "npm","run","dev" ]
+CMD [ "npm","run","docker"]

@@ -1,19 +1,17 @@
 # development stage
-FROM node:22-alpine AS development
+FROM node:22-alpine AS base
 
 WORKDIR /app/chat
 
 COPY ./chat/package.json ./
+COPY package-lock.json ./
 
-COPY ./package.json ../
-COPY ./package-lock.json ../
+COPY  .npmrc ./
 
-COPY  ./.npmrc /app/
-
-RUN npm ci install -w chat
+RUN npm ci
 
 COPY ./chat ./
 
-EXPOSE 7070
+EXPOSE 5000
 
 CMD [ "npm","run","docker"]

@@ -1,15 +1,17 @@
+# development stage
 FROM node:22-alpine AS base
 
 WORKDIR /app/gateway
 
-COPY package-lock.json ./
 COPY ./gateway/package.json ./
-COPY .npmrc ./
+COPY package-lock.json ./
+
+COPY  .npmrc ./
 
 RUN npm ci
 
 COPY ./gateway ./
 
-EXPOSE 9000
+EXPOSE 5000
 
-CMD ["npm","run","docker"]
+CMD [ "npm","run","docker"]
