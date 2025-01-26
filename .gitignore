@@ -11,4 +11,4 @@ app.code-workspace
 stateinfo.txt
 TODO.txt
 docker-compose.yml
-docker-build.sh
+.docker-build.sh
