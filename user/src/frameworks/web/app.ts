@@ -1,8 +1,7 @@
 import { globalErrorHadler } from "@cr0wdspace/common";
 import { connectDb } from "@frameworks/db/db.js";
 import cookieParser from "cookie-parser";
-import cors from "cors";
-import express, { NextFunction, Request } from "express";
+import express from "express";
 import session from "express-session";
 import { adminAuthRouter, adminUserRouter, authRouter, settingsRouter, userRouter } from "./routes/index.js";
 import logMiddleware from "./middlewares/log.middleware.js";
@@ -17,16 +16,6 @@ import { RedisService } from "@frameworks/services/redis.service.js";
 const redisImp = RedisService.getInstance()
 await redisImp.connect();
 await redisImp.storeBannedUsers();
-
-app.use(cors({
-    methods: 'GET,PUT,POST,PATCH,DELETE',
-    origin: ["http://localhost:5173", "http://localhost:5111"],
-    allowedHeaders: ["Content-Type"],
-    credentials: true,
-    maxAge: 3600,
-    preflightContinue: false,
-    exposedHeaders: [],
-}))
 
 declare module "express-session" { // For session logins for admins
     interface SessionData {
