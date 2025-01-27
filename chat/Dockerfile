@@ -8,7 +8,7 @@ COPY package-lock.json ./
 ENV NODE_ENV=development
 
 RUN --mount=type=secret,id=npmrc,target=/root/.npmrc \
-    npm ci --silent
+    npm ci 
 
 COPY ./chat ./
 

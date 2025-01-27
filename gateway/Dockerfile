@@ -8,8 +8,8 @@ COPY package-lock.json ./
 ENV NODE_ENV=development
 
 RUN --mount=type=secret,id=npmrc,target=/root/.npmrc \
-    npm ci --silent
-
+    npm ci
+    
 COPY ./gateway ./
 
 RUN npm run build
@@ -24,6 +24,7 @@ FROM node:22-alpine AS production
 WORKDIR /app/gateway
 
 COPY --from=build /app/gateway/dist ./dist
+COPY --from=build /app/gateway/racl.json ./
 
 COPY ./gateway/package.json ./ 
 COPY package-lock.json ./ 
