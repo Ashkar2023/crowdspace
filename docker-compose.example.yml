@@ -1,0 +1,175 @@
+version: '3.8'
+
+services:
+  # Minio service
+  minio-server:
+    image: minio/minio:latest
+    container_name: minio_server_1
+    ports:
+      - "4100:4100"
+      - "4200:4200"
+    environment: 
+      # envs: Add necessary environment variables for Minio here
+    volumes:
+      - minio-volume:/data
+    command: server --address ":4100" --console-address ":4200" /data
+    networks:
+      - crowdspace_micro_network
+
+  # RabbitMQ service
+  rabbitmq-server:
+    image: rabbitmq:management
+    container_name: rabbitmq_server_1
+    ports:
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD","rabbitmqctl","status"]
+      retries: 5
+      timeout: 3s
+      interval: 5s
+      start_period: 4s
+    networks:
+      - crowdspace_micro_network
+
+  # Redis service
+  redis-server:
+    image: redis:alpine
+    container_name: redis_server_1
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD","redis-cli","ping"]
+      retries: 5
+      timeout: 3s
+      interval: 5s
+      start_period: 3s
+    networks:
+      - crowdspace_micro_network
+
+  # Redis Monitoring
+  redis-monitoring:
+    image: redis/redisinsight
+    container_name: redismon
+    ports:
+      - "5540:5540"
+      - "8001:8001"
+    networks:
+      - crowdspace_micro_network
+
+  ################# APP SERVICES ##################
+  # Gateway Service
+  crowdspace-gateway-server:
+    image: crowdspace-gateway:latest
+    container_name: crowdspace_gateway_server_1
+    build:
+      context: .
+      dockerfile: ./gateway/Dockerfile
+      secrets:
+        - npmrc
+    ports:
+      - "9000:9000"
+    environment: 
+      # envs: Add necessary environment variables for Gateway service here
+    networks:
+      - crowdspace_micro_network
+
+  # Auth Service
+  crowdspace-auth-server:
+    image: crowdspace-auth:latest
+    build:
+      context: .
+      dockerfile: ./auth/Dockerfile
+      secrets:
+        - npmrc
+    container_name: crowdspace_auth_server_1
+    depends_on:
+      redis-server:
+        condition: service_healthy
+    environment: 
+      # envs: Add necessary environment variables for Auth service here
+    networks:
+      - crowdspace_micro_network
+
+  # User Service
+  crowdspace-user-server:
+    image: crowdspace-user:latest
+    build:
+      context: .
+      dockerfile: ./user/Dockerfile
+      secrets:
+        - npmrc
+    container_name: crowdspace_user_server_1
+    depends_on:
+      rabbitmq-server:
+        condition: service_healthy
+      redis-server:
+        condition: service_healthy
+    environment: 
+      # envs: Add necessary environment variables for User service here
+    networks:
+      - crowdspace_micro_network
+
+  # Media Service
+  crowdspace-media-server:
+    image: crowdspace-media:latest
+    build:
+      context: .
+      dockerfile: ./media/Dockerfile
+      secrets:
+        - npmrc
+    depends_on:
+      rabbitmq-server:
+        condition: service_healthy
+    container_name: crowdspace_media_server_1
+    environment: 
+      # envs: Add necessary environment variables for Media service here
+    networks:
+      - crowdspace_micro_network
+
+  # Content Service
+  crowdspace-content-server:
+    image: crowdspace-content:latest
+    container_name: crowdspace_content_server_1
+    build:
+      context: .
+      dockerfile: ./content/Dockerfile
+      secrets:
+        - npmrc
+    depends_on:
+      rabbitmq-server:
+        condition: service_healthy
+    environment: 
+      # envs: Add necessary environment variables for Content service here
+    networks:
+      - crowdspace_micro_network
+
+  # Chat Service
+  crowdspace-chat-server:
+    image: crowdspace-chat:latest
+    build:
+      context: .
+      dockerfile: ./chat/Dockerfile
+      secrets:
+        - npmrc
+    depends_on:
+      rabbitmq-server:
+        condition: service_healthy
+      redis-server:
+        condition: service_healthy
+    container_name: crowdspace_chat_server_1
+    environment: 
+      # envs: Add necessary environment variables for Chat service here
+    networks:
+      - crowdspace_micro_network
+
+volumes:
+  minio-volume:
+
+networks:
+  crowdspace_micro_network:
+
+secrets:
+  npmrc:
+    file: ./.npmrc
+    # referencing auth token containin npmrc for private package common. 
+    # please ignore this and remove the build secret if you are not considering making a private package
