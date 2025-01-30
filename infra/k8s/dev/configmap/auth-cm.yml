@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auth-configmap
+data:
+  PORT: "3030"
+  REDIS_URL: redis://redis-service
+  ISSUER: crowdspace.in
+  AUDIENCE: crowdspace.in

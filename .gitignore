@@ -14,3 +14,4 @@ docker-compose.yml
 dockerbuild*.sh
 dockerpush.sh
 kind-config.yml
+infra/k8s/**/secret

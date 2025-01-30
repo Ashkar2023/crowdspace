@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway-service
+spec:
+  selector:
+    app: gateway-svc
+  ports:
+    - port: 9000
+      targetPort: 9000
+      # remove NodePort FIX
+      nodePort: 30900
+      protocol: TCP
+  type: NodePort

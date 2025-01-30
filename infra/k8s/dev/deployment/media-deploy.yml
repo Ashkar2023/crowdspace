@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: media-deployment
+  labels:
+    app: media-svc
+spec:
+  selector:
+    matchLabels:
+      app: media-svc
+  template:
+    metadata:
+      labels:
+        app: media-svc
+    spec:
+      containers:
+        - name: media-svc-container
+          image: ashkar2023/crowdspace-media
+          ports:
+            - containerPort: 4000
+          envFrom:
+            - configMapRef:
+                name: media-configmap
+            - secretRef:
+                name: media-secret
