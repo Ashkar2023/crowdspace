@@ -7,4 +7,4 @@ data:
   RABBITMQ_ENDPOINT: amqp://rabbitmq-service:5672
   USER_SERVICE: http://user-service:3000
   DB_URL: mongodb://host.docker.internal:27017/crowdspace-chat
-  REDIS_URL: http://redis-service:6379
+  REDIS_URL: redis://redis-service:6379
