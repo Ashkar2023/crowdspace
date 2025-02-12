@@ -14,6 +14,8 @@ import { RTC_Answer_handler, RTC_Offer_handler } from "@controllers/rtcOfferCont
 import { exchangeIceCandidates } from "@controllers/rtcIceCandidates.controller.js";
 import { joinLobby } from "@controllers/joinLobby.controller.js";
 import { endCallAndEmit } from "@controllers/endCall.controller.js";
+import { envConfig } from "config/envConfig.js";
+import logMiddleware from "middlewares/log.middleware.js";
 
 const app = express();
 const httpServer = new http.Server(app);
@@ -21,7 +23,7 @@ const httpServer = new http.Server(app);
 // make socket.io a service
 export const io = new Server(httpServer, {
     cors: {
-        origin: "http://localhost:5173",
+        origin: [envConfig.CLIENT_URL],
         maxAge: 3600,
         methods: ["GET"]
     },
@@ -118,6 +120,8 @@ httpServer.listen(process.env.PORT, () => {
 setTimeout(() => {
     console.log("---------USERID---------|----------SOCKET_ID------")
 }, 1000);
+
+app.use(logMiddleware);
 
 const attatchSocketIo: RequestHandler = (req, res, next) => {
     req.io = io;
