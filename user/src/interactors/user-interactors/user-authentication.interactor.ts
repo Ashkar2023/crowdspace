@@ -80,10 +80,10 @@ export class UserAuthenticationImp implements IUserAuthenticationUsecase {
         })
         
         
-        const santizedUser = userFound.toObject();
-        
+        const sanitizedUser = userFound.toObject();
+
         return {
-            user: santizedUser,
+            user: sanitizedUser,
             refreshToken,
             accessToken
         };

@@ -3,7 +3,7 @@ import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
 
-const accessLogPath = new URL("../../logs/entry.log", import.meta.url);
+const accessLogPath = new URL("../../../../logs/entry.log", import.meta.url);
 const accessLogDirPath = path.dirname(fileURLToPath(accessLogPath));
 
 try {
