@@ -12,6 +12,7 @@ export class UserEntity implements IUserEntity {
     isBanned: boolean;
     blockedUsers?: Schema.Types.ObjectId[] | undefined;
     configuration?: Configuration | undefined;
+    privateAccount?: boolean | undefined;
     bio?: string | undefined;
     links?: string[] | undefined;
     cover?: string | undefined;
@@ -21,7 +22,7 @@ export class UserEntity implements IUserEntity {
     role: "admin" | "user";
 
     private static defaultConfiguration: Configuration = {
-        privateAccount: false,
+        // privateAccount: false,
         suggestionInProfile: true,
         PushNotifications: {
             likes: true,
@@ -53,6 +54,7 @@ export class UserEntity implements IUserEntity {
         this.isBanned = false;
         this.blockedUsers = data.blockedUsers || [];
         this.configuration = data.configuration || undefined;
+        this.privateAccount = false;
         this.bio = data.bio || "";
         this.links = data.links || [];
         this.cover = data.cover || "";
@@ -78,6 +80,7 @@ export class UserEntity implements IUserEntity {
             gender: this.gender,
             blockedUsers: this.blockedUsers,
             configuration: this.configuration,
+            privateAccount: this.privateAccount,
             bio: this.bio,
             links: this.links,
             cover: this.cover,

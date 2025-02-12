@@ -7,7 +7,7 @@ import { UUID } from "node:crypto"
 // }
 
 export type Configuration = {
-    privateAccount: boolean,
+    // privateAccount: boolean,
     suggestionInProfile: boolean,
     PushNotifications: {
         likes: boolean,
@@ -41,6 +41,7 @@ export type IUser = {
     isBanned?: boolean,
     blockedUsers?: ObjectId[]
     configuration?: Configuration,
+    privateAccount?: boolean,
     bio?: string,
     links?: string[],
     cover?: string,

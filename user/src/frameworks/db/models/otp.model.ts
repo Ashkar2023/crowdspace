@@ -2,7 +2,7 @@ import { IOtp } from '@entities/interfaces/otp-entity.interface.js';
 import { Schema, Types, model } from 'mongoose';
 import { randomUUID } from 'node:crypto';
 
-const otpSchema = new Schema({ /* Chnage to redis */
+const otpSchema = new Schema({ /* Add IOtp type to schema */
     otp: {
         type: String,
         required: true,
@@ -15,7 +15,7 @@ const otpSchema = new Schema({ /* Chnage to redis */
     expiration: {
         type: Date,
         default: () => { Date.now() + 180 * 1000 },
-        expires: 10
+        expires: 10,
     },
     sessionId: {
         type: Types.UUID,

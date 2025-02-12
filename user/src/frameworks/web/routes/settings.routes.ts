@@ -2,27 +2,28 @@ import { ISettingsControllerFacade } from "@adapters/controllers/interfaces/ifac
 import { createCallback } from "@cr0wdspace/common";
 import { Router } from "express";
 
-export function buildSettingsRouter({ router, settingsController, middlewares }: {
+export function buildSettingsRouter({ router, settingsControllerFacade, middlewares }: {
     router: Router,
-    settingsController: ISettingsControllerFacade,
+    settingsControllerFacade: ISettingsControllerFacade,
     middlewares: Record<string, any>
 }) {
 
-    // router.use(middlewares.verifyAccessToken); DELETE
-
     router.patch("/profile",
-        createCallback(settingsController.updateProfile.bind(settingsController))
+        createCallback(settingsControllerFacade.updateProfile.bind(settingsControllerFacade))
     )
 
     router.patch("/password",
-        createCallback(settingsController.updatePassword.bind(settingsController))
+        createCallback(settingsControllerFacade.updatePassword.bind(settingsControllerFacade))
     )
     
     router.patch("/username",
-        createCallback(settingsController.updateUsername.bind(settingsController))
+        createCallback(settingsControllerFacade.updateUsername.bind(settingsControllerFacade))
     )
 
-    // PATCH /settings/privacy
+    router.patch("/privacy", 
+        createCallback(settingsControllerFacade.updatePrivacy.bind(settingsControllerFacade))
+    )
+
     // PATCH /settings/notification
 
     return router;

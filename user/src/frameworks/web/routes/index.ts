@@ -61,7 +61,7 @@ const AuthControllerFacadeInstance = new AuthControllerFacade(
     ValidationServiceInstance
 );
 
-const SettingsControllerInstance = new SettingsControllerFacade(SettingsInteractorFacadeInstance);
+const SettingsControllerInstance = new SettingsControllerFacade(SettingsInteractorFacadeInstance,ValidationServiceInstance);
 
 const UserControllerInstance = new UserControllerFacade(UserInteractorFacadeInstance);
 
@@ -78,7 +78,7 @@ export const authRouter = buildAuthRoutes({
 
 export const settingsRouter = buildSettingsRouter({
     router: Router(),
-    settingsController: SettingsControllerInstance,
+    settingsControllerFacade: SettingsControllerInstance,
     middlewares: {}
 })
 

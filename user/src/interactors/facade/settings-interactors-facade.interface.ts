@@ -41,4 +41,8 @@ export class SettingsInteractorFacade implements ISettingsInteractorFacade {
     async updateUsername(newUsername: string, userId: string) {
         return await this._ProfileUpdateInstance.updateUsername(newUsername, userId);
     }
+
+    async updatePrivacy(state: boolean, user_id: string) {
+        return await this._ProfileUpdateInstance.updatePrivacy(state, user_id)
+    };
 }

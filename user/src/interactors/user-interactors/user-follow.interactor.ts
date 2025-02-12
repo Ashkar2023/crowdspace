@@ -1,5 +1,5 @@
 import { BadRequestError, ConflictError, consumerEvents, encodeEventMessage, rabbitmqConfig } from "@cr0wdspace/common";
-import { IFollow } from "@entities/interfaces/follow.interface.js";
+import { FollowStatus, IFollow } from "@entities/interfaces/follow.interface.js";
 import { publisherChannel } from "@frameworks/services/events/events.service.js";
 import { IFollowRepository } from "@interactors/interfaces/repositories/follow-repository.interface.js";
 import { IUserRepository } from "@interactors/interfaces/repositories/user-repository.interface.js";
@@ -18,7 +18,6 @@ class UserFollowImp implements IUserFollowUsecase {
     async followUser(
         user_id: Types.ObjectId,
         followee_id: Types.ObjectId,
-        followee_private: boolean
     ) {
 
         const followExists = await this._FollowRepository
@@ -28,26 +27,37 @@ class UserFollowImp implements IUserFollowUsecase {
             throw new ConflictError("you are already following this user");
         }
 
-        const createFollow = await this._FollowRepository.doFollow(user_id, followee_id, followee_private);
+        const followeeUserData = await this._UserRepository.findUserById(followee_id.toString(), "privateAccount");
 
-        const followingsUpdated = await this._UserRepository.updateFollowingsCount(user_id, "inc")
-        const followeeFollowersUpdated = await this._UserRepository.updateFollowersCount(followee_id, "inc")
+        if(followeeUserData === null) throw new BadRequestError("User to follow not found");
+
+        const follow = await this._FollowRepository.doFollow(user_id, followee_id, followeeUserData?.privateAccount!);
+
+        if (follow.status === FollowStatus.active) {
+            const followingsUpdated = await this._UserRepository.updateFollowingsCount(user_id, "inc")
+            const followeeFollowersUpdated = await this._UserRepository.updateFollowersCount(followee_id, "inc")
+        }
 
         // Anti-pattern in Clean 👇
-        const bodyBuffer = encodeEventMessage(consumerEvents.follow, {
-            recipient_id: followee_id, //redundant but the notifications handler(chat service) resolves socket id with this field
-            follower_id: user_id,
-            followee_id,
-            follow_doc_id: createFollow
-        });
-        
+        const bodyBuffer = encodeEventMessage(
+            followeeUserData?.privateAccount ?
+                consumerEvents.follow_request :
+                consumerEvents.follow,
+            {
+                recipient_id: followee_id, //redundant but the notifications handler(chat service) resolves socket id with this field
+                follower_id: user_id,
+                followee_id,
+                follow_doc: follow
+            }
+        );
+
         publisherChannel.publish(
             rabbitmqConfig.exchanges.notificationFanout.name,
             rabbitmqConfig.routingKeys.user.notificationFanout,
             bodyBuffer
         );
 
-        return createFollow;
+        return follow;
     }
 
 
@@ -66,7 +76,7 @@ class UserFollowImp implements IUserFollowUsecase {
         const removedFollow = await this._FollowRepository.doUnfollow(user_id, followee_id);
 
         if (!removedFollow) {
-            throw new BadRequestError("you are not following this user")
+            throw new BadRequestError("couldn't process unfollow request");
         }
 
         const followingsUpdated = await this._UserRepository.updateFollowingsCount(user_id, "dec")

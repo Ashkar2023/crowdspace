@@ -47,8 +47,10 @@ app.use("/settings", settingsRouter)
 app.use("/admin", adminAuthRouter)
 app.use("/admin", adminUserRouter)
 
-app.use(["/profile","/"], userRouter);
-// app.use("/", userRouter);
+app.use([
+    "/profile",
+    "/"
+], userRouter);
 
 /* global error handling */
 app.use(globalErrorHadler); // enhance the global error handler later

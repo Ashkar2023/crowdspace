@@ -37,11 +37,10 @@ export class UserInteractorFacade implements IUserInteractorFacade {
         return await this._UserProfileInteractorInstance.getMultipleUsersBasicProfile(user_ids);
     }
 
-    async followUser(user_id: Types.ObjectId, followee_id: Types.ObjectId, followee_private: boolean) {
+    async followUser(user_id: Types.ObjectId, followee_id: Types.ObjectId) {
         return await this._UserFollowInteractorInstance.followUser(
             user_id,
             followee_id,
-            followee_private
         )
     }
 

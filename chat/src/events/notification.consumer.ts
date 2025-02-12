@@ -1,6 +1,7 @@
 import { consumerEvents, decodeEventMessage, NotificationKind, rabbitmqConfig, SocketEvents } from "@cr0wdspace/common";
 import { io } from "../index.js";
 import { consumerChannel } from "./index.js";
+import { envConfig } from "config/envConfig.js";
 
 
 consumerChannel.consume(rabbitmqConfig.queues.chat,
@@ -11,7 +12,8 @@ consumerChannel.consume(rabbitmqConfig.queues.chat,
         }
 
         const { event, body } = decodeEventMessage(message.content);
-        console.log(event, body)
+
+        if (envConfig.NODE_ENV === "development") console.log(event, body);
 
         let socketId;
 
@@ -76,6 +78,19 @@ consumerChannel.consume(rabbitmqConfig.queues.chat,
             case consumerEvents.avatar_updated: {
                 if (socketId) {
                     io.to(socketId).emit(SocketEvents.avatar_updated, { avatar: body.avatar });
+                }
+                break;
+            }
+
+            case consumerEvents.follow_request: {
+                if (socketId) {
+                    io.to(socketId).emit(SocketEvents.notification,
+                        {
+                            ...body,
+                            type: NotificationKind.followRequest,
+                            actor: await fetchActorBasics(body.follower_id),
+                        }
+                    );
                 }
                 break;
             }

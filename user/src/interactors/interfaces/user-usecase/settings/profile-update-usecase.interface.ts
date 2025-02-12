@@ -9,4 +9,5 @@ export type T_ProfileSetting = {
 export interface IProfileUpdateUsecase {
     updateProfile: (settings: T_ProfileSetting, userId: string) => Promise<T_ProfileSetting>
     updateUsername: (newUsername: string, userId: string) => Promise<string>
+    updatePrivacy: (state: boolean, user_id: string,) => Promise<boolean>
 }

@@ -1,11 +1,14 @@
 import { ISettingsInteractorFacade } from "@interactors/interfaces/ifacade/settings-interactor-facade.interface.js";
 import { IProfileUpdateController } from "../interfaces/profile-update-controller.interface.js";
-import { ResponseCreator } from "@cr0wdspace/common";
+import { IResponse, ResponseCreator } from "@cr0wdspace/common";
 import { Request } from "express";
+import { IValidationService } from "../interfaces/service/validation-service.interface.js";
+import z from "zod";
 
 export class ProfileUpdateController implements IProfileUpdateController {
     constructor(
-        private SettingsInteractorFacade: ISettingsInteractorFacade
+        private _SettingsInteractorFacade: ISettingsInteractorFacade,
+        private _ValidationService: IValidationService
     ) { }
 
     async updateProfile(req: Request) {
@@ -13,11 +16,11 @@ export class ProfileUpdateController implements IProfileUpdateController {
         const { username, bio, links, gender } = req.body;
         const { ajwt } = req.cookies;
 
-        const decoded = this.SettingsInteractorFacade.decodeToken(ajwt);
+        const decoded = this._SettingsInteractorFacade.decodeToken(ajwt);
 
         /* ZOD validation here */
 
-        const updated = await this.SettingsInteractorFacade.updateProfile({
+        const updated = await this._SettingsInteractorFacade.updateProfile({
             username,
             bio,
             links,
@@ -37,11 +40,11 @@ export class ProfileUpdateController implements IProfileUpdateController {
         const username = req.body.username as string;
         const { ajwt } = req.cookies;
 
-        const decoded = this.SettingsInteractorFacade.decodeToken(ajwt);
+        const decoded = this._SettingsInteractorFacade.decodeToken(ajwt);
 
         /* ZOD validation here */
 
-        const updatedUsername = await this.SettingsInteractorFacade.updateUsername(
+        const updatedUsername = await this._SettingsInteractorFacade.updateUsername(
             username.toLowerCase(),
             decoded.sub
         );
@@ -53,4 +56,23 @@ export class ProfileUpdateController implements IProfileUpdateController {
             .get()
     };
 
+
+    async updatePrivacy(req: Request): Promise<IResponse> {
+        const { state } = req.body as { state: boolean };
+        const loggedInUser = req.headers["x-logged-in-user"] as string;
+
+        this._ValidationService.validate(state, z.boolean({
+            coerce:false,
+            invalid_type_error: "privacy state must be true/false",
+            required_error: "privacy state is required"
+        }))
+
+        const isPrivate = await this._SettingsInteractorFacade.updatePrivacy(state, loggedInUser);
+
+        const response = new ResponseCreator();
+        return response.setStatusCode(200)
+            .setMessage("account privacy status updated")
+            .setData({ privateAccount: isPrivate })
+            .get();
+    }
 }

@@ -59,7 +59,6 @@ export class UserController implements IUserController {
     async followUser(req: Request) {
         const loggedinUser = req.headers["x-logged-in-user"] as string;
         const { user_id: followee_id } = req.params;
-        const { privateAccount } = req.body;
 
         if (!isValidObjectId(followee_id)) {
             throw new BadRequestError('invalid identifier');
@@ -68,7 +67,6 @@ export class UserController implements IUserController {
         const followResult = await this._UserInteractorFacade.followUser(
             new Types.ObjectId(loggedinUser),
             new Types.ObjectId(followee_id),
-            privateAccount
         )
 
         const response = new ResponseCreator();

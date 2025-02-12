@@ -85,7 +85,7 @@ export class UserRepositoryImp implements IUserRepository {
             "gender",
             "followersCount",
             "followingsCount",
-            // "configurations", set privateAccount on top level fields in document
+            "privateAccount",
             "postsCount",
             "bio",
             "links",
@@ -130,4 +130,16 @@ export class UserRepositoryImp implements IUserRepository {
         const users = await this.model.find({ isBanned: true }).select("_id").lean();
         return users.map(usr => usr._id.toString());
     }
+
+    async updatePrivacySetting(user_id: Types.ObjectId, state: boolean) {
+        const result = await this.model.findByIdAndUpdate(user_id, {
+            $set: {
+                privateAccount : state
+            }
+        }, { new: true })
+
+        return {
+            isPrivate: result?.privateAccount!,
+        }
+    };
 }

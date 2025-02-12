@@ -5,27 +5,33 @@ import { ProfileUpdateController } from "../user-controllers/profile-update.cont
 import { ISettingsInteractorFacade } from "@interactors/interfaces/ifacade/settings-interactor-facade.interface.js";
 import { PasswordController } from "../user-controllers/password.controller.js";
 import { IPasswordController } from "../interfaces/password-controller.interface.js";
+import { IValidationService } from "../interfaces/service/validation-service.interface.js";
 
 export class SettingsControllerFacade implements ISettingsControllerFacade {
-    private ProfileControllerInstance: IProfileUpdateController;
-    private PasswordControllerInstance : IPasswordController;
+    private _ProfileControllerInstance: IProfileUpdateController;
+    private _PasswordControllerInstance: IPasswordController;
 
     constructor(
-        private SettingsInteractorFacade: ISettingsInteractorFacade
+        private _SettingsInteractorFacade: ISettingsInteractorFacade,
+        validationService: IValidationService
     ) {
-        this.ProfileControllerInstance = new ProfileUpdateController(SettingsInteractorFacade);
-        this.PasswordControllerInstance = new PasswordController(SettingsInteractorFacade)
+        this._ProfileControllerInstance = new ProfileUpdateController(_SettingsInteractorFacade, validationService);
+        this._PasswordControllerInstance = new PasswordController(_SettingsInteractorFacade)
     };
 
     async updateProfile(req: Request) {
-        return await this.ProfileControllerInstance.updateProfile(req);
+        return await this._ProfileControllerInstance.updateProfile(req);
     };
 
-    async updatePassword(req: Request){
-        return await this.PasswordControllerInstance.updatePassword(req);
+    async updatePassword(req: Request) {
+        return await this._PasswordControllerInstance.updatePassword(req);
     };
 
-    async updateUsername(req: Request){
-        return await this.ProfileControllerInstance.updateUsername(req);
+    async updateUsername(req: Request) {
+        return await this._ProfileControllerInstance.updateUsername(req);
+    }
+
+    async updatePrivacy(req: Request) {
+        return await this._ProfileControllerInstance.updatePrivacy(req);
     }
 }

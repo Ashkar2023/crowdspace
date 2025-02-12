@@ -2,6 +2,7 @@ import { BadRequestError, ConflictError, InternalServerError, UnauthorizedError 
 import { IUserRepository } from "../interfaces/repositories/user-repository.interface.js";
 import { IProfileUpdateUsecase, T_ProfileSetting } from "../interfaces/user-usecase/settings/profile-update-usecase.interface.js";
 import { IUserChecksUsecase } from "../interfaces/user-usecase/auth/user-checks-usecase.interface.js";
+import { Types } from "mongoose";
 
 export class ProfileImp implements IProfileUpdateUsecase {
 
@@ -44,5 +45,14 @@ export class ProfileImp implements IProfileUpdateUsecase {
         }
 
         throw new UnauthorizedError("User not found", 404);
+    }
+
+    async updatePrivacy(state: boolean, user_id: string) {
+        const result = await this._UserRepository.updatePrivacySetting(
+            new Types.ObjectId(user_id),
+            state
+        );
+
+        return result.isPrivate;
     }
 }

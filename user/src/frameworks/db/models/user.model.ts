@@ -17,8 +17,6 @@ const NotificationsSchema = new Schema({
 }, { _id: false })
 
 const configurationSchema = new Schema({
-    darkTheme: { type: Boolean, default: false },
-    privateAccount: { type: Boolean, default: false },
     suggestionInProfile: { type: Boolean, default: true },
     PushNotifications: { type: NotificationsSchema },
     inAppNotifications: { type: NotificationsSchema },
@@ -71,6 +69,10 @@ const UserSchema = new Schema<IUser>({
     configuration: {
         type: configurationSchema,
         default: {}
+    },
+    privateAccount:{
+        type: Boolean,
+        default: false
     },
     bio: String,
     cover: String,

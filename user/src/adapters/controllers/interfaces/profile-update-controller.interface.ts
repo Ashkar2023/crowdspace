@@ -4,4 +4,5 @@ import { Request } from "express";
 export interface IProfileUpdateController {
     updateProfile: (req: Request) => Promise<IResponse>
     updateUsername: (req: Request) => Promise<IResponse>;
+    updatePrivacy: (req: Request) => Promise<IResponse>
 } 

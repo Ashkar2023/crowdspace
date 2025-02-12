@@ -5,7 +5,6 @@ export interface IUserFollowUsecase {
     followUser: (
         user_id: Types.ObjectId,
         followee_id: Types.ObjectId,
-        followee_private: boolean
     ) => Promise<HydratedDocument<IFollow> | null>;
 
     unfollowUser: (

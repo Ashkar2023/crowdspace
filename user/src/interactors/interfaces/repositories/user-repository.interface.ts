@@ -19,4 +19,5 @@ export interface IUserRepository {
     findMultipleUsersById: (user_ids: string[], select?: string) => Promise<HydratedDocument<IUser>[]>;
     updateProfileAvatar: (user_id: Types.ObjectId, media_path: string) => Promise<UpdateWriteOpResult | null>;
     getAllBannedUsers: () => Promise<string[]>
+    updatePrivacySetting: (user_id: Types.ObjectId, state: boolean) => Promise<{ isPrivate: boolean }>
 }
