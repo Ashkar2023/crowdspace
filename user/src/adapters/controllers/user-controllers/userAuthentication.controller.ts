@@ -3,12 +3,13 @@ import { IUserAuthController } from "../interfaces/userAuth-controller.interface
 import { ResponseCreator, expirationDate } from "@cr0wdspace/common";
 import { IAuthInteractorFacade } from "@interactors/interfaces/ifacade/auth-interactor-facade.interface.js";
 import { IValidationService } from "../interfaces/service/validation-service.interface.js";
+import { envConfig } from "@src/config/env.config.js";
 
 export class UserAuthController implements IUserAuthController {
-    
+
     constructor(
         private _AuthInteractorFacade: IAuthInteractorFacade,
-        private _validator : IValidationService,
+        private _validator: IValidationService,
     ) { }
 
 
@@ -17,9 +18,9 @@ export class UserAuthController implements IUserAuthController {
 
         /*  VALIDATION */
         this._validator.validateCredentialType(type);
-        if(type==="email"){
+        if (type === "email") {
             this._validator.validateEmail(credential);
-        }else if(type==="username"){
+        } else if (type === "username") {
             this._validator.validateUsername(credential);
         }
 
@@ -37,8 +38,8 @@ export class UserAuthController implements IUserAuthController {
             .setStatusCode(200)
             .setHeaders({
                 "Set-Cookie": [
-                    `ajwt=${accessToken}; Path=/; Expires=${expirationDate(5, "minute")}; httpOnly;`,
-                    `rjwt=${refreshToken}; Path=/; Expires=${expirationDate(1, "week")}; httpOnly;`
+                    `ajwt=${accessToken}; Path=/; Expires=${expirationDate(5, "minute")}; httpOnly; ${envConfig.NODE_ENV === "production" ? "secure;" : ""}`,
+                    `rjwt=${refreshToken}; Path=/; Expires=${expirationDate(1, "week")}; httpOnly; ${envConfig.NODE_ENV === "production" ? "secure;" : ""}`
                 ]
             })
             .setMessage("User authenticated")
@@ -67,7 +68,7 @@ export class UserAuthController implements IUserAuthController {
 
     async refreshAccess(req: Request) {
         const { rjwt } = req.cookies;
-        
+
         const refreshToken = await this._AuthInteractorFacade.refreshAccessToken(rjwt);
 
         const response = new ResponseCreator();
