@@ -19,7 +19,7 @@ consumerChannel.consume(rabbitmqConfig.queues.content,
                         actor: body.follower_id,
                         is_read: false,
                         recipient_id: body.follower_id,
-                        target: body.follow_doc_id,
+                        target: body.follow_doc,
                         type: NotificationKind.follow
                     })
                     console.log('created notification', notification);
@@ -47,6 +47,22 @@ consumerChannel.consume(rabbitmqConfig.queues.content,
                     console.log((error as Error).message)
                 }
                 break
+            }
+
+            case consumerEvents.follow_request: {
+                try {
+                    const followReqNotification = await NotificationRepoImp.createNotification({
+                        actor: body.follower_id,
+                        is_read: false,
+                        recipient_id: body.follower_id,
+                        target: body.followee_id,
+                        type: NotificationKind.followRequest
+                    });
+
+                } catch (error) {
+                    console.log((error as Error).message)
+                }
+                break;
             }
         }
     },
