@@ -3,6 +3,7 @@ import { consumerChannel, publisherChannel } from "./events.service.js";
 import { UserRepositoryImp } from "@frameworks/db/repository/user.repository.js";
 import { userModel } from "@frameworks/db/models/user.model.js";
 import { Types } from "mongoose";
+import { envConfig } from "@src/config/env.config.js";
 
 const UserRepository = new UserRepositoryImp(userModel);
 
@@ -14,10 +15,12 @@ consumerChannel.consume(rabbitmqConfig.queues.user,
         }
 
         const { body, event } = decodeEventMessage(message.content);
-        console.log({
-            body,
-            event
-        })
+
+        envConfig.NODE_ENV === "development" &&
+            console.table({
+                body,
+                event
+            });
 
         switch (event) {
             case consumerEvents.avatar_upload_success: {
@@ -43,10 +46,6 @@ consumerChannel.consume(rabbitmqConfig.queues.user,
 
                     // winston log
 
-                    if (updated.modifiedCount) {
-                        consumerChannel.ack(message);
-                    }
-                    
                 } catch (error) {
                     console.log((error as Error).message)
                 }

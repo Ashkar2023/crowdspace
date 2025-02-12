@@ -12,7 +12,7 @@ consumerChannel.consume(rabbitmqConfig.queues.media,
 
     },
     {
-        noAck: false
+        noAck: true
     }
 );
 

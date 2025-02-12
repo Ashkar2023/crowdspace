@@ -21,7 +21,11 @@ const notificationSchema = new Schema<INotification>({
         type:Schema.Types.ObjectId,
         required:true
     },
-    target:{
+    target:{ 
+        /**
+        * the target Id of the action object
+        * Ex: the actual comment/like or follow request.
+        */
         type:Schema.Types.ObjectId,
         required:true
     }

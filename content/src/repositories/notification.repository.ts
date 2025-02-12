@@ -13,11 +13,11 @@ export class NotificationRepository {
     }
 
     async getAllNotifications(userId: string | Types.ObjectId): Promise<INotification[]> {
-        if(!(userId instanceof Types.ObjectId)){
+        if (!(userId instanceof Types.ObjectId)) {
             userId = new Types.ObjectId(userId);
         }
-        
-        return await this.#model.find({ recipient_id: userId });
+
+        return await this.#model.find({ recipient_id: userId }).sort({ createdAt: -1 });
     }
 
 

@@ -10,7 +10,7 @@ consumerChannel.consume(rabbitmqConfig.queues.content,
         }
 
         const { event, body } = decodeEventMessage(message.content);
-        console.log(event);
+        console.log("event",event);
 
         switch (event) {
             case consumerEvents.follow: {
@@ -54,10 +54,12 @@ consumerChannel.consume(rabbitmqConfig.queues.content,
                     const followReqNotification = await NotificationRepoImp.createNotification({
                         actor: body.follower_id,
                         is_read: false,
-                        recipient_id: body.follower_id,
+                        recipient_id: body.followee_id,
                         target: body.followee_id,
                         type: NotificationKind.followRequest
                     });
+
+                    console.log("(followReqNotification",followReqNotification);
 
                 } catch (error) {
                     console.log((error as Error).message)

@@ -24,13 +24,14 @@ await consumerChannel.assertExchange(
 
 await consumerChannel.assertQueue(queues.content); //current service queue
 await consumerChannel.assertQueue(queues.chat);
+
 await consumerChannel.bindQueue(
     queues.content,
     exchanges.contentDirect.name,
     routingKeys.content.contentDirect
 )
 await consumerChannel.bindQueue(
-    queues.chat,
+    queues.content,
     exchanges.notificationFanout.name,
     routingKeys.chat.notificationFanout
 )
