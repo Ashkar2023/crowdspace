@@ -1,6 +1,7 @@
 import { consumerEvents, decodeEventMessage, NotificationKind, rabbitmqConfig } from "@cr0wdspace/common";
 import { consumerChannel } from "./index.js";
-import { NotificationRepoImp } from "repositories/repositories.index.js";
+import { NotificationRepoImp, PostRepoImp } from "repositories/repositories.index.js";
+import { followRequestStatus } from "~types/notification.types.js";
 
 consumerChannel.consume(rabbitmqConfig.queues.content,
     async (message) => {
@@ -56,12 +57,22 @@ consumerChannel.consume(rabbitmqConfig.queues.content,
                         is_read: false,
                         recipient_id: body.followee_id,
                         target: body.followee_id,
-                        type: NotificationKind.followRequest
+                        type: NotificationKind.followRequest,
+                        status: followRequestStatus.pending
                     });
 
                     console.log("(followReqNotification",followReqNotification);
 
                 } catch (error) {
+                    console.log((error as Error).message)
+                }
+                break;
+            }
+            
+            case consumerEvents.media_upload_success: {
+                try{
+                    const result = await PostRepoImp.createPost(body);
+                }catch(error){
                     console.log((error as Error).message)
                 }
                 break;
