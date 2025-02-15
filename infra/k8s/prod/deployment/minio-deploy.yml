@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio-deployment 
+  labels:
+    app: minio-server
+    component: admin-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minio-server
+  template:
+    metadata:
+      labels:
+        app: minio-server
+    spec:
+      containers:
+        - name: minio-container
+          image: minio/minio:latest
+          ports:
+            - containerPort: 4100
+            - containerPort: 4200
+          args:
+            - server
+            - --address
+            - ":4100"
+            - --console-address 
+            - ":4200"
+            - /data
+          envFrom:
+            - secretRef:
+                name: minio-secret
+            - configMapRef:
+                name: minio-configmap
+          volumeMounts:
+            - mountPath: /data
+              name: minio-data
+
+      volumes:
+        - name: minio-data
+          emptyDir: {}

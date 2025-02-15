@@ -16,7 +16,8 @@ spec:
     spec:
       containers:
         - name: chat-svc-container
-          image: ashkar2023/crowdspace-chat
+          image: crowdspace-chat:dev-latest
+          imagePullPolicy : IfNotPresent
           ports:
             - containerPort: 7070
           envFrom:

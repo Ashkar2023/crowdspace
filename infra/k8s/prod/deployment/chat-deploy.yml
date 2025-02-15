@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chat-deployment
+  labels:
+    app: chat-svc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chat-svc
+  template:
+    metadata:
+      labels:
+        app: chat-svc
+    spec:
+      containers:
+        - name: chat-svc-container
+          image: ashkar2023/crowdspace-chat
+          ports:
+            - containerPort: 7070
+          envFrom:
+            - configMapRef:
+                name: chat-configmap
+            - secretRef:
+                name: chat-secret

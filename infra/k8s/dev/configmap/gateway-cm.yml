@@ -10,7 +10,6 @@ data:
   CONTENT_SERVICE: http://content-service:5000
   CHAT_SERVICE: http://chat-service:7070
 
-  # USER_CLIENT_DEV: http://
-  # USER_CLIENT_BUILD: http://
-  # ADMIN_CLIENT: http://
+  USER_CLIENT: http://host.docker.internal:5173
+  ADMIN_CLIENT: http://localhost:5173
 

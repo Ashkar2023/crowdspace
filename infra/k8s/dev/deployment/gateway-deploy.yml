@@ -16,7 +16,8 @@ spec:
     spec:
       containers:
         - name: gateway-container
-          image: ashkar2023/crowdspace-gateway:latest
+          image: crowdspace-gateway:dev-latest
+          imagePullPolicy : IfNotPresent
           ports:
             - containerPort: 9000
           command:

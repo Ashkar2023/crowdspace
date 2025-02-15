@@ -11,7 +11,8 @@ app.code-workspace
 stateinfo.txt
 TODO.txt
 docker-compose.yml
-dockerbuild*.sh
-dockerpush.sh
-kind-config.yml
+kind-config.y*ml
 infra/k8s/**/secret
+buildall.sh
+infra/k8s/**/cert-manager
+**/.http

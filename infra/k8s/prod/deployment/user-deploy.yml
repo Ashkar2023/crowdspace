@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-deployment
+  labels:
+    app: user-svc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-svc
+  template:
+    metadata:
+      labels:
+        app: user-svc
+    spec:
+      containers:
+        - name: user-svc-container
+          image: ashkar2023/crowdspace-user:latest
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - secretRef:
+                name: user-secret
+            - configMapRef:
+                name: user-configmap
+          command:
+            - node
+            - --trace-deprecation
+            - dist/index.js

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-configmap
+data:
+  PORT: "3000"
+  RABBITMQ_ENDPOINT: amqp://rabbitmq-service:5672
+  REDIS_URL: redis://redis-service:6379
+  ISSUER: crowdspace.in
+  AUDIENCE: crowdspace.in

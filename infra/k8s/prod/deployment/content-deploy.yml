@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: content-deployment
+  labels:
+    app: content-svc
+spec:
+  selector:
+    matchLabels:
+      app: content-svc
+  template:
+    metadata:
+      labels:
+        app: content-svc
+    spec:
+      containers:
+        - name: content-svc-container
+          image: ashkar2023/crowdspace-content
+          ports:
+            - containerPort: 5000
+          envFrom:
+            - configMapRef:
+                name: content-configmap
+            - secretRef:
+                name: content-secret

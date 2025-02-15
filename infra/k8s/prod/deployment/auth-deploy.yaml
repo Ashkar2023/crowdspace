@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-deployment
+  labels:
+    app: auth-svc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-svc
+  template:
+    metadata:
+      labels:
+        app: auth-svc
+    spec:
+      containers:
+        - name: auth-svc-container
+          image: ashkar2023/crowdspace-auth:latest
+          ports:
+            - containerPort: 3030
+          envFrom:
+            - configMapRef:
+                name: auth-configmap
+          env:
+            - name: TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: auth-secret
+                  key: JWT_TOKEN_SECRET

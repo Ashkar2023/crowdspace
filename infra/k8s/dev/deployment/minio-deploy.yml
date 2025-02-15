@@ -18,6 +18,7 @@ spec:
       containers:
         - name: minio-container
           image: minio/minio:latest
+          imagePullPolicy : IfNotPresent
           ports:
             - containerPort: 4100
             - containerPort: 4200
@@ -31,6 +32,8 @@ spec:
           envFrom:
             - secretRef:
                 name: minio-secret
+            - configMapRef:
+                name: minio-configmap
           volumeMounts:
             - mountPath: /data
               name: minio-data

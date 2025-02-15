@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway-deployment
+  labels:
+    app: gateway-svc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway-svc
+  template:
+    metadata:
+      labels:
+        app: gateway-svc
+    spec:
+      containers:
+        - name: gateway-svc-container
+          image: ashkar2023/crowdspace-gateway:latest
+          ports:
+            - containerPort: 9000
+          command:
+            - node
+            - --trace-deprecation
+            - dist/index.js
+          envFrom:
+            - configMapRef:
+                name: gateway-configmap
+            - secretRef:
+                name: gateway-secret

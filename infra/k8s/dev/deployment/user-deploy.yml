@@ -16,7 +16,8 @@ spec:
     spec:
       containers:
         - name: user-container
-          image: ashkar2023/crowdspace-user:latest
+          image: crowdspace-user:dev-latest
+          imagePullPolicy : IfNotPresent
           ports:
             - containerPort: 3000
           envFrom:

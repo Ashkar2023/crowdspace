@@ -16,7 +16,7 @@ RUN npm run build
 
 EXPOSE 5000
 
-CMD [ "npm","run","docker"]
+CMD [ "npm","start"]
 
 
 FROM node:22-alpine AS production

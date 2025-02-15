@@ -16,7 +16,8 @@ spec:
     spec:
       containers:
         - name: auth-container
-          image: ashkar2023/crowdspace-auth:latest
+          image: crowdspace-auth:dev-1.0.1
+          imagePullPolicy : IfNotPresent
           ports:
             - containerPort: 3030
           envFrom:

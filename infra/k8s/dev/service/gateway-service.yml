@@ -8,7 +8,7 @@ spec:
   ports:
     - port: 9000
       targetPort: 9000
-      # remove NodePort FIX
+      # remove ClusterIP FIX
       nodePort: 30900
       protocol: TCP
   type: NodePort

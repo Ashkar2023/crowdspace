@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: media-configmap
+data:
+  PORT: "4000"
+  MINIO_ENDPOINT: http://minio-service:4100
+  RABBITMQ_ENDPOINT: amqp://rabbitmq-service:5672
+  USER_SERVICE: http://user-service:3000
+  MINIO_REGION: ap-south-1

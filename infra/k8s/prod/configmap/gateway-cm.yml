@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gateway-configmap
+data:
+  PORT: "9000"
+  AUTH_SERVICE: http://auth-service:3030
+  USER_SERVICE: http://user-service:3000
+  MEDIA_SERVICE: http://media-service:4000
+  CONTENT_SERVICE: http://content-service:5000
+  CHAT_SERVICE: http://chat-service:7070
+
+  USER_CLIENT: https://dev.crowdspace.in
+  ADMIN_CLIENT: https://admin.crowdspace.in

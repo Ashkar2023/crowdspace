@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
         - name: media-svc-container
-          image: ashkar2023/crowdspace-media
+          image: crowdspace-media:dev-latest
+          imagePullPolicy : IfNotPresent
           ports:
             - containerPort: 4000
           envFrom:

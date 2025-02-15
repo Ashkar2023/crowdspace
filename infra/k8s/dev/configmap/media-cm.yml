@@ -7,3 +7,4 @@ data:
   MINIO_ENDPOINT: http://minio-service:4100
   RABBITMQ_ENDPOINT: amqp://rabbitmq-service:5672
   USER_SERVICE: http://user-service:3000
+  MINIO_REGION: local-test

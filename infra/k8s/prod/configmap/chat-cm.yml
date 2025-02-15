@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: chat-configmap
+data:
+  PORT: "7070"
+  RABBITMQ_ENDPOINT: amqp://rabbitmq-service:5672
+  USER_SERVICE: http://user-service:3000
+  REDIS_URL: redis://redis-service:6379
+  CLIENT_URL: https://dev.crowdspace.in

@@ -28,3 +28,6 @@
 LICENSE
 README.md
 **/logs
+
+buildall.sh
+dockerbuild.sh
