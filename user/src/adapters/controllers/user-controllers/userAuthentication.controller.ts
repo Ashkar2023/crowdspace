@@ -58,8 +58,8 @@ export class UserAuthController implements IUserAuthController {
             .setStatusCode(200)
             .setHeaders({
                 "Set-Cookie": [
-                    `ajwt=; Path=/; Expires=${expirationDate(-1, "day")}; Max-Age=0; httpOnly;`, //WHEN HOSTING - Add Domain
-                    `rjwt=; Path=/; Expires=${expirationDate(-1, "day")}; Max-Age=0; httpOnly;`
+                    `ajwt=; Path=/; Expires=${expirationDate(-1, "day")}; Max-Age=0; httpOnly; ${envConfig.NODE_ENV === "production" ? "secure;" : ""}`, //WHEN HOSTING - Add Domain
+                    `rjwt=; Path=/; Expires=${expirationDate(-1, "day")}; Max-Age=0; httpOnly; ${envConfig.NODE_ENV === "production" ? "secure;" : ""}`
                 ]
             })
             .setMessage("Logout successful")
