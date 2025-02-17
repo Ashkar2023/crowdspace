@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: minio-configmap
 data:
-  MINIO_SITE_REGION: local-test
+  MINIO_REGION_NAME: local-test

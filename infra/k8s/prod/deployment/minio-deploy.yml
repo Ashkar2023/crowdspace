@@ -34,9 +34,22 @@ spec:
             - configMapRef:
                 name: minio-configmap
           volumeMounts:
-            - mountPath: /data
-              name: minio-data
-
+            - name: minio-volume
+              mountPath: /data
       volumes:
-        - name: minio-data
-          emptyDir: {}
+        - name: minio-volume
+          persistentVolumeClaim:
+            claimName: minio-pvc
+---
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: minio-pv
+# spec:
+#   capacity:
+#     storage: 5Gi
+#   accessModes:
+#     - ReadWriteOnce
+#   persistentVolumeReclaimPolicy: Retain
+#   storageClassName: minio-rwo
+  
