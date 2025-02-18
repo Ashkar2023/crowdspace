@@ -17,7 +17,7 @@ consumerChannel.consume(rabbitmqConfig.queues.chat,
 
         let socketId;
 
-        if (body.recipient_id) {
+        if (body.recipient_id && !body.receiverSocketId) { // for new-message event no need for retrieving socketId from userId(recipientId) 
             socketId = RetrieveCorrespondingId(body.recipient_id); //post owner
         }
 
@@ -67,9 +67,9 @@ consumerChannel.consume(rabbitmqConfig.queues.chat,
                 if (socketId) {
                     io.to(socketId)
                         .emit(SocketEvents.notification, {
-                            ...body,
+                            ...body.follow_doc,
                             type: NotificationKind.follow,
-                            actor: await fetchActorBasics(body.follower_id)
+                            actor: await fetchActorBasics(body.follow_doc.follower_id)
                         });
                 }
                 break;
@@ -86,13 +86,25 @@ consumerChannel.consume(rabbitmqConfig.queues.chat,
                 if (socketId) {
                     io.to(socketId).emit(SocketEvents.notification,
                         {
-                            ...body,
+                            ...body.follow_doc,
                             type: NotificationKind.followRequest,
-                            actor: await fetchActorBasics(body.follower_id),
+                            actor: await fetchActorBasics(body.follow_doc.follower_id),
                         }
                     );
                 }
                 break;
+            }
+
+            case consumerEvents.follow_req_accepted: {
+                if (socketId) {
+                    io.to(socketId).emit(SocketEvents.notification,
+                        {
+                            ...body.follow_doc,
+                            type: NotificationKind.followRequestAccepted,
+                            actor: await fetchActorBasics(body.follow_doc.followee_id) // the actor here is the followee, who accepts the request
+                        }
+                    )
+                }
             }
 
             default:

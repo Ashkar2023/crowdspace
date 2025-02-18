@@ -3,6 +3,7 @@ import { IUserController } from "../interfaces/user-controller.interface.js";
 import { BadRequestError, IResponse, ResponseCreator } from "@cr0wdspace/common";
 import { Request } from "express";
 import { isValidObjectId, Types } from "mongoose";
+import { FollowStatus } from "@entities/interfaces/follow.interface.js";
 
 export class UserController implements IUserController {
 
@@ -100,6 +101,31 @@ export class UserController implements IUserController {
     };
 
 
+    async acceptFollowRequest(req: Request) {
+        const loggedinUser = req.headers["x-logged-in-user"] as string;
+        const { followerId } = req.body as Record<string, string>;
+        const { follow_doc_id: followDocId } = req.params;
+
+        [followerId, followDocId].forEach(id => {
+            if (!isValidObjectId(id)) throw new BadRequestError("invalid id");
+        })
+
+        const followDoc = await this._UserInteractorFacade.updateFollowRequest(
+            new Types.ObjectId(followDocId),
+            new Types.ObjectId(followerId),
+            new Types.ObjectId(loggedinUser),
+            FollowStatus.active
+        );
+
+        const response = new ResponseCreator();
+        return response
+            .setStatusCode(200)
+            .setMessage("follow request accepted")
+            .setData({ ...followDoc?.toObject() })
+            .get()
+    };
+
+
     async getFollows(req: Request) {
         const user_id = req.params.user_id as string;
         console.log(req.params);
@@ -148,19 +174,19 @@ export class UserController implements IUserController {
         const loggedInUserId = req.headers["x-logged-in-user"] as string;
 
         const followers = await this._UserInteractorFacade.getFollowers(loggedInUserId, +page)
-        
+
         const response = new ResponseCreator();
         return response
-        .setStatusCode(200)
-        .setMessage("followers fetched")
-        .setData(followers)
-        .get();
+            .setStatusCode(200)
+            .setMessage("followers fetched")
+            .setData(followers)
+            .get();
     };
-    
+
     async getFollowings(req: Request) {
         const page = req.query.page as string;
         const loggedInUserId = req.headers["x-logged-in-user"] as string;
-        
+
         const followings = await this._UserInteractorFacade.getFollowings(loggedInUserId, +page)
 
         const response = new ResponseCreator();

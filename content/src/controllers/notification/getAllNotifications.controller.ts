@@ -23,7 +23,7 @@ export const getAllNotifications = async (req: Request) => {
         )
     ).json();
 
-    const profileDict = createUserBasicDict(body.profiles);
+    const profileDict = createUserBasicDict(body.profiles, false);
 
     const NotificationsWithProfiles = injectProfiles(notifications, profileDict, "actor")
 

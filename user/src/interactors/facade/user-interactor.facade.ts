@@ -1,4 +1,4 @@
-import { IFollow } from "@entities/interfaces/follow.interface.js";
+import { FollowStatus, IFollow } from "@entities/interfaces/follow.interface.js";
 import { IUser } from "@entities/interfaces/user-entity.interface.js";
 import { IUserInteractorFacade } from "@interactors/interfaces/ifacade/user-interactor.facade.interface.js";
 import { IFollowRepository } from "@interactors/interfaces/repositories/follow-repository.interface.js";
@@ -49,6 +49,14 @@ export class UserInteractorFacade implements IUserInteractorFacade {
             user_id,
             followee_id
         )
+    }
+    async updateFollowRequest(
+        follow_doc_id: Types.ObjectId,
+        follower_id: Types.ObjectId,
+        followee_id: Types.ObjectId,
+        status: FollowStatus
+    ) {
+        return await this._UserFollowInteractorInstance.updateFollowRequest(follow_doc_id, follower_id, followee_id, status);
     }
 
     async getFollowersAndFollowees(user_id: Types.ObjectId) {

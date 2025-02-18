@@ -1,4 +1,4 @@
-import { IFollow } from "@entities/interfaces/follow.interface.js";
+import { FollowStatus, IFollow } from "@entities/interfaces/follow.interface.js";
 import { HydratedDocument, Types } from "mongoose";
 
 export interface IFollowRepository {
@@ -12,6 +12,13 @@ export interface IFollowRepository {
         followee_id: Types.ObjectId,
         followee_private: boolean
     ) => Promise<HydratedDocument<IFollow>>
+    
+    updateFollowRequest: (
+        follow_doc_id: Types.ObjectId,
+        follower_id: Types.ObjectId,
+        followee_id: Types.ObjectId,
+        status: FollowStatus
+    ) => Promise<HydratedDocument<IFollow> | null>
 
     findConnection: (
         follower_id: Types.ObjectId,
@@ -21,7 +28,7 @@ export interface IFollowRepository {
         incomingFollow: HydratedDocument<IFollow> | null
     }>
 
-    followExists: (
+    findFollowDoc: (
         follower_id: Types.ObjectId,
         followee_id: Types.ObjectId,
     ) => Promise<HydratedDocument<IFollow> | null>

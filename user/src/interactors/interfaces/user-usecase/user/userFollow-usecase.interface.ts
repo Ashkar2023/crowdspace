@@ -1,4 +1,4 @@
-import { IFollow } from "@entities/interfaces/follow.interface.js";
+import { FollowStatus, IFollow } from "@entities/interfaces/follow.interface.js";
 import { HydratedDocument, Types } from "mongoose";
 
 export interface IUserFollowUsecase {
@@ -18,6 +18,13 @@ export interface IUserFollowUsecase {
         followersCount: number,
         followingsCount: number
     }>
+
+    updateFollowRequest: (
+        follow_doc_id: Types.ObjectId,
+        follower_id: Types.ObjectId,
+        followee_id: Types.ObjectId,
+        status: FollowStatus
+    ) => Promise<HydratedDocument<IFollow> | null>
 
     removeFollower: (follower_id: string, loggedInUserId: string) => Promise<HydratedDocument<IFollow> | null>;
 

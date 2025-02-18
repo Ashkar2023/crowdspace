@@ -33,7 +33,11 @@ export class UserControllerFacade implements IUserControllerFacade {
     async unfollowUser(req: Request) {
         return await this._UserControllerInstance.unfollowUser(req);
     }
-
+    
+    async acceptFollowRequest(req: Request){
+        return await this._UserControllerInstance.acceptFollowRequest(req);
+    };
+    
     async getFollows(req: Request) {
         return await this._UserControllerInstance.getFollows(req);
     }

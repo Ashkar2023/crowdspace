@@ -70,13 +70,16 @@ export class FollowRepositoryImp implements IFollowRepository {
     }
 
 
-    async followExists(
+    async findFollowDoc(
         follower_id: Types.ObjectId,
         followee_id: Types.ObjectId,
     ) {
         return await this.#model.findOne({ follower_id, followee_id });
     }
 
+    async updateFollowRequest(follower_doc_id: Types.ObjectId, follower_id: Types.ObjectId, followee_id: Types.ObjectId, status: FollowStatus) {
+        return await this.#model.findOneAndUpdate({ _id: follower_doc_id, followee_id, follower_id }, { $set: { status } }, { new: true });
+    };
 
     async getFollowersAndFollowees(user_id: Types.ObjectId) {
         const result = await this.#model.aggregate([
@@ -177,20 +180,20 @@ export class FollowRepositoryImp implements IFollowRepository {
                 $limit: 2
             },
             {
-                $lookup:{
-                    from:"users",
-                    foreignField:"_id",
-                    localField:"follower_id",
-                    pipeline:[
+                $lookup: {
+                    from: "users",
+                    foreignField: "_id",
+                    localField: "follower_id",
+                    pipeline: [
                         {
-                            $project:{
-                                avatar:1,
-                                displayname:1,
-                                username:1
+                            $project: {
+                                avatar: 1,
+                                displayname: 1,
+                                username: 1
                             }
                         }
                     ],
-                    as:"follower_info"
+                    as: "follower_info"
                 }
             },
             {
@@ -203,7 +206,7 @@ export class FollowRepositoryImp implements IFollowRepository {
         return result;
     }
 
-    
+
     async getFollowings(follower_id: Types.ObjectId, page: number) {
         const result = await this.#model.aggregate([
             {
@@ -218,20 +221,20 @@ export class FollowRepositoryImp implements IFollowRepository {
                 $limit: 2
             },
             {
-                $lookup:{
-                    from:"users",
-                    foreignField:"_id",
-                    localField:"followee_id",
-                    pipeline:[
+                $lookup: {
+                    from: "users",
+                    foreignField: "_id",
+                    localField: "followee_id",
+                    pipeline: [
                         {
-                            $project:{
-                                avatar:1,
-                                displayname:1,
-                                username:1
+                            $project: {
+                                avatar: 1,
+                                displayname: 1,
+                                username: 1
                             }
                         }
                     ],
-                    as:"followee_info"
+                    as: "followee_info"
                 }
             },
             {
@@ -241,7 +244,7 @@ export class FollowRepositoryImp implements IFollowRepository {
             }
         ])
 
-        console.log("Followings",result)
+        console.log("Followings", result)
 
         return result;
     }

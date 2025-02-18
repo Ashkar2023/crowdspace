@@ -8,7 +8,7 @@ await UserMsgBroker.init(process.env.RABBITMQ_ENDPOINT!);
 export const consumerChannel = await UserMsgBroker.makeChannel("consumer");
 export const publisherChannel = await UserMsgBroker.makeChannel("publisher");
 
-const { exchanges, queues, routingKeys } = rabbitmqConfig;
+export const { exchanges, queues, routingKeys } = rabbitmqConfig;
 
 await consumerChannel.assertExchange( //content exchange
     exchanges.contentDirect.name,

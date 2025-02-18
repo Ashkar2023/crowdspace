@@ -20,7 +20,9 @@ export function buildUserRoutes({ router, UserController }: {
 
     router.delete("/:user_id/follow", createCallback(UserController.unfollowUser.bind(UserController)))
 
-    router.get("/:user_id/follows", createCallback(UserController.getFollows.bind(UserController))); // remove
+    router.patch("/:follow_doc_id/accept", createCallback(UserController.acceptFollowRequest.bind(UserController)));
+
+    router.get("/:user_id/follows", createCallback(UserController.getFollows.bind(UserController))); 
 
     router.get("/:user_id/followers", createCallback(UserController.getFollowers.bind(UserController)));
 

@@ -1,10 +1,11 @@
 import { BadRequestError, ConflictError, consumerEvents, encodeEventMessage, rabbitmqConfig } from "@cr0wdspace/common";
-import { FollowStatus, IFollow } from "@entities/interfaces/follow.interface.js";
-import { publisherChannel } from "@frameworks/services/events/events.service.js";
+import { FollowStatus } from "@entities/interfaces/follow.interface.js";
+import { exchanges, publisherChannel, queues, routingKeys } from "@frameworks/services/events/events.service.js";
 import { IFollowRepository } from "@interactors/interfaces/repositories/follow-repository.interface.js";
 import { IUserRepository } from "@interactors/interfaces/repositories/user-repository.interface.js";
 import { IUserFollowUsecase } from "@interactors/interfaces/user-usecase/user/userFollow-usecase.interface.js";
-import { HydratedDocument, isValidObjectId, Types } from "mongoose";
+import { envConfig } from "@src/config/env.config.js";
+import { isValidObjectId, Types } from "mongoose";
 
 class UserFollowImp implements IUserFollowUsecase {
 
@@ -21,7 +22,7 @@ class UserFollowImp implements IUserFollowUsecase {
     ) {
 
         const followExists = await this._FollowRepository
-            .followExists(user_id, followee_id);
+            .findFollowDoc(user_id, followee_id);
 
         if (followExists) {
             throw new ConflictError("you are already following this user");
@@ -29,7 +30,7 @@ class UserFollowImp implements IUserFollowUsecase {
 
         const followeeUserData = await this._UserRepository.findUserById(followee_id.toString(), "privateAccount");
 
-        if(followeeUserData === null) throw new BadRequestError("User to follow not found");
+        if (followeeUserData === null) throw new BadRequestError("User to follow not found");
 
         const follow = await this._FollowRepository.doFollow(user_id, followee_id, followeeUserData?.privateAccount!);
 
@@ -45,8 +46,6 @@ class UserFollowImp implements IUserFollowUsecase {
                 consumerEvents.follow,
             {
                 recipient_id: followee_id, //redundant but the notifications handler(chat service) resolves socket id with this field
-                follower_id: user_id,
-                followee_id,
                 follow_doc: follow
             }
         );
@@ -67,7 +66,7 @@ class UserFollowImp implements IUserFollowUsecase {
     ) {
 
         const followExists = await this._FollowRepository
-            .followExists(user_id, followee_id);
+            .findFollowDoc(user_id, followee_id);
 
         if (!followExists) {
             throw new ConflictError("can't unfollow an unfollowed user");
@@ -79,17 +78,47 @@ class UserFollowImp implements IUserFollowUsecase {
             throw new BadRequestError("couldn't process unfollow request");
         }
 
-        const followingsUpdated = await this._UserRepository.updateFollowingsCount(user_id, "dec")
-        const followeeFollowersUpdated = await this._UserRepository.updateFollowersCount(followee_id, "dec")
+        if (followExists.status === FollowStatus.active) {
+            const followingsUpdated = await this._UserRepository.updateFollowingsCount(user_id, "dec")
+            const followeeFollowersUpdated = await this._UserRepository.updateFollowersCount(followee_id, "dec")
+        }
 
         // Anti-pattern in Clean 👇
         const bodyBuffer = encodeEventMessage(consumerEvents.unfollow, {
-            notification_id: removedFollow._id
+            target_id: removedFollow._id
         });
-        publisherChannel.publish("content-exchange", "notify", bodyBuffer);
+        publisherChannel.publish(exchanges.notificationFanout.name, routingKeys.content.notificationFanout, bodyBuffer);
 
         return removedFollow;
     }
+
+
+    async updateFollowRequest(follow_doc_id: Types.ObjectId, follower_id: Types.ObjectId, followee_id: Types.ObjectId, status: FollowStatus) {
+        const previousFollowDoc = await this._FollowRepository.findFollowDoc(follower_id, followee_id);
+        const updatedDoc = await this._FollowRepository.updateFollowRequest(follow_doc_id, follower_id, followee_id, status);
+        // writing promise.all can cause type issues. so just going with normal queries. try to find the fix 
+
+        envConfig.NODE_ENV === 'development' && console.log(updatedDoc);
+
+        if (previousFollowDoc === null || updatedDoc === null) { // explicit null check to easy understand code in future
+            throw new BadRequestError("follow request doesn't exist");
+        }
+
+        if (updatedDoc.status === FollowStatus.active && previousFollowDoc.status === FollowStatus.pending) {
+            const followingsUpdated = await this._UserRepository.updateFollowingsCount(follower_id, "inc")
+            const followeeFollowersUpdated = await this._UserRepository.updateFollowersCount(followee_id, "inc")
+        }
+
+        // Anti-pattern in Clean 👇
+        const bodyBuffer = encodeEventMessage(consumerEvents.follow_req_accepted, {
+            recipient_id: follower_id, // the recipient is the follower here, because his request is being accepted
+            follow_doc: updatedDoc.toObject()
+        });
+        publisherChannel.publish(exchanges.notificationFanout.name, routingKeys.content.notificationFanout, bodyBuffer);
+
+        return updatedDoc;
+    }
+
 
     async getFollowersAndFollowees(user_id: Types.ObjectId) {
         const result = await this._FollowRepository.getFollowersAndFollowees(user_id);

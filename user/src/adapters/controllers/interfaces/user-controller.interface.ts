@@ -9,6 +9,8 @@ export interface IUserController {
     followUser: (req: Request) => Promise<IResponse>
     unfollowUser: (req: Request) => Promise<IResponse>
 
+    acceptFollowRequest: (req: Request) => Promise<IResponse>
+
     getFollows: (req: Request) => Promise<IResponse>
 
     search: (req: Request) => Promise<IResponse>

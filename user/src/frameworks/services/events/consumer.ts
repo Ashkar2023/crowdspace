@@ -17,7 +17,7 @@ consumerChannel.consume(rabbitmqConfig.queues.user,
         const { body, event } = decodeEventMessage(message.content);
 
         envConfig.NODE_ENV === "development" &&
-            console.table({
+            console.log({
                 body,
                 event
             });
@@ -30,7 +30,7 @@ consumerChannel.consume(rabbitmqConfig.queues.user,
                         body.avatar_url
                     )
 
-                    /*  send event to DELETE the old avatar media, if any */
+                    /* FIX send event to DELETE the old avatar media, if any */
 
                     const bodyObject = encodeEventMessage(consumerEvents.avatar_updated, {
                         avatar: body.avatar_url,

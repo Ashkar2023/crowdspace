@@ -1,6 +1,6 @@
 import { notificationModel } from "models/notification.model.js";
 import { Document, Model, Types } from "mongoose";
-import { INotification } from "~types/notification.types.js";
+import { followRequestStatus, INotification } from "~types/notification.types.js";
 
 
 export class NotificationRepository {
@@ -21,17 +21,17 @@ export class NotificationRepository {
     }
 
 
-    async deleteNotification(notificationId: Types.ObjectId): Promise<(Document & INotification) | null> {
-        return await this.#model.findByIdAndDelete(notificationId);
+    async deleteNotificationByTargetId(notificationId: Types.ObjectId): Promise<(Document & INotification) | null> {
+        return await this.#model.findOneAndDelete({ target: notificationId });
     }
 
 
+    async updateNotification(follow_doc_id: Types.ObjectId, status: followRequestStatus): Promise<INotification | null> {
+        return await this.#model.findOneAndUpdate({ target: follow_doc_id }, { $set: { status } }, {new: true});
+    }
+
     // async getNotificationById(notificationId: Types.ObjectId): Promise<INotification | null> {
     //     return await notificationModel.findById(notificationId).exec();
-    // }
-
-    // async updateNotification(notificationId: Types.ObjectId, updateData: Partial<INotification>): Promise<INotification | null> {
-    //     return await notificationModel.findByIdAndUpdate(notificationId, updateData, { new: true }).exec();
     // }
 
 }
