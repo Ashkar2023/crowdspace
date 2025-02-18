@@ -1,41 +1,58 @@
-import { ResponseCreator } from "@cr0wdspace/common";
+import { BadRequestError, FollowStatus, ResponseCreator } from "@cr0wdspace/common";
 import { Request } from "express";
+import { envConfig } from "../config/env.config.js";
 
 export const getUserProfile = async (req: Request) => {
     const username = req.params.username.replace("@", "");
-    const loggedInUsername = req.headers["x-logged-in-username"] as string;
     const loggedInUserId = req.headers["x-logged-in-user"] as string;
+    const loggedInUsername = req.headers["x-logged-in-username"] as string;
 
     let requestedProfileUserId = loggedInUserId;
 
     let aggregatedBody: any = {}
 
-    if (loggedInUsername !== username) { // Case for handling Direct link retrievals, Ex: Client searching manually with username or opening a shared link
-        const userProfileFetchUrl = new URL(`/profile/@${username}`, process.env.USER_SERVICE);
+    const userProfileFetchUrl = new URL(`/profile/@${username}`, envConfig.USER_SERVICE);
 
-        // fetch all user details needed for profile
-        const userProfileFetchResponse = await fetch(userProfileFetchUrl.href, {
-            method: "GET",
-            headers: {
-                "X-logged-in-user": req.headers['x-logged-in-user'] as string
-            }
-        });
+    /* MANUALLY HANDLE ERRORs on fetch */
+    const userProfileFetchResponse = await fetch(userProfileFetchUrl.href, {
+        method: "GET",
+        headers: {
+            "X-logged-in-user": req.headers['x-logged-in-user'] as string // the usual header
+        }
+    });
 
-        const { body } = await userProfileFetchResponse.json();
+    /* CHECK if profileBody has necessary data */
+    const { body: profileBody } = await userProfileFetchResponse.json();
 
-        requestedProfileUserId = body.profile._id;
-        aggregatedBody.profile = body.profile;
-        aggregatedBody.outgoingFollow = body.outgoingFollow;
-        aggregatedBody.incomingFollow = body.incomingFollow;
+    requestedProfileUserId = profileBody.profile._id;
+    aggregatedBody.profile = profileBody.profile;
+    aggregatedBody.outgoingFollow = profileBody.outgoingFollow;
+    aggregatedBody.incomingFollow = profileBody.incomingFollow;
+
+    if (
+        username === loggedInUsername &&
+        loggedInUserId !== profileBody.profile._id
+    ) {
+        throw new BadRequestError("Invalid request: Profile data mismatch")
     }
 
-    const postsFetchUrl = new URL(`/users/${requestedProfileUserId}/posts`, process.env.CONTENT_SERVICE);
-    const postsResponse = await fetch(postsFetchUrl.href, {
-        method: "GET"
-    })
+    if (
+        (profileBody.profile.privateAccount && profileBody?.outgoingFollow?.status === FollowStatus.active) ||
+        !profileBody.profile.privateAccount ||
+        loggedInUserId === profileBody.profile._id
+    ) {
+        /* MANUALLY HANDLE ERRORs on fetch */
+        const postsFetchUrl = new URL(`/users/${requestedProfileUserId}/posts`, envConfig.CONTENT_SERVICE);
+        const postsResponse = await fetch(postsFetchUrl.href, {
+            method: "GET"
+        })
 
-    const { body, message } = await postsResponse.json();
-    aggregatedBody.posts = body.posts;
+        const { body: postsBody, message } = await postsResponse.json();
+        aggregatedBody.posts = postsBody.posts;
+        aggregatedBody.accessGranted = true;
+    } else {
+        aggregatedBody.accessGranted = false;
+    }
 
     const response = new ResponseCreator(); // hanlde response cases from both requests(profileData, posts)
     return response
