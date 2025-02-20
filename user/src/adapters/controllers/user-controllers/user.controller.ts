@@ -126,19 +126,19 @@ export class UserController implements IUserController {
     };
 
 
-    async getFollows(req: Request) {
-        const user_id = req.params.user_id as string;
-        console.log(req.params);
+    // async getFollows(req: Request) {
+    //     const user_id = req.params.user_id as string;
+    //     console.log(req.params);
 
-        const follows = await this._UserInteractorFacade.getFollowersAndFollowees(new Types.ObjectId(user_id));
+    //     const follows = await this._UserInteractorFacade.getFollowersAndFollowees(new Types.ObjectId(user_id));
 
-        const response = new ResponseCreator();
-        return response
-            .setStatusCode(200)
-            .setMessage("fetched follows")
-            .setData(follows)
-            .get();
-    }
+    //     const response = new ResponseCreator();
+    //     return response
+    //         .setStatusCode(200)
+    //         .setMessage("fetched follows")
+    //         .setData(follows)
+    //         .get();
+    // }
 
     async search(req: Request) {
         const { q } = req.query;
@@ -171,23 +171,25 @@ export class UserController implements IUserController {
 
     async getFollowers(req: Request) {
         const page = req.query.page as string;
-        const loggedInUserId = req.headers["x-logged-in-user"] as string;
-
-        const followers = await this._UserInteractorFacade.getFollowers(loggedInUserId, +page)
-
+        const { user_id } = req.params;
+        // const loggedInUserId = req.headers["x-logged-in-user"] as string;
+        
+        const followers = await this._UserInteractorFacade.getFollowers(user_id, +page)
+        
         const response = new ResponseCreator();
         return response
-            .setStatusCode(200)
-            .setMessage("followers fetched")
-            .setData(followers)
-            .get();
+        .setStatusCode(200)
+        .setMessage("followers fetched")
+        .setData(followers)
+        .get();
     };
-
+    
     async getFollowings(req: Request) {
         const page = req.query.page as string;
-        const loggedInUserId = req.headers["x-logged-in-user"] as string;
+        const { user_id } = req.params;
+        // const loggedInUserId = req.headers["x-logged-in-user"] as string;
 
-        const followings = await this._UserInteractorFacade.getFollowings(loggedInUserId, +page)
+        const followings = await this._UserInteractorFacade.getFollowings(user_id, +page)
 
         const response = new ResponseCreator();
         return response
