@@ -170,14 +170,15 @@ export class FollowRepositoryImp implements IFollowRepository {
         const result = await this.#model.aggregate([
             {
                 $match: {
-                    followee_id
+                    followee_id,
+                    status: "active"
                 }
             },
             {
-                $skip: (page - 1) * 2
+                $skip: (page - 1) * 7
             },
             {
-                $limit: 2
+                $limit: 7
             },
             {
                 $lookup: {
@@ -211,14 +212,15 @@ export class FollowRepositoryImp implements IFollowRepository {
         const result = await this.#model.aggregate([
             {
                 $match: {
-                    follower_id
+                    follower_id,
+                    status: "active"
                 }
             },
             {
-                $skip: (page - 1) * 2
+                $skip: (page - 1) * 7
             },
             {
-                $limit: 2
+                $limit: 7
             },
             {
                 $lookup: {
