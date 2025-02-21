@@ -10,7 +10,7 @@
         "build": "rimraf dist && tsc && tsc-alias"
     },
     "dependencies": {
-        "@cr0wdspace/common": "^1.3.0",
+        "@cr0wdspace/common": "^1.6.0",
         "@socket.io/admin-ui": "^0.5.1",
         "@types/morgan": "^1.9.9",
         "express": "^4.21.2",

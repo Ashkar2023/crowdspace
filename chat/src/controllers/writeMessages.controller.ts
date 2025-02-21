@@ -41,7 +41,7 @@ const writeMessage = (socket: Socket, io: Server) => {
             const chatObjectId = new Types.ObjectId(message.chat_id);
 
             chatDoc = await chatRepoImp.findChat(chatObjectId, userObjectId) as HydratedDocument<IChat>;
-            console.log("chatDoc", chatDoc)
+            
             try {
                 /* HANDLE if any case where the chat is not in DB */
                 // if (!chatDoc) {
@@ -95,16 +95,15 @@ const writeMessage = (socket: Socket, io: Server) => {
 
         try {
             const messageStored = await storeMessagePromise; // awaited here to run the other tasks parallely for time saving
-            console.log("messageStored", messageStored.id);
 
-            io.to([receiverSocketId, socket.id]).emit(SocketEvents.recv_msg, messageStored); // Latency waiting for the message to store
+            io.to([receiverSocketId, socket.id]).emit(SocketEvents.recv_msg, messageStored);
 
             publisherChannel.publish(
                 rabbitmqConfig.exchanges.notificationFanout.name,
                 rabbitmqConfig.routingKeys.chat.notificationFanout,
                 encodeEventMessage(consumerEvents.new_message,
                     {
-                        ...messageStored.toObject(),
+                        ...messageStored,
                         receiverSocketId
                     }
                 ));

@@ -26,7 +26,12 @@ export class MessageRepository {
             reply_to,
         };
 
-        return await this.#model.create(newMessage);
+        const message = await this.#model.create(newMessage);
+        if (message.content_type === msgContentType.text) {
+            return { ...message.toObject(), body: Buffer.from(message.body!, "base64").toString("utf-8") }
+        }
+
+        return message.toObject()
     }
 
     async deleteMessage(message_id: Types.ObjectId): Promise<DeleteResult> {
