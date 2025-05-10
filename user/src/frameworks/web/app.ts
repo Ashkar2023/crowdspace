@@ -17,22 +17,22 @@ const redisImp = RedisService.getInstance()
 await redisImp.connect();
 await redisImp.storeBannedUsers();
 
-declare module "express-session" { // For session logins for admins
-    interface SessionData {
-        user: string
-    }
-}
+// declare module "express-session" { // For session logins for admins
+//     interface SessionData {
+//         user: string
+//     }
+// }
 
-app.use(session({ /* CHANGE TO REDIS */
-    secret: process.env.SESSION_SECRET as string,
-    saveUninitialized: false,
-    resave: false,
-    rolling: true,
-    cookie: {
-        httpOnly: true,
-        maxAge: 1000 * 60 * 10
-    }
-}))
+// app.use(session({ /* CHANGE TO REDIS */
+//     secret: process.env.SESSION_SECRET as string,
+//     saveUninitialized: false,
+//     resave: false,
+//     rolling: true,
+//     cookie: {
+//         httpOnly: true,
+//         maxAge: 1000 * 60 * 10
+//     }
+// }))
 
 app.use(logMiddleware);
 app.use(cookieParser());
@@ -40,13 +40,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 //user routes
-app.use("/auth", authRouter); // when changing to NGINX check the prefix route path ex: /auth 
+app.use("/auth", authRouter); 
 app.use("/settings", settingsRouter)
 
 //admin routes
 app.use("/admin", adminAuthRouter)
 app.use("/admin", adminUserRouter)
-
 app.use([
     "/profile",
     "/"

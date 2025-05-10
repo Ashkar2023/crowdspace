@@ -1,9 +1,11 @@
 import { BadRequestError, TokenError, UnauthorizedError } from "@cr0wdspace/common";
 import { NextFunction, Request, Response } from "express";
+import { envConfig } from "../config/env.config.js";
 
 const userAuthMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { ajwt } = req.cookies;
+        
         if (!ajwt) {
             throw new TokenError("access token not found", 401, "invalid_access");
         }
@@ -16,9 +18,9 @@ const userAuthMiddleware = async (req: Request, res: Response, next: NextFunctio
         })
 
         const { body, success, error, message } = await response.json();
-        console.log(response.status)
-        console.log(body)
-        console.log(error)
+        console.log("/auth/verify", response.status)
+        // console.log("/auth/verify body",body)
+        // console.log("/auth/verify error",error)
 
         if (success) {
             req.headers["x-logged-in-user"] = body.userId;

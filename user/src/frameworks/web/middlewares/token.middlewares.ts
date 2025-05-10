@@ -1,4 +1,5 @@
 import { TokenError, verifyJWT } from "@cr0wdspace/common";
+import { envConfig } from "@src/config/env.config.js";
 import { RequestHandler } from "express";
 
 export const verifyAccessToken: RequestHandler = async (req, res, next) => {
@@ -9,7 +10,7 @@ export const verifyAccessToken: RequestHandler = async (req, res, next) => {
 
         const result = await verifyJWT({
             jwt: ajwt,
-            secret: process.env.TOKEN_SECRET as string,
+            secret: envConfig.TOKEN_SECRET,
             issuerAndAudience: {
                 issuer: process.env.ISSUER as string,
                 audience: process.env.AUDIENCE as string
@@ -36,7 +37,7 @@ export const verifyRefreshToken: RequestHandler = async (req, res, next) => {
         
         const result = await verifyJWT({
             jwt: rjwt,
-            secret: process.env.TOKEN_SECRET as string,
+            secret: envConfig.TOKEN_SECRET,
             issuerAndAudience: {
                 issuer: process.env.ISSUER as string,
                 audience: process.env.AUDIENCE as string

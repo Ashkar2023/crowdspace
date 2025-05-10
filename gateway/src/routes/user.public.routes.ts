@@ -3,7 +3,7 @@ import { createProxyMiddleware as proxy } from "http-proxy-middleware";
 
 const userPublicRoutes = Router();
 
-userPublicRoutes.post([
+userPublicRoutes.all([
     '/auth/login',
     '/auth/create',
     '/auth/register',
@@ -11,6 +11,7 @@ userPublicRoutes.post([
     '/auth/oauth-callback',
     '/auth/gen-otp',
     '/auth/verify-otp',
+    '/settings/reset-password',
 ],
     proxy<Request, Response>({
         target: process.env.USER_SERVICE,

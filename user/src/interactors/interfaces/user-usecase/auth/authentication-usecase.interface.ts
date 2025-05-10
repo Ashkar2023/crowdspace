@@ -7,7 +7,7 @@ export type loginData = {
 }
 
 export interface IUserAuthenticationUsecase{
-    authenticateUser: (loginData: loginData) => Promise<{
+    authenticateUser: (loginData: loginData, oauth?: boolean) => Promise<{
         user: IUser,
         accessToken: string,
         refreshToken: string

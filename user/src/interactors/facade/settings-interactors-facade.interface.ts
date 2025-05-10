@@ -9,6 +9,7 @@ import { PasswordUpdateImp } from "@interactors/user-interactors/password-update
 import { ProfileImp } from "@interactors/user-interactors/profile-update.interactor.js";
 import { TokenImp } from "@interactors/user-interactors/token.interactor.js";
 import { UserChecksImp } from "@interactors/user-interactors/user-checks.interactor.js";
+import { IMailService } from "@interactors/interfaces/services/mailer-service.interface.js";
 
 export class SettingsInteractorFacade implements ISettingsInteractorFacade {
     private _ProfileUpdateInstance: IProfileUpdateUsecase;
@@ -17,11 +18,12 @@ export class SettingsInteractorFacade implements ISettingsInteractorFacade {
     private _UserChecksInstance: IUserChecksUsecase;
 
     constructor(
-        private UserRepository: IUserRepository,
-        private HashService: IHashService,
+        UserRepository: IUserRepository,
+        HashService: IHashService,
+        MailService: IMailService
     ) {
         this._UserChecksInstance = new UserChecksImp(UserRepository);
-        this._PasswordUpdateInstance = new PasswordUpdateImp(UserRepository, HashService);
+        this._PasswordUpdateInstance = new PasswordUpdateImp(UserRepository, HashService, MailService);
         this._ProfileUpdateInstance = new ProfileImp(UserRepository, this._UserChecksInstance);
         this._TokenInstance = new TokenImp();
     }
@@ -45,4 +47,12 @@ export class SettingsInteractorFacade implements ISettingsInteractorFacade {
     async updatePrivacy(state: boolean, user_id: string) {
         return await this._ProfileUpdateInstance.updatePrivacy(state, user_id)
     };
+
+    async generateAndEmailResetLink(email: string){
+        return await this._PasswordUpdateInstance.generateAndEmailResetLink(email);
+    }
+
+    async resetForgottenPassword(email: string, newPassword: string){
+        return await this._PasswordUpdateInstance.resetForgottenPassword(email, newPassword);
+    }
 }

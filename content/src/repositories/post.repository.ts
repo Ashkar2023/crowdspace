@@ -25,8 +25,13 @@ class PostRepository {
         return posts
     }
 
-    async findPost(postUUID: string): Promise<HydratedDocument<T_Post> | null> {
-        return await this.#model.findById(new Types.ObjectId(postUUID)); //later Change to findOne for UUID based query  
+    async findPost(post_id: string): Promise<HydratedDocument<T_Post> | null> {
+        return await this.#model.findById(new Types.ObjectId(post_id));
+    }
+
+
+    async findPostByUrl(post_url: string): Promise<HydratedDocument<T_Post> | null> {
+        return await this.#model.findOne({ url: post_url });
     }
 
 
@@ -49,12 +54,30 @@ class PostRepository {
         //         }
         //     }
         // ])
-        const response = await this.#model.find({}).skip((page - 1) * 3).limit(3);
+        const response = await this.#model.find({}).skip((page - 1) * 5).limit(5).sort({ createdAt: -1 });
 
         return response
     }
 
-    // update likes count
+    async updatePostLikeCount(postId: Types.ObjectId, action: "inc" | "dec"): Promise<HydratedDocument<T_Post> | null> {
+        const increment = action === "inc" ? 1 : -1;
+
+        return await this.#model.findByIdAndUpdate(
+            postId,
+            { $inc: { likesCount: increment } },
+            { new: true }
+        );
+    }
+
+    async updatePostCommentCount(postId: Types.ObjectId, action: "inc" | "dec"): Promise<HydratedDocument<T_Post> | null> {
+        const increment = action === "inc" ? 1 : -1;
+
+        return await this.#model.findByIdAndUpdate(
+            postId,
+            { $inc: { commentsCount: increment } },
+            { new: true }
+        );
+    }
 }
 
 export default PostRepository;

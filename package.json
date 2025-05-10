@@ -18,12 +18,12 @@
         "w:log:2": "find . -path ./gateway -prune -o -path ./auth -prune -o -type f -name \"*.log\" -exec tail -f -n 2 {} +"
     },
     "devDependencies": {
-        "@types/amqplib": "^0.10.6",
+        "@types/amqplib": "^0.10.7",
         "@types/cookie-parser": "^1.4.8",
         "@types/express": "~4.17.21",
         "@types/morgan": "^1.9.9",
-        "@types/node": "^22.10.7",
-        "nodemon": "^3.1.9",
-        "typescript": "^5.6.3"
+        "@types/node": "^22.15.17",
+        "nodemon": "^3.1.10",
+        "typescript": "^5.8.3"
     }
 }

@@ -16,7 +16,7 @@ export class OtpImp implements IOtpUsecase {
     }
 
 
-    async genAndSendOtpMail(email: string) {
+    async genOtpAndSendMail(email: string) {
         /* Make it the entity pattern */
         const newOTP = await generateOTP();
 
@@ -24,7 +24,7 @@ export class OtpImp implements IOtpUsecase {
 
         const newOtpDoc = await this._OtpRepository.insertOtpDoc(otpEntity);
 
-        const sentMail = await this._MailService.sendMail(email, newOTP); // decide on newOtpDoc.otp or this way
+        const sentMail = await this._MailService.sendMail(email, newOTP, "OTP", "OTP for Account Verification"); // decide on newOtpDoc.otp or this way
 
         return {
             expiration: newOtpDoc.expiration

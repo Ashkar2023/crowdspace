@@ -1,5 +1,5 @@
 # Social-Media  
-A Microservices Social-Media web app built upon Clean Architecture, using MERN.
+A Microservices Social-Media web app using MERN.
 
 ## 📦 Common Package Dependency  
 This project references the **`@cr0wdspace/common`** NPM package for shared utilities, middleware, and configurations.  
@@ -11,5 +11,11 @@ This project references the **`@cr0wdspace/common`** NPM package for shared util
 - **Backend:** Node.js, Express  
 - **Database:** MongoDB  
 - **Authentication:** OAuth2, JWT  
-- **Architecture:** Microservices, Clean Architecture  
+- **Architecture:** Microservices, Clean Architecture, MVC
 - **Communication:** RabbitMQ
+- **Media Storage:** MinIO
+- **Cloud Provider** GKE/GCP
+- **Cert Providers** Let's Encrypt
+
+## key highlights
+- **Well Structured REST API:** follows best practices for API development

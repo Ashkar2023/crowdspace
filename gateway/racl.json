@@ -20,8 +20,7 @@
             {
                 "resource": "reports/*",
                 "methods": [
-                    "POST",
-                    "DELETE"
+                    "POST"
                 ],
                 "action": "allow"
             },
@@ -32,6 +31,11 @@
             },
             {
                 "resource": "posts/*",
+                "methods": "*",
+                "action": "allow"
+            },
+            {
+                "resource": "post/*",
                 "methods": "*",
                 "action": "allow"
             },
@@ -68,16 +72,8 @@
         "group": "admin",
         "permissions": [
             {
-                "resource": "*",
+                "resource": "/admin/*",
                 "methods": "*",
-                "action": "allow"
-            },
-            {
-                "resource": "*",
-                "methods": [
-                    "DELETE",
-                    "PATCH"
-                ],
                 "action": "allow"
             }
         ]

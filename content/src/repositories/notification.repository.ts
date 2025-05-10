@@ -1,5 +1,5 @@
 import { notificationModel } from "models/notification.model.js";
-import { Document, Model, Types } from "mongoose";
+import { Document, HydratedDocument, Model, Types } from "mongoose";
 import { followRequestStatus, INotification } from "~types/notification.types.js";
 
 
@@ -8,7 +8,7 @@ export class NotificationRepository {
 
     constructor() { }
 
-    async createNotification(notificationData: INotification): Promise<INotification> {
+    async createNotification(notificationData: INotification): Promise<HydratedDocument<INotification>> {
         return await this.#model.create(notificationData);
     }
 
@@ -27,7 +27,7 @@ export class NotificationRepository {
 
 
     async updateNotification(follow_doc_id: Types.ObjectId, status: followRequestStatus): Promise<INotification | null> {
-        return await this.#model.findOneAndUpdate({ target: follow_doc_id }, { $set: { status } }, {new: true});
+        return await this.#model.findOneAndUpdate({ target: follow_doc_id }, { $set: { status } }, { new: true });
     }
 
     // async getNotificationById(notificationId: Types.ObjectId): Promise<INotification | null> {

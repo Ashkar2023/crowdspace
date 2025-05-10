@@ -24,6 +24,10 @@ export function buildSettingsRouter({ router, settingsControllerFacade, middlewa
         createCallback(settingsControllerFacade.updatePrivacy.bind(settingsControllerFacade))
     )
 
+    router.post("/reset-password", createCallback(settingsControllerFacade.sendPasswordResetLink.bind(settingsControllerFacade)));
+
+    router.patch("/reset-password", createCallback(settingsControllerFacade.resetPassword.bind(settingsControllerFacade)));
+    
     // PATCH /settings/notification
 
     return router;

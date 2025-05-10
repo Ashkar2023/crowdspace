@@ -18,5 +18,9 @@ app.listen(process.env.PORT, () => {
     console.log("Media running at port: ", process.env.PORT);
 });
 
+process.on("uncaughtException",(err,origin)=>{
+    console.log(origin)
+    console.error(err)
+})
 
 await pingS3();

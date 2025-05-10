@@ -1,5 +1,5 @@
-import { IMailService } from "@interactors/interfaces/services/mailer-service.interface.js";
-import { otpHtml } from "@src/config/mail-html.js";
+import { IMailService, MailType } from "@interactors/interfaces/services/mailer-service.interface.js";
+import { getMailContent } from "@src/config/mail-html.js";
 import { createTransport, SentMessageInfo, Transporter, } from "nodemailer";
 
 /* CHANGE to a seperate service */
@@ -31,12 +31,12 @@ export class Mailer implements IMailService {
         });
     }
 
-    async sendMail(toMail: string, otp: string) {
+    async sendMail(toMail: string, code: string, type: MailType, subject: string) {
         const sentMailInfo: SentMessageInfo = await this.transporter.sendMail({
             to: toMail,
             from: process.env.SMTP_USER,
-            subject: "OTP for Account Verification",
-            html: otpHtml(otp)
+            subject: subject,
+            html: getMailContent(type, code)
         })
 
         return sentMailInfo;

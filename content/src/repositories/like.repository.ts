@@ -31,14 +31,18 @@ export class LikeRepository {
         return result
     }
 
-    async deleteLike({ post_id, author }: Record<string, Types.ObjectId>): Promise<HydratedDocument<ILike> | null> {
-        return await this.#model.findOneAndDelete({ post_id, author });
+    async deleteLike({ post_id, author }: Record<string, Types.ObjectId>): Promise<(ILike & Required<{ _id: Types.ObjectId }>) | null> {
+        return await this.#model.findOneAndDelete({ post_id, author }).lean();
     }
 
     /* QUERY all like in descending sort */
 
-    async findLikes(postIds: Types.ObjectId[]): Promise<HydratedDocument<ILike>[]> {
-        return this.#model.find({ post_id: { $in: postIds } });
+    async findLikes(postIds: Types.ObjectId[], user_id: Types.ObjectId): Promise<HydratedDocument<ILike>[]> {
+        return this.#model.find({ post_id: { $in: postIds }, author: user_id });
+    }
+
+    async findALike(postId: Types.ObjectId, user_id: Types.ObjectId): Promise<HydratedDocument<ILike> | null> {
+        return this.#model.findOne({ post_id: postId, author: user_id });
     }
 
 }

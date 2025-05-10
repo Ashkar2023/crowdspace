@@ -1,10 +1,12 @@
-export const otpHtml = (otp: string) => (
+import { MailType } from "@interactors/interfaces/services/mailer-service.interface.js";
+
+const emailTemplate = (content: string, title: string) => (
     `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your OTP for Crowdspace</title>
+    <title>${title}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -30,6 +32,12 @@ export const otpHtml = (otp: string) => (
             color: #52525b;
             margin-bottom: 30px;
         }
+        .footer {
+            text-align: center;
+            color: #71717a;
+            font-size: 14px;
+            margin-top: 30px;
+        }
         .otp-container {
             background-color: #f4f4f5;
             padding: 15px;
@@ -43,24 +51,53 @@ export const otpHtml = (otp: string) => (
             letter-spacing: 4px;
             color: #18181b;
         }
-        .footer {
+        .btn {
+            display: block;
+            width: 100%;
             text-align: center;
-            color: #71717a;
-            font-size: 14px;
-            margin-top: 30px;
+            background-color: #2563eb;
+            color: #ffffff;
+            padding: 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Verify Your Account</h1>
-        <p>Your OTP is:</p>
-        <div class="otp-container">
-            <span class="otp">${otp}</span>
-        </div>
-        <p>This OTP will expire in 3 minutes.</p>
-        <p class="footer">&copy; 2024 Crowdspace</p>
+        ${content}
+        <p class="footer">&copy; 2025 Crowdspace</p>
     </div>
 </body>
 </html>`
-)
+);
+
+export const getOtpHtml = (otp: string) => emailTemplate(
+    `<h1>Verify Your Account</h1>
+    <p>Your OTP is:</p>
+    <div class="otp-container">
+        <span class="otp">${otp}</span>
+    </div>
+    <p>This OTP will expire in 5 minutes.</p>`,
+    "Your OTP for Crowdspace"
+);
+
+export const forgotPasswordLinkHtml = (link: string) => emailTemplate(
+    `<h1>Reset Your Password</h1>
+    <p>Click the button below to reset your password:</p>
+    <a href="${link}" class="btn">Reset Password</a>
+    <p>If you did not request this, please ignore this email.</p>`,
+    "Reset Your Password - Crowdspace"
+);
+
+export const getMailContent = (mailType: MailType, ...args: string[]) => {
+    switch (mailType) {
+        case "RESET_PASSWORD":
+            return forgotPasswordLinkHtml(args[0]);
+        case "OTP":
+            return getOtpHtml(args[0]);
+    }
+}

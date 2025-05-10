@@ -5,7 +5,7 @@
         "node_modules/**/node_modules"
     ],
     "verbose": false,
-    "exec":"npm run build && node  dist/index.js",
+    "exec":"npm run build && node dist/index.js",
     "execMap": {},
     "watch": [
         "src/"

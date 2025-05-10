@@ -5,19 +5,38 @@ import { createClient, RedisClientType } from "redis";
 export class RedisService {
     private static instance: RedisService;
     private client: RedisClientType;
+    #retries: number = 0;
+    #maxRetries: number = 2;
+    #interval: number = 5000;
 
     private constructor() {
         this.client = createClient({
-            url: envConfig.REDIS_URL
+            url: envConfig.REDIS_URL,
+            socket: {
+                reconnectStrategy: false
+            }
         });
 
         this.client.on("error", async (err) => {
-            console.log(
-                styleText("redBright", "Redis Error : " + err.code + "\n"),
-                styleText("italic", "Learn to handle connnection error and refactor\n")
-            );
+            console.log(styleText("redBright", "Redis Error : " + err.code + "\n"));
 
-            await this.client.disconnect();
+            envConfig.NODE_ENV === "development" &&
+                console.log(styleText("italic", "Learn to handle connnection error and refactor\n"));
+
+            if (this.#retries < this.#maxRetries) {
+                ++this.#retries;
+                console.log(styleText("yellow", `Retrying connection (${this.#retries}/${this.#maxRetries})...\n @${new Date().toLocaleTimeString()}`));
+
+                setTimeout(() => {
+                    console.log(this.#retries, "@", new Date().toLocaleTimeString())
+                    this.connect();
+                }, 5000)
+
+                return
+            }
+
+            console.log(styleText("redBright", "Max retries reached. Could not connect to Redis.\n"));
+            // throw err;
         })
     }
 
@@ -28,9 +47,20 @@ export class RedisService {
         return RedisService.instance;
     }
 
-    public async connect(): Promise<RedisClientType> {
-        console.log(styleText("bgGreen", "REDIS server connected"));
-        return await this.client.connect();
+    /** 
+     * The connect throws an error so the onError should be used according to that
+    */
+    // @ts-ignore
+    public async connect(): Promise<RedisClientType | never> {
+        try{
+            return await this.client.connect();
+        }catch(error){
+            console.log("============")
+            // @ts-ignore
+            console.log((error as Error).code)
+            console.log("============")
+            // throw error
+        }
     }
 
     public getClient(): RedisClientType {

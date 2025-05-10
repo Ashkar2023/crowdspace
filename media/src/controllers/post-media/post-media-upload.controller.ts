@@ -13,7 +13,10 @@ export const postMediaUpload = async (req: Request) => {
 
 
 
-    /* TO-DO: Compress medias before upload */
+    /* 
+        TO-DO: Compress medias before upload 
+        accomplish with worker threads
+    */
 
 
 
@@ -25,11 +28,11 @@ export const postMediaUpload = async (req: Request) => {
          * only alphanumeric, _ . - supported path name
          */
         const mediaPath = DateForPath() + media.originalname.replace(/[^\w\-._]/g, ""); //
-        const bucketName = mediaStorageConfig.buckets.post;
+        const folder_dest = mediaStorageConfig.bucket_folders.post;
 
         const uploadObject = new PutObjectCommand({
-            Bucket: bucketName,
-            Key: mediaPath,
+            Bucket: mediaStorageConfig.bucket,
+            Key: `${folder_dest}/${mediaPath}`,
             Body: media.buffer,
             ContentType: media.mimetype
         })
@@ -39,7 +42,7 @@ export const postMediaUpload = async (req: Request) => {
 
             if (uploaded.$metadata.httpStatusCode === 200) {
                 populatedMediaObjects.push({
-                    media_url: `/${bucketName}/${mediaPath}`,
+                    media_url: `/${folder_dest}/${mediaPath}`,
                     media_meta: {
                         size: media.size,
                         originalName: media.originalname,
@@ -50,14 +53,14 @@ export const postMediaUpload = async (req: Request) => {
                             MediaEnum.IMAGE :
                             MediaEnum.VIDEO)
                 });
-            }else{
+            } else {
                 throw new Error(uploaded.$metadata.httpStatusCode?.toString());
             }
         } catch (error) {
             /* LEARN S3 req res & error handling */
             if (error instanceof S3ServiceException) {
                 console.log(error.message);
-            }else{
+            } else {
                 console.log(error);
             }
             throw new InternalServerError("upload failed", 500);

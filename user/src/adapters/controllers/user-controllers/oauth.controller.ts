@@ -1,10 +1,12 @@
 import { IOAuthController } from "../interfaces/oauth-controller.interface.js";
 import { Request } from "express";
-import { ResponseCreator, expirationDate } from "@cr0wdspace/common";
+import { InternalServerError, ResponseCreator, expirationDate } from "@cr0wdspace/common";
 import { oauthConfig } from "@src/config/oauth.js";
 import generateRandomPassword from "@src/util/passwordGenerator.js";
 import { OAuth2Client } from "google-auth-library";
 import { IAuthInteractorFacade } from "@interactors/interfaces/ifacade/auth-interactor-facade.interface.js";
+import { envConfig } from "@src/config/env.config.js";
+import { MongooseError } from "mongoose";
 
 export class OAuthController implements IOAuthController {
     constructor(
@@ -18,7 +20,7 @@ export class OAuthController implements IOAuthController {
         const googleClient = new OAuth2Client(
             process.env.OAUTH_CLIENT_ID,
             process.env.OAUTH_CLIENT_SECRET,
-            oauthConfig.frontend_url
+            envConfig.NODE_ENV === "production" ? oauthConfig.frontend_url : "http://localhost:5173"
         );
 
         const { tokens } = await googleClient.getToken(code as string); //code type is different to what this fn expects. 
@@ -34,22 +36,31 @@ export class OAuthController implements IOAuthController {
         const existingUser = await this.AuthInteractorFacade.checkExistingUser(userData.email);
 
         if (!existingUser) {
-            await this.AuthInteractorFacade.registerUser({
-                email: userData.email,
-                displayname: userData.name,
-                username: userData.name.replace(/ /g, "_").toLowerCase(),
-                password: generateRandomPassword(),
-                avatar: userData.picture,
-                role: "user",
-                isVerified: true // ADD TYPE:oauth to doc
-            })
+            try {
+
+                await this.AuthInteractorFacade.registerUser({
+                    email: userData.email,
+                    displayname: userData.name,
+                    username: (userData.name as string).replace(/ /g, "_").toLowerCase().concat(Math.round(Math.random() * 1000).toString()), // fix username duplicate issue with TRIE
+                    password: generateRandomPassword(),
+                    avatar: userData.picture,
+                    role: "user",
+                    isVerified: true // ADD TYPE:oauth to doc
+                })
+            } catch (error) {
+                if (error instanceof MongooseError) {
+                    console.log(error)
+                }
+                console.log(error);
+                throw new InternalServerError("user oauth error", 500);
+            }
         }
 
         let { user, refreshToken, accessToken } = await this.AuthInteractorFacade.authenticateUser({
             credential: userData.email,
-            password: "nil",
+            password: "",
             type: "email"
-        })
+        }, true)
 
         const response = new ResponseCreator();
         return response

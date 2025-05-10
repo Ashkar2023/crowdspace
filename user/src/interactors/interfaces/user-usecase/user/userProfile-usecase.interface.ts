@@ -1,6 +1,7 @@
-import { HydratedDocument } from "mongoose";
+import { HydratedDocument, Types } from "mongoose";
 import { IUser } from "@entities/interfaces/user-entity.interface.js";
 import { IFollow } from "@entities/interfaces/follow.interface.js";
+import { IBasicUser } from "@cr0wdspace/common";
 
 export interface IUserProfileUsecase {
     getUserProfile: (username: string, loggedInUserId: string) =>
@@ -9,6 +10,13 @@ export interface IUserProfileUsecase {
             outgoingFollow: HydratedDocument<IFollow> | null,
             incomingFollow: HydratedDocument<IFollow> | null
         }>
+
+    getAccountStatusAndConnection: (follower: Types.ObjectId, followee: Types.ObjectId) =>
+        Promise<{
+            privateAccount: boolean,
+            outgoingFollow: HydratedDocument<IFollow> | null,
+            incomingFollow: HydratedDocument<IFollow> | null
+        } & IBasicUser>
 
     getUserBasicProfile: (userId: string) => Promise<HydratedDocument<IUser> | null>
 

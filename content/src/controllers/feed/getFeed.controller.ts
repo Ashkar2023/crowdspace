@@ -2,18 +2,22 @@ import { createUserBasicDict, IBasicUser, injectProfiles, parseUniqueIds, Respon
 import { Request } from 'express'
 import { HydratedDocument, Types } from 'mongoose';
 import { LikeRepoImp, PostRepoImp } from 'repositories/repositories.index.js';
+import { validator } from 'services/schema.validator.js';
+import z from 'zod';
 import { T_Post } from '~types/post.types.js';
 
 export const getFeed = async (req: Request) => {
     const loggedInUser = req.headers["x-logged-in-user"] as string;
-    const str = req.query
     const page = req.query.page;
 
-    const posts = await PostRepoImp.getFeed(loggedInUser, page ? +page : 0 ); //validation is not good enough
+    // you could update the normal validate to have this behaviour and avoid this method
+    validator.coerceAndValidate<string, number>(page as string, z.coerce.number().finite({message: "input not valid"}).positive() );
+
+    const posts = await PostRepoImp.getFeed(loggedInUser, page ? +page : 0 ); // +page coercsion
 
     const postsIds = posts.map(post => post._id);
 
-    const likesOnPosts = await LikeRepoImp.findLikes(postsIds);
+    const likesOnPosts = await LikeRepoImp.findLikes(postsIds, new Types.ObjectId(loggedInUser));
     const likedPostIdSet = new Set(likesOnPosts.map(like=>like.post_id.toString()));
 
     const uniqueAuthorIds = parseUniqueIds(posts, "author");
@@ -37,7 +41,7 @@ export const getFeed = async (req: Request) => {
     const postsWithAuthor = injectProfiles(posts, profilesDict, "author") as HydratedDocument<T_Post>[];
     const finalPosts = postsWithAuthor.map(post=>({
         ...post,
-        liked: likedPostIdSet.has(post.id)
+        liked: likedPostIdSet.has(post._id.toString())
     }))
 
     const response = new ResponseCreator();

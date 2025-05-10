@@ -2,9 +2,10 @@ import { Request, Response, Router } from "express";
 import { createProxyMiddleware as proxy } from "http-proxy-middleware";
 import { proxyDefaultConfig } from "../config/proxy.config.js";
 
-const postRouter =  Router();
+const postsRouter =  Router();
+export const postRouter =  Router();
 
-postRouter.all("/*",
+postsRouter.all("/*",
     proxy<Request, Response>({
         target:process.env.CONTENT_SERVICE,
         pathRewrite:{"^/":"/posts/"},
@@ -12,4 +13,12 @@ postRouter.all("/*",
     })
 )
 
-export default postRouter;
+postRouter.all("/*",
+    proxy<Request, Response>({
+        target:process.env.CONTENT_SERVICE,
+        pathRewrite:{"^/":"/post/"},
+        ...proxyDefaultConfig,
+    })
+)
+
+export default postsRouter;

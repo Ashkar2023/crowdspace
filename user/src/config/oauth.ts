@@ -1,6 +1,8 @@
+import { envConfig } from "./env.config.js";
+
 export const oauthConfig = {
     project_id: "crowdspace-001",
-    frontend_url: "http://localhost:5173",
+    frontend_url: envConfig.FRONTEND_URL,
     auth_uri: "https://accounts.google.com/o/oauth2/auth",
     token_uri: "https://oauth2.googleapis.com/token",
     auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs"

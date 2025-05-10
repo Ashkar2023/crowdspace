@@ -1,12 +1,12 @@
 import { consumerEvents, BadRequestError, encodeEventMessage, NotificationKind, ResponseCreator, rabbitmqConfig } from "@cr0wdspace/common";
 import { publisherChannel } from "events/index.js";
 import { Request, response } from "express";
-import { isValidObjectId, Schema, Types } from "mongoose";
+import { Document, isValidObjectId, Schema, Types } from "mongoose";
 import { LikeRepoImp, NotificationRepoImp, PostRepoImp } from "repositories/repositories.index.js";
 
 export const likePost = async (req: Request) => {
     const post_id = req.params.postId;
-    const loggedInUserId = req.headers["x-logged-in-user"] as string; // user._id now
+    const loggedInUserId = req.headers["x-logged-in-user"] as string;
 
     if (!isValidObjectId(post_id)) {
         throw new BadRequestError("invalid postId");
@@ -15,7 +15,6 @@ export const likePost = async (req: Request) => {
     }
 
     const post = await PostRepoImp.findPost(post_id);
-    /* Update likes count */
 
     if (!post) {
         throw new BadRequestError("post not found");
@@ -36,12 +35,13 @@ export const likePost = async (req: Request) => {
             actor: new Types.ObjectId(loggedInUserId),
             is_read: false,
             recipient_id: new Types.ObjectId(post.author),
-            target: new Types.ObjectId(post_id),
+            target: new Types.ObjectId(like.value._id),
             type: NotificationKind.like,
         })
 
-        const bodyBuffer = encodeEventMessage(consumerEvents.new_like, notification);
-        let published = publisherChannel.publish(
+        /* publish & Update likes count */
+        const bodyBuffer = encodeEventMessage(consumerEvents.new_like, { ...notification.toObject(), post_id });
+        publisherChannel.publish(
             rabbitmqConfig.exchanges.notificationFanout.name,
             rabbitmqConfig.routingKeys.chat.notificationFanout,
             bodyBuffer
@@ -52,9 +52,9 @@ export const likePost = async (req: Request) => {
     return response
         .setData({
             action: "liked",
-            existingLike: true
+            existingLike
         })
-        .setMessage(existingLike ? "post liked" : "like record exists")
+        .setMessage(!existingLike ? "post liked" : "like record exists")
         .setStatusCode(201)
         .get()
 }

@@ -1,4 +1,4 @@
-import express, { ErrorRequestHandler } from "express";
+import express from "express";
 import { connect } from "mongoose";
 
 // Message Events setup
@@ -8,7 +8,7 @@ import "./events/consumer.js";
 import { styleText } from "util";
 import userContentRouter from "@routers/user-routes/user.routes.js";
 import commentRouter from "@routers/user-routes/comment.routes.js";
-import postRouter from "@routers/user-routes/post.routes.js";
+import postsRouter, { postRouter } from "@routers/user-routes/post.routers.js";
 import loggingMiddleware from "middlewares/logging.middleware.js";
 import { globalErrorHadler, TokenError } from "@cr0wdspace/common";
 import reportRouter from "@routers/user-routes/report.routes.js";
@@ -37,7 +37,8 @@ app.use("/users", userContentRouter)
 
 app.use("/comments", commentRouter);
 
-app.use("/posts", postRouter);
+app.use("/posts", postsRouter);
+app.use("/post", postRouter);
 
 app.use("/reports", reportRouter)
 

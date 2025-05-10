@@ -14,7 +14,7 @@ export class VerificationController implements IVerificationController {
     async generateAndSendOtp(req: Request) {
         const { email } = req.body;
 
-        const sent = await this.AuthInteractorFacade.genAndSendOtpMail(email);
+        const sent = await this.AuthInteractorFacade.genOtpAndSendMail(email);
 
         const response = new ResponseCreator();
         return response

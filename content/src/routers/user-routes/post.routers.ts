@@ -6,21 +6,26 @@ import { likePost } from "@controllers/post/likePost.controller.js";
 import { unlikePost } from "@controllers/post/unlikePost.controller.js";
 import { createCallback } from "@cr0wdspace/common";
 import { Router } from "express";
+import { getPost } from "@controllers/post/getPost.controller.js";
 
-// prefixed with '/posts'
+/* /post */
+export const postRouter = Router();
 
-const postRouter = Router();
+postRouter.get("/:postUrl", createCallback(getPost));
 
-postRouter.get("/:postId/comments", createCallback(getPostComments))
+/* /posts */
+const postsRouter = Router();
 
-postRouter.route("/:postId/like")
+postsRouter.get("/:postId/comments", createCallback(getPostComments))
+
+postsRouter.route("/:postId/like")
     .post(createCallback(likePost))
     .delete(createCallback(unlikePost))
 
-postRouter.route("/:postId")
+postsRouter.route("/:postId")
     .delete(createCallback(deletePost))
     .patch(createCallback(editPost));
 
-postRouter.get("/", createCallback(getFeed))
+postsRouter.get("/", createCallback(getFeed))
 
-export default postRouter
+export default postsRouter

@@ -12,34 +12,34 @@ export const createComment = async (req: Request) => {
         throw new BadRequestError("invalid post identifier");
     }
 
-    let replyForComment,
+    let replyForCommentPromise,
         queries = [];
 
     if (replyFor) {
         if (!isValidObjectId(replyFor)) {
             throw new BadRequestError("invalid comment Identifier")
         }
-        replyForComment = CommentRepoImp.findComment(replyFor);
-        queries.push(replyForComment);
+        replyForCommentPromise = CommentRepoImp.findComment(replyFor);
+        queries.push(replyForCommentPromise);
     }
 
-    const post = PostRepoImp.findPost(post_id);
-    queries.unshift(post);
+    const postPromise = PostRepoImp.findPost(post_id);
+    queries.unshift(postPromise);
 
-    const queryResults = await Promise.allSettled(queries);
+    const [post, replyForComment] = await Promise.allSettled(queries);
 
     //@ts-ignore //FIX
-    if (!queryResults[0].value) {
+    if (!post.value) {
         throw new BadRequestError("post not found");
     }
 
     //@ts-ignore //FIX
-    if (replyFor && !queryResults[1].value) {
+    if (replyFor && !replyForComment.value) {
         throw new BadRequestError("comment to reply to, not found");
     }
 
-    //@ts-ignore //FIX
-    if (replyFor && queryResults[1].value.replyFor) {
+    // @ts-ignore //FIX
+    if (replyFor && replyForComment.value.replyFor) {
         throw new BadRequestError("cannot reply to a reply-comment");
     }
 
@@ -52,17 +52,17 @@ export const createComment = async (req: Request) => {
 
 
     //@ts-ignore //FIX
-    if (queryResults[0].value.author.toString() !== loggedInUserId) {
+    if (post.value.author.toString() !== loggedInUserId) {
         const commentNotification = await NotificationRepoImp.createNotification({
             actor: comment.author,
             // @ts-ignore
-            recipient_id: queryResults[0].value.author as Types.ObjectId,
+            recipient_id: post.value.author as Types.ObjectId,
             target: comment._id,
             type: NotificationKind.comment,
             is_read: false
         })
 
-        const messageBuffer = encodeEventMessage(consumerEvents.new_comment, commentNotification);
+        const messageBuffer = encodeEventMessage(consumerEvents.new_comment, { ...commentNotification.toObject(), post_id });
 
         const published = publisherChannel.publish(
             rabbitmqConfig.exchanges.notificationFanout.name,
@@ -71,9 +71,13 @@ export const createComment = async (req: Request) => {
         );
     }
 
+    const { body, message } = await (
+        await fetch(process.env.USER_SERVICE + `/basic/${loggedInUserId}`)
+    ).json();
+
     const response = new ResponseCreator();
     return response
-        .setData({ comment })
+        .setData({ comment: { ...comment.toObject(), author: body } })
         .setMessage("Comment created!")
         .setStatusCode(201)
         .get();

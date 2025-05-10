@@ -3,4 +3,6 @@ import { Request } from "express";
 
 export interface IPasswordController {
     updatePassword: (req: Request) => Promise<IResponse>;
+    sendPasswordResetLink: (req: Request) => Promise<IResponse>;
+    resetPassword: (req: Request) => Promise<IResponse>
 }

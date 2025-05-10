@@ -4,6 +4,7 @@ import { BadRequestError, IResponse, ResponseCreator } from "@cr0wdspace/common"
 import { Request } from "express";
 import { isValidObjectId, Types } from "mongoose";
 import { FollowStatus } from "@entities/interfaces/follow.interface.js";
+import { error } from "console";
 
 export class UserController implements IUserController {
 
@@ -126,20 +127,6 @@ export class UserController implements IUserController {
     };
 
 
-    // async getFollows(req: Request) {
-    //     const user_id = req.params.user_id as string;
-    //     console.log(req.params);
-
-    //     const follows = await this._UserInteractorFacade.getFollowersAndFollowees(new Types.ObjectId(user_id));
-
-    //     const response = new ResponseCreator();
-    //     return response
-    //         .setStatusCode(200)
-    //         .setMessage("fetched follows")
-    //         .setData(follows)
-    //         .get();
-    // }
-
     async search(req: Request) {
         const { q } = req.query;
 
@@ -173,17 +160,17 @@ export class UserController implements IUserController {
         const page = req.query.page as string;
         const { user_id } = req.params;
         // const loggedInUserId = req.headers["x-logged-in-user"] as string;
-        
+
         const followers = await this._UserInteractorFacade.getFollowers(user_id, +page)
-        
+
         const response = new ResponseCreator();
         return response
-        .setStatusCode(200)
-        .setMessage("followers fetched")
-        .setData(followers)
-        .get();
+            .setStatusCode(200)
+            .setMessage("followers fetched")
+            .setData(followers)
+            .get();
     };
-    
+
     async getFollowings(req: Request) {
         const page = req.query.page as string;
         const { user_id } = req.params;
@@ -199,4 +186,21 @@ export class UserController implements IUserController {
             .get();
 
     };
+
+    async getAccountStatusAndConnection(req: Request) {
+        const { follower, followee } = req.query as Record<string, string>;
+
+        if(![followee,follower].every((key)=>isValidObjectId(key))){
+            throw new BadRequestError("users id's are not valid");
+        }
+        
+        const data = await this._UserInteractorFacade.getAccountStatusAndConnection(new Types.ObjectId(follower), new Types.ObjectId(followee))
+
+        const response = new ResponseCreator();
+        return response
+            .setStatusCode(200)
+            .setMessage("user account status and connection fetched")
+            .setData(data)
+            .get();
+    }
 }

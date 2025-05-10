@@ -49,10 +49,10 @@ fi
 
 docker build \
     $BUILD_TARGET \
-    -t crowdspace-${PACKAGE_NAME}:${TAG} \
     -t crowdspace-${PACKAGE_NAME}:${LATEST_TAG} \
     --secret id=npmrc,src=.npmrc \
     -f ./${PACKAGE_NAME}/Dockerfile .
+    # -t crowdspace-${PACKAGE_NAME}:${TAG} \
 
 if [ $? -ne 0 ]; then
     echo -e "$RED \nDocker build failed! $RESET"
@@ -61,5 +61,5 @@ else
     echo -e "${MAGENTA}Build finished${RESET}"
 fi
 
-echo -e "${GREEN}\nDocker image ${BLUE}crowdspace-${PACKAGE_NAME}:${CYAN}${TAG}${GREEN} built successfully!${RESET}"
+# echo -e "${GREEN}\nDocker image ${BLUE}crowdspace-${PACKAGE_NAME}:${CYAN}${TAG}${GREEN} built successfully!${RESET}"
 echo -e "${GREEN}Latest tag: ${BLUE}crowdspace-${PACKAGE_NAME}:${CYAN}${LATEST_TAG}${RESET}"

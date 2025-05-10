@@ -78,4 +78,8 @@ export class UserInteractorFacade implements IUserInteractorFacade {
     async getFollowings(user_id: string, page: number) {
         return await this._UserFollowInteractorInstance.getFollowings(user_id, page)
     }
+
+    async getAccountStatusAndConnection(follower: Types.ObjectId, followee: Types.ObjectId){
+        return await this._UserProfileInteractorInstance.getAccountStatusAndConnection(follower, followee);
+    }
 }

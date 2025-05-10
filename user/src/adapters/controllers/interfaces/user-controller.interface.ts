@@ -11,7 +11,7 @@ export interface IUserController {
 
     acceptFollowRequest: (req: Request) => Promise<IResponse>
 
-    getFollows: (req: Request) => Promise<IResponse>
+    getAccountStatusAndConnection: (req:Request) => Promise<IResponse>
 
     search: (req: Request) => Promise<IResponse>
 

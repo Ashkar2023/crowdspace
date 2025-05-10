@@ -49,6 +49,7 @@ export type PostCreateFields = {
     visibility: PostVisibilty,
     thumbnail?: string //remove from a post
     mentions: Types.ObjectId[],
+    url: string
 }
 
 /* PARENT POST TYPE */

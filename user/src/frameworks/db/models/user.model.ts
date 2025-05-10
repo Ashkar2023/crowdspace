@@ -76,7 +76,10 @@ const UserSchema = new Schema<IUser>({
     },
     bio: String,
     cover: String,
-    avatar: String,
+    avatar:{
+        type: String,
+        default: "/avtr/post.jpg"
+    },
     followingsCount: {
         type: Number,
         default: 0,

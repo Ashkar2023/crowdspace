@@ -13,10 +13,6 @@ app.use(cookieParser());
 const redisImp = RedisService.getInstance();
 await redisImp.connect();
 
-app.use(
-    (rq, rs, n) => { console.log(rq.path), n() },
-)
-
 app.use(loggingMiddleware)
 app.use("/auth", authRouter)
 

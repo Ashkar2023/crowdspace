@@ -24,6 +24,12 @@ import { AdminAuthController } from "@adapters/controllers/admin-controllers/adm
 import { UserAuthenticationImp } from "@interactors/user-interactors/user-authentication.interactor.js";
 
 /**
+ * ❌❌❌ BIG TODO: REFACTOR TO USE PROPER DEPENDENCY INJECTION ❌❌❌
+ *
+ * 🚨 WARNING: The facades are creating instances of interactors/controllers internally! 🚨
+ *  should remove that, create and inject dependecies from here.
+ *  either manually or using DI
+ *
  *  USE DI (Dependency injection) CONTAINERS INSTEAD OF MANUAL BINDING
  */
 
@@ -47,7 +53,8 @@ const AuthInteractorFacadeInstance = new AuthInteractorFacade(
 );
 const SettingsInteractorFacadeInstance = new SettingsInteractorFacade(
     UserRepositoryInstance,
-    HashServiceInstance
+    HashServiceInstance,
+    MailerServiceInstance
 );
 
 const UserInteractorFacadeInstance = new UserInteractorFacade(UserRepositoryInstance, FollowRepositoryInstance)
@@ -61,7 +68,7 @@ const AuthControllerFacadeInstance = new AuthControllerFacade(
     ValidationServiceInstance
 );
 
-const SettingsControllerInstance = new SettingsControllerFacade(SettingsInteractorFacadeInstance,ValidationServiceInstance);
+const SettingsControllerInstance = new SettingsControllerFacade(SettingsInteractorFacadeInstance, ValidationServiceInstance, MailerServiceInstance);
 
 const UserControllerInstance = new UserControllerFacade(UserInteractorFacadeInstance);
 
@@ -72,7 +79,7 @@ const AdminAuthControllerInstance = new AdminAuthController(AuthControllerFacade
 // USER
 export const authRouter = buildAuthRoutes({
     router: Router(),
-    authContoller: AuthControllerFacadeInstance,
+    authContollerFacade: AuthControllerFacadeInstance,
     middlewares: {}
 });
 

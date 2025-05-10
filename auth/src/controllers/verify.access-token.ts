@@ -18,17 +18,16 @@ export const verifyAccessController = async (req: Request) => {
             audience: process.env.AUDIENCE as string,
         }
     })
-    console.log("verified ", verified);
 
     if (!verified) throw new TokenError("access token expired", 401, "invalid_access");
 
     const { sub } = decodeJWT(bearerToken);
 
     const redisClient = RedisService.getInstance().getClient();
-    const banned = await redisClient.SISMEMBER("bannedUsers", sub!);
+    const banned = await redisClient.SISMEMBER("bannedUsers", sub as string);
 
     if (banned) {
-        throw new BadRequestError("Account banned", 403,"banned");
+        throw new BadRequestError("Account banned", 403, "banned");
     }
 
     if (!isValidObjectId(sub)) {

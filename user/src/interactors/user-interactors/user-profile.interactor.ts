@@ -1,4 +1,5 @@
 import { BadRequestError } from "@cr0wdspace/common";
+import { IFollow } from "@entities/interfaces/follow.interface.js";
 import { IUser } from "@entities/interfaces/user-entity.interface.js";
 import { IFollowRepository } from "@interactors/interfaces/repositories/follow-repository.interface.js";
 import { IUserRepository } from "@interactors/interfaces/repositories/user-repository.interface.js";
@@ -46,6 +47,30 @@ export class UserProfileImp implements IUserProfileUsecase {
             "username displayname avatar"
         )
 
-        return profiles 
+        return profiles
     };
+
+    async getAccountStatusAndConnection(follower: Types.ObjectId, followee: Types.ObjectId) {
+        const userProfile = await this._UserRepository.findUserById(followee.toString(), "privateAccount username displayname avatar");
+
+        if (!userProfile) {
+            throw new BadRequestError("user not found", 404);
+        }
+
+        const connection = await this._FollowRepository.findConnection(
+            follower,
+            followee
+        );
+
+        return {
+            ...userProfile.toObject(),
+            ...connection,
+            avatar: userProfile.avatar!,
+            privateAccount: userProfile.privateAccount!,
+            /* 
+                FIX the Type boolean should be removed from being optional. it's type is boolean | undefined
+                in this object there is no need of avatar & privateAccount. its explicitly provided to override type being undefined
+             */
+        }
+    }
 }

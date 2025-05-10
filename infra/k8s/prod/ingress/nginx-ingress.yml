@@ -7,17 +7,18 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
     nginx.ingress.kubernetes.io/websocket-services: "chat-service"
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
 spec:
   tls:
   - hosts:
     - api.crowdspace.in
     secretName: api-crowdspace-tls
-  - hosts:
-    - minio.crowdspace.in
-    secretName: minio-crowdspace-tls
-  - hosts:
-    - media.crowdspace.in
-    secretName: media-crowdspace-tls
+#   - hosts:
+#     - minio.crowdspace.in
+#     secretName: minio-crowdspace-tls
+#   - hosts:
+#     - media.crowdspace.in
+#     secretName: media-crowdspace-tls
   ingressClassName: nginx
   rules:
   - host: api.crowdspace.in
@@ -40,24 +41,24 @@ spec:
             name: rabbitmq-service
             port:
               number: 15672
-  - host: minio.crowdspace.in
-    http:
-      paths:
-      - path: /
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: minio-service
-            port:
-              number: 4200
-  - host: media.crowdspace.in
-    http:
-      paths:
-      - path: /
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: minio-service
-            port:
-              number: 4100
+#   - host: minio.crowdspace.in
+#     http:
+#       paths:
+#       - path: /
+#         pathType: ImplementationSpecific
+#         backend:
+#           service:
+#             name: minio-service
+#             port:
+#               number: 4200
+#   - host: media.crowdspace.in
+#     http:
+#       paths:
+#       - path: /
+#         pathType: ImplementationSpecific
+#         backend:
+#           service:
+#             name: minio-service
+#             port:
+#               number: 4100
 

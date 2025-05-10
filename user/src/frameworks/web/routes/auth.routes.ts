@@ -5,31 +5,28 @@ import { IAuthControllerFacade } from "@adapters/controllers/interfaces/ifacade/
 
 /**  @param {Object} params - The parameters should be an Object  */
 
-export function buildAuthRoutes({ router, authContoller, middlewares }: {
+export function buildAuthRoutes({ router, authContollerFacade, middlewares }: {
     router: Router,
-    authContoller: IAuthControllerFacade,
+    authContollerFacade: IAuthControllerFacade,
     middlewares: Record<string, RequestHandler>
 }) {
 
-    router.post("/check-username", createCallback(authContoller.checkUsernameExists.bind(authContoller)));
+    router.post("/check-username", createCallback(authContollerFacade.checkUsernameExists.bind(authContollerFacade)));
 
-    router.post("/register", createCallback(authContoller.registerUser.bind(authContoller)));
+    router.post("/register", createCallback(authContollerFacade.registerUser.bind(authContollerFacade)));
 
-    router.post("/login", createCallback(authContoller.loginUser.bind(authContoller)));
+    router.post("/login", createCallback(authContollerFacade.loginUser.bind(authContollerFacade)));
 
-    router.post("/oauth-callback", createCallback(authContoller.googleAuthSignup.bind(authContoller)));
+    router.post("/oauth-callback", createCallback(authContollerFacade.googleAuthSignup.bind(authContollerFacade)));
 
-    router.post("/gen-otp", createCallback(authContoller.generateAndSendOtp.bind(authContoller)));
+    router.post("/gen-otp", createCallback(authContollerFacade.generateAndSendOtp.bind(authContollerFacade)));
 
-    router.post("/verify-otp", createCallback(authContoller.verifyAccount.bind(authContoller)));
+    router.post("/verify-otp", createCallback(authContollerFacade.verifyAccount.bind(authContollerFacade)));
 
     /* Protected Routes */
-    router.get("/logout", createCallback(authContoller.logoutUser.bind(authContoller)));
+    router.get("/logout", createCallback(authContollerFacade.logoutUser.bind(authContollerFacade)));
 
-    router.get("/token-refresh", createCallback(authContoller.refreshAccess.bind(authContoller)));
-
-        
-    /* // router.patch("/forgot-pwd") */
+    router.get("/token-refresh", createCallback(authContollerFacade.refreshAccess.bind(authContollerFacade)));
 
     return router
 }

@@ -11,7 +11,7 @@ import logMiddleware from "./middlewares/log.middleware.js";
 import { refreshAccessToken } from "./controllers/token.refresh.js";
 import profileRoutes from "./routes/profile.routes.js";
 import commentRouter from "./routes/comment.routes.js";
-import postRouter from "./routes/post.routes.js";
+import postsRouter, { postRouter } from "./routes/post.routes.js";
 import reportRouter from "./routes/report.routes.js";
 import usersRoutes from "./routes/users.routes.js";
 import { createProxyMiddleware as proxy } from "http-proxy-middleware";
@@ -20,16 +20,15 @@ import notificationRouter from "./routes/notification.routes.js";
 import { proxyDefaultConfig } from "./config/proxy.config.js";
 import adminPublicRoutes from "./routes/admin.public.routes.js";
 import expressacl from "express-acl";
+import { envConfig } from "./config/env.config.js";
 
 const app = express().disable("x-powered-by");
 
 app.use(cors({
-    // origin: [
-    //     process.env.USER_CLIENT_DEV as string,
-    //     process.env.USER_CLIENT_BUILD as string,
-    //     process.env.USER_ADMIN as string,
-    // ],
-    origin: true,
+    origin: [
+        envConfig.ADMIN_CLIENT,
+        envConfig.USER_CLIENT
+    ],
     allowedHeaders: ["Content-type", "X-user-id", "x-logged-in-username"],
     methods: 'GET,PUT,POST,PATCH,DELETE',
     credentials: true,
@@ -48,7 +47,7 @@ declare global {
 
 expressacl.config({
     decodedObjectName: "decoded",
-    roleSearchPath:"decoded.role",
+    roleSearchPath: "decoded.role",
     filename: "racl.json",
     baseUrl: "/",
     denyCallback: (res,) => {
@@ -75,10 +74,9 @@ app.use(userAuthMiddleware); //Calls to Auth service
 
 app.use((req: Request, res: Response, next: NextFunction) => {
 
-    if(req.cookies.ajwt){
+    if (req.cookies.ajwt) {
         const decoded = decodeJWT(req.cookies.ajwt);
         req.decoded = decoded;
-        console.log('decoded.role', decoded);
     }
 
     next();
@@ -90,7 +88,8 @@ app.use("/users?", usersRoutes); // For interservices /users -> /users, For gate
 app.use("/media", mediaRouter);
 
 app.use("/comments", commentRouter);
-app.use("/posts", postRouter);
+app.use("/posts", postsRouter);
+app.use("/post", postRouter)
 app.use("/reports", reportRouter);
 app.use("/admin", reportRouter);
 app.use("/chats", chatRouter);
@@ -101,7 +100,10 @@ app.use("/profile", profileRoutes); //aggregator route
 app.use('/socket/chat', proxy({
     target: process.env.CHAT_SERVICE,
     ws: true,
-    ...proxyDefaultConfig
+    ...proxyDefaultConfig,
+    pathRewrite: (path, req: Request) => {
+        return req.originalUrl
+    }
 }))
 
 app.get("/search", proxy({

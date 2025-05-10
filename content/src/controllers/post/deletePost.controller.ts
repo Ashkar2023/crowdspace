@@ -16,19 +16,14 @@ export const deletePost = async (req: Request) => {
     const deleted = await PostRepoImp.deletePost(postId);
     console.log(deleted);
 
-    const bodyObject = encodeEventMessage(consumerEvents.post_deleted, {
+    const bodyObject = encodeEventMessage(consumerEvents.delete_post, {
         postId: postToDelete._id,
         mediaUrls: postToDelete.media.map(item => {
             return item.media_url;
         })
     })
 
-    // // 👇 This would throw error as it is not acknowledged in the media as of now, uncomment when the logic is written in media service
     // const published = publisherChannel.publish("content-exchange", "", bodyObject); 
-
-    // if (!published) {
-    //     //learn rabbitmq errors
-    // }
 
     const response = new ResponseCreator();
     return response

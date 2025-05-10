@@ -45,8 +45,8 @@ export class AuthInteractorFacade implements IAuthInteractorFacade {
     }
 
     
-    async authenticateUser(loginData: loginData){
-        return await this.UserAuthenticationInstance.authenticateUser(loginData)
+    async authenticateUser(loginData: loginData, oauth?: boolean){
+        return await this.UserAuthenticationInstance.authenticateUser(loginData, oauth)
     };
 
     async refreshAccessToken(cookie: string){
@@ -55,8 +55,8 @@ export class AuthInteractorFacade implements IAuthInteractorFacade {
 
 
     //-> OTP usecases
-    async genAndSendOtpMail(email: string){
-        return await this.OtpInstance.genAndSendOtpMail(email);
+    async genOtpAndSendMail(email: string){
+        return await this.OtpInstance.genOtpAndSendMail(email);
     }
 
     async verifyOtp(email: string, otp: string){

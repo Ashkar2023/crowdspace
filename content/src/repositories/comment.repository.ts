@@ -52,7 +52,7 @@ export class CommentRepository {
         )
     }
 
-    async deleteComment(commentId: string): Promise<DeleteResult | null> {
+    async deleteComment(commentId: string): Promise<HydratedDocument<IComment> | null> {
         return await this.#model.findByIdAndDelete(commentId);
     }
 

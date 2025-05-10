@@ -37,10 +37,6 @@ export class UserControllerFacade implements IUserControllerFacade {
     async acceptFollowRequest(req: Request){
         return await this._UserControllerInstance.acceptFollowRequest(req);
     };
-    
-    async getFollows(req: Request) {
-        return await this._UserControllerInstance.getFollows(req);
-    }
 
     async search(req:Request){
         return await this._UserControllerInstance.search(req);
@@ -56,5 +52,9 @@ export class UserControllerFacade implements IUserControllerFacade {
 
     async getFollowings(req: Request){
         return await this._UserControllerInstance.getFollowings(req);
+    }
+
+    async getAccountStatusAndConnection(req: Request){
+        return await this._UserControllerInstance.getAccountStatusAndConnection(req);
     }
 }

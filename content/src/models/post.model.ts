@@ -1,6 +1,7 @@
 import { model, Schema, SchemaTypes } from "mongoose";
 import { MediaEnum, PostEnum, PostStatus, Media, T_Post, PostVisibilty } from "~types/post.types.js";
 import { pointSchema } from "./common.schemas.js";
+import { generateUrlSafeHash } from "@cr0wdspace/common";
 
 const mediaSchema = new Schema<Media>({
     // index: Number,
@@ -23,6 +24,13 @@ const postSchema = new Schema<T_Post>({
         type: String,
         required: false,
         maxlength: 2000
+    },
+    url: {
+        type: String,
+        required: true,
+        default: function () {
+           return generateUrlSafeHash(this.author.toString(), Date.now().toString())
+        }
     },
     tags: {
         type: [String],

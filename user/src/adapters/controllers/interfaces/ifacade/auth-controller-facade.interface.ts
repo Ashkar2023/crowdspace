@@ -1,4 +1,5 @@
 import { IOAuthController } from "../oauth-controller.interface.js";
+import { IPasswordController } from "../password-controller.interface.js";
 import { IUserAuthController } from "../userAuth-controller.interface.js";
 import { IUserRegistrationController } from "../userRegistration-controller.interface.js";
 import { IVerificationController } from "../verification-controller.interface.js";

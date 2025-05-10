@@ -2,6 +2,7 @@ import { BadRequestError, decodeJWT, signJWT, TokenError, UnauthorizedError } fr
 import { IHashService } from "../interfaces/services/hash-service.interface.js";
 import { IUserRepository } from "../interfaces/repositories/user-repository.interface.js";
 import { IUserAuthenticationUsecase } from "../interfaces/user-usecase/auth/authentication-usecase.interface.js";
+import { envConfig } from "@src/config/env.config.js";
 
 export type loginData = {
     credential: string,
@@ -18,7 +19,7 @@ export class UserAuthenticationImp implements IUserAuthenticationUsecase {
 
     }
 
-    async authenticateUser(data: loginData) {
+    async authenticateUser(data: loginData, oauth?: boolean) {
         const { credential, password, type } = data;
 
         const userFound = await this._UserRepository.findUser(credential, type, "+password");
@@ -32,11 +33,12 @@ export class UserAuthenticationImp implements IUserAuthenticationUsecase {
         }
 
         let comparison = true; // for oauth
-
-        if (password !== "nil") {
+        console.log(oauth)
+        if (!oauth) { // FIX nil
+            console.log(oauth)
             comparison = await this._HashService.comparePassword(password, userFound.password);
         }
-
+        
         if (!comparison) {
             throw new BadRequestError("Incorrect credentials", 400);
         } else if (!userFound.isVerified) {
@@ -55,7 +57,7 @@ export class UserAuthenticationImp implements IUserAuthenticationUsecase {
         priority : HIGH 
         */
        const accessToken = await signJWT({
-           secret: (process.env.TOKEN_SECRET as string),
+           secret: (envConfig.TOKEN_SECRET),
            payload: {
                iss: process.env.ISSUER as string,
                aud: process.env.AUDIENCE as string,

@@ -2,7 +2,7 @@ import { BadRequestError } from "@cr0wdspace/common";
 import { IUser } from "@entities/interfaces/user-entity.interface.js";
 import { credentialType, IUserRepository } from "@interactors/interfaces/repositories/user-repository.interface.js";
 import { T_ProfileSetting } from "@interactors/interfaces/user-usecase/settings/profile-update-usecase.interface.js";
-import { Model, Types, UpdateWriteOpResult } from "mongoose";
+import { HydratedDocument, Model, Types, UpdateWriteOpResult } from "mongoose";
 
 
 

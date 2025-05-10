@@ -11,7 +11,6 @@ usersRoutes.all("/*",
         ...proxyDefaultConfig,
         on: {
             proxyReq(proxyReq, req, res) {
-                console.log("header",req.headers["x-logged-in-user"]);
                 proxyReq.setHeader("x-logged-in-user", req.headers["x-logged-in-user"] as string);
             }
         }
